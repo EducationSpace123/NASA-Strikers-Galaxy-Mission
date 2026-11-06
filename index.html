@@ -202,7 +202,7 @@
 
         <div class="game-overlay" id="gameOverScreen" style="display: none;">
             <h1>SỨ MỆNH KẾT THÚC</h1>
-            <p id="finalStats">Hành tinh đã đến: Sao Thủy | Tổng điểm: 0</p>
+            <p id="finalStats">Đã bay tới: Sao Thủy | Quãng đường: 0 vạn km | Tổng điểm: 0</p>
             <button class="start-btn" onclick="startGame()">BAY LẠI TỪ ĐẦU</button>
         </div>
 
@@ -215,7 +215,7 @@
 
         let gameRunning = false;
         let score = 0;
-        let distanceTraveled = 0; // Quãng đường đã đi tính bằng km không gian
+        let distanceTraveled = 0;
         let currentPlanetIndex = 0;
         let lives = 3;
         let weaponLevel = 1;
@@ -225,16 +225,15 @@
         let selectedShipType = 1;
         let screenShakeTimer = 0;
 
-        // Danh sách hành tinh trong hành trình bay qua
         const planets = [
-            { name: "Sao Thủy ☿️", distanceReq: 0, color: "#a855f7" },
-            { name: "Sao Kim ♀️", distanceReq: 1000, color: "#facc15" },
-            { name: "Trái Đất 🌍", distanceReq: 2500, color: "#38bdf8" },
-            { name: "Sao Hỏa 🔴", distanceReq: 4500, color: "#fc3d21" },
-            { name: "Sao Mộc 🟠", distanceReq: 7000, color: "#fb923c" },
-            { name: "Sao Thổ 🪐", distanceReq: 10000, color: "#fde047" },
-            { name: "Sao Thiên Vương 🔵", distanceReq: 14000, color: "#2dd4bf" },
-            { name: "Sao Hải Vương 🌊", distanceReq: 19000, color: "#3b82f6" }
+            { name: "Sao Thủy ☿️", distanceReq: 0 },
+            { name: "Sao Kim ♀️", distanceReq: 1000 },
+            { name: "Trái Đất 🌍", distanceReq: 2500 },
+            { name: "Sao Hỏa 🔴", distanceReq: 4500 },
+            { name: "Sao Mộc 🟠", distanceReq: 7000 },
+            { name: "Sao Thổ 🪐", distanceReq: 10000 },
+            { name: "Sao Thiên Vương 🔵", distanceReq: 14000 },
+            { name: "Sao Hải Vương 🌊", distanceReq: 19000 }
         ];
 
         let ship = {
@@ -388,9 +387,8 @@
         }
 
         function update() {
-            distanceTraveled += 2; // Tăng quãng đường bay theo thời gian thực
+            distanceTraveled += 2;
             
-            // Cập nhật hành trình qua các hành tinh
             for (let i = planets.length - 1; i >= 0; i--) {
                 if (distanceTraveled >= planets[i].distanceReq) {
                     currentPlanetIndex = i;
@@ -613,14 +611,15 @@
                 ctx.fillRect(p.x, p.y, p.size, p.size);
             });
 
-            // HUD Giao diện hành trình hành tinh
+            // HUD Giao diện: Đã được sắp xếp rõ ràng, không bị đè chữ
             ctx.fillStyle = "#f0f4f8";
             ctx.font = "bold 15px Segoe UI";
             ctx.fillText(`Điểm: ${score}`, 20, 30);
             ctx.fillText(`Hành tinh: ${planets[currentPlanetIndex].name}`, 20, 55);
             ctx.fillText(`Quãng đường: ${distanceTraveled} vạn km`, 20, 80);
-            ctx.fillText(`Mạng: ${"❤️ ".repeat(lives)}`, canvas.width - 160, 30);
-            ctx.fillText(`Siêu Bom (Phím E): ${"⚡ ".repeat(ultimateCharges)}`, canvas.width - 220, 55);
+            
+            ctx.fillText(`Mạng: ${"❤️ ".repeat(lives)}`, 20, 115);
+            ctx.fillText(`Siêu Bom (Phím E): ${"⚡ ".repeat(ultimateCharges)}`, 20, 140);
 
             ctx.restore();
         }
