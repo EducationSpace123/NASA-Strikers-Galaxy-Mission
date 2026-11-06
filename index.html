@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Galaxy Survivor - Khám Phá Vũ Trụ Hoàn Chỉnh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NASA Galaxy Survivor - Fullscreen & Hộp Quà Tri Thức</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -22,35 +22,29 @@
             user-select: none;
         }
 
-        body {
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-            background-image: radial-gradient(circle at 50% 30%, #0b3d91 0%, var(--bg-color) 85%);
         }
 
         .game-container {
             position: relative;
             width: 100vw;
-            max-width: 920px;
             height: 100vh;
-            max-height: 520px;
             background: #020617;
-            border: 3px solid var(--nasa-blue);
-            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(11, 61, 145, 0.6);
         }
 
         canvas {
             display: block;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             touch-action: none;
         }
 
@@ -61,25 +55,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(3, 7, 18, 0.98), rgba(11, 61, 145, 0.85));
+            background: linear-gradient(135deg, rgba(3, 7, 18, 0.98), rgba(11, 61, 145, 0.88));
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 10px;
+            padding: 15px;
             text-align: center;
         }
 
         .nasa-logo {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 2px;
-            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
+            width: 55px;
+            height: 55px;
+            margin-bottom: 4px;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.8));
         }
 
         .home-screen h1 {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: #fff;
             margin-bottom: 2px;
             font-weight: 900;
@@ -90,58 +84,59 @@
         }
 
         .money-badge {
-            background: rgba(11, 61, 145, 0.5);
+            background: rgba(11, 61, 145, 0.6);
             border: 1px solid var(--accent);
-            padding: 2px 10px;
+            padding: 4px 14px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--gold);
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .menu-grid {
             width: 100%;
-            max-width: 750px;
+            max-width: 850px;
             display: flex;
-            gap: 6px;
-            margin-bottom: 4px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .panel-box {
             flex: 1;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.92);
             border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 5px 6px;
+            border-radius: 10px;
+            padding: 8px 10px;
             text-align: left;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .panel-title {
-            font-size: 0.6rem;
+            font-size: 0.72rem;
             font-weight: bold;
             color: var(--accent);
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         .panel-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.58rem;
+            font-size: 0.68rem;
             color: #e2e8f0;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         .action-btn {
             background: var(--nasa-blue);
             color: white;
             border: none;
-            padding: 2px 5px;
-            border-radius: 4px;
+            padding: 3px 8px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.55rem;
+            font-size: 0.65rem;
         }
 
         .action-btn:hover {
@@ -158,25 +153,26 @@
 
         .controls-row {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
             justify-content: center;
-            margin-bottom: 4px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         .mode-container {
             display: flex;
-            gap: 4px;
+            gap: 6px;
         }
 
         .mode-btn {
             background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            padding: 4px 6px;
-            font-size: 0.6rem;
+            padding: 6px 12px;
+            font-size: 0.7rem;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
         }
 
@@ -185,45 +181,69 @@
             background: rgba(252, 61, 33, 0.3);
         }
 
-        .audio-toggle-btn {
+        .audio-toggle-btn, .fullscreen-toggle-btn, .quiz-btn {
             background: rgba(14, 165, 233, 0.2);
             border: 1px solid var(--accent);
             color: #38bdf8;
-            padding: 4px 6px;
-            font-size: 0.6rem;
+            padding: 6px 12px;
+            font-size: 0.7rem;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
+        }
+
+        .quiz-btn {
+            background: rgba(250, 204, 21, 0.2);
+            border-color: var(--gold);
+            color: var(--gold);
         }
 
         .play-btn {
             background: linear-gradient(135deg, var(--nasa-red), #e11d48);
             color: white;
             border: none;
-            padding: 6px 25px;
-            font-size: 0.85rem;
+            padding: 10px 35px;
+            font-size: 1.05rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(252, 61, 33, 0.6);
+            box-shadow: 0 0 20px rgba(252, 61, 33, 0.6);
         }
 
-        /* POPUP KHOA HỌC HÀNH TINH */
-        #planetPopup {
+        /* POPUP KHOA HỌC / THỬ THÁCH TRI THỨC */
+        #planetPopup, #quizModal {
             display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 85%;
-            max-width: 420px;
-            background: rgba(11, 61, 145, 0.95);
+            width: 88%;
+            max-width: 460px;
+            background: rgba(11, 61, 145, 0.96);
             border: 2px solid var(--accent);
             border-radius: 16px;
-            padding: 16px;
+            padding: 20px;
             z-index: 40;
             text-align: center;
             box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+        }
+
+        .quiz-opt-btn {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid #475569;
+            color: white;
+            padding: 8px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            margin: 4px 0;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .quiz-opt-btn:hover {
+            border-color: var(--accent);
+            background: rgba(51, 65, 85, 0.9);
         }
 
         /* MÀN HÌNH THUA TRẬN */
@@ -263,60 +283,51 @@
             background: rgba(30, 41, 59, 0.95);
             border: 2px solid #475569;
             width: 100%;
-            max-width: 380px;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin: 5px 0;
+            max-width: 400px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin: 6px 0;
             cursor: pointer;
             text-align: left;
         }
 
-        .perk-card:hover {
-            border-color: var(--accent);
-            background: rgba(51, 65, 85, 0.95);
-        }
-
-        /* HUD TRONG TRẬN */
+        /* HUD TRONG TRẬN TOÀN MÀN HÌNH */
         .hud-top {
             position: absolute;
-            top: 10px;
-            left: 15px;
-            right: 15px;
+            top: 15px;
+            left: 20px;
+            right: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             pointer-events: none;
             z-index: 10;
             font-weight: bold;
-            font-size: 0.85rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            font-size: 0.95rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.9);
         }
     </style>
 </head>
 <body>
 
-    <div class="game-container">
+    <div class="game-container" id="gameContainer">
         <!-- TRANG CHỦ (MENU CHÍNH) -->
         <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
-            <h1>NASA <span>SURVIVOR</span> - KHÁM PHÁ VŨ TRỤ</h1>
+            <h1>NASA <span>SURVIVOR</span> - HỘP QUÀ TRI THỨC</h1>
             <div class="money-badge">💰 Số Dư: <span id="playerMoney">400</span> Xu</div>
 
             <div class="menu-grid">
-                <!-- Nhiệm vụ học tập / Thử thách -->
+                <!-- Hộp quà tri thức -->
                 <div class="panel-box">
-                    <div class="panel-title">🎯 NHIỆM VỤ KHÁM PHÁ</div>
-                    <div class="panel-item">
-                        <span>📍 Đi 1.500m (Trái Đất)</span>
-                        <button class="action-btn" id="m1Btn" onclick="claimMission(1, 100)">Thưởng 100Xu</button>
-                    </div>
-                    <div class="panel-item">
-                        <span>⭐ Đạt 500 điểm</span>
-                        <button class="action-btn" id="m2Btn" onclick="claimMission(2, 150)">Thưởng 150Xu</button>
+                    <div class="panel-title">🎁 HỘP QUÀ TRI THỨC</div>
+                    <div class="panel-item" style="flex-direction:column; align-items:flex-start; gap:4px;">
+                        <span>Trả lời câu hỏi vũ trụ để nhận ngay +50 Xu!</span>
+                        <button class="quiz-btn" style="width:100%; margin-top:4px;" onclick="openRandomQuiz()">MỞ HỘP CÂU HỎI NGẪU NHIÊN</button>
                     </div>
                 </div>
 
-                <!-- Chọn Trang Phục (Skin) -->
+                <!-- Chọn Trang Phục -->
                 <div class="panel-box">
                     <div class="panel-title">🎨 TRANG PHỤC TÀU</div>
                     <div class="panel-item">
@@ -358,31 +369,40 @@
                     <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 Vô Tận</button>
                 </div>
                 <button class="audio-toggle-btn" id="audioToggleBtn" onclick="toggleAudio()">🎵 ÂM THANH</button>
+                <button class="fullscreen-toggle-btn" onclick="toggleFullScreen()">🖥️ TOÀN MÀN HÌNH</button>
             </div>
 
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
 
-        <!-- Popup Giới Thiệu Kiến Thức Hành Tinh -->
+        <!-- MODAL HỘP QUÀ TRI THỨC (20 CÂU HỎI) -->
+        <div id="quizModal">
+            <h3 style="color: var(--gold); margin-bottom: 8px;">🎁 Thử Thách Tri Thức Vũ Trụ</h3>
+            <p id="quizQuestionText" style="font-size: 0.9rem; color: #fff; margin-bottom: 12px; line-height: 1.4;"></p>
+            <div id="quizOptionsContainer"></div>
+            <button class="action-btn" style="margin-top: 12px; padding: 6px 15px;" onclick="closeQuizModal()">Đóng</button>
+        </div>
+
+        <!-- Popup Giới Thiệu Hành Tinh -->
         <div id="planetPopup">
-            <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 6px;">Khám Phá Hành Tinh</h2>
-            <p id="popupDesc" style="font-size: 0.85rem; color: #e2e8f0; line-height: 1.4; margin-bottom: 12px;"></p>
-            <button class="play-btn" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
+            <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 8px;">Khám Phá Hành Tinh</h2>
+            <p id="popupDesc" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 15px;"></p>
+            <button class="play-btn" style="padding: 8px 22px; font-size: 0.95rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
         </div>
 
         <!-- Màn hình Thua Trận -->
         <div class="game-over-screen" id="gameOverScreen">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:50px; height:50px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:55px; height:55px;">
             <h1 style="color: var(--nasa-red);">SỨ MỆNH THẤT BẠI</h1>
             <p id="finalStats" style="color:#cbd5e1; margin-bottom: 4px;">Tổng điểm: 0</p>
             <p id="finalDistance" style="color:#38bdf8; margin-bottom: 6px;">Quãng đường: 0 mét</p>
-            <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1rem; margin-bottom: 15px;">Nhận được: +0 Xu</p>
+            <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1.05rem; margin-bottom: 15px;">Nhận được: +0 Xu</p>
             <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
         </div>
 
         <!-- Bảng Kỹ Năng Lên Cấp -->
         <div id="perkModal">
-            <h2 style="color: var(--accent); margin-bottom: 10px;">🎉 NÂNG CẤP TRONG TRẬN</h2>
+            <h2 style="color: var(--accent); margin-bottom: 12px;">🎉 NÂNG CẤP TRONG TRẬN</h2>
             <div id="perkOptionsContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
         </div>
 
@@ -395,12 +415,88 @@
             <span id="livesText">❤️ 3</span>
         </div>
 
-        <canvas id="gameCanvas" width="920" height="520"></canvas>
+        <canvas id="gameCanvas"></canvas>
     </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Không thể mở toàn màn hình: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // BỘ 20 CÂU HỎI TRI THỨC VŨ TRỤ
+        const spaceQuestions = [
+            { q: "Hành tinh nào gần Mặt Trời nhất?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Trái Đất", "D. Sao Hỏa"], ans: 0 },
+            { q: "Hành tinh nào nóng nhất trong Hệ Mặt Trời?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Sao Mộc", "D. Sao Hỏa"], ans: 1 },
+            { q: "Hành tinh nào có kích thước lớn nhất Hệ Mặt Trời?", opts: ["A. Sao Thổ", "B. Sao Mộc", "C. Sao Hải Vương", "D. Trái Đất"], ans: 1 },
+            { q: "Vùng tối đen trong vũ trụ có trọng lực cực mạnh đến mức ánh sáng cũng không thoát ra được gọi là gì?", opts: ["A. Tinh vân", "B. Lỗ đen (Black Hole)", "C. Tiêu hành tinh", "D. Sao băng"], ans: 1 },
+            { q: "Hành tinh nào được gọi là 'Hành tinh Đỏ'?", opts: ["A. Sao Kim", "B. Sao Hỏa", "C. Sao Mộc", "D. Sao Thủy"], ans: 1 },
+            { q: "Nơi nào lớn nhất chứa tất cả các ngôi sao, hành tinh và không gian?", opts: ["A. Vũ trụ", "B. Thiên hà", "C. Hệ mặt trời", "D. Tinh vân"], ans: 0 },
+            { q: "Hành tinh nào có hệ thống vành đai rực rỡ nhất?", opts: ["A. Sao Thổ", "B. Sao Mộc", "C. Sao Thiên Vương", "D. Sao Hải Vương"], ans: 0 },
+            { q: "Trạm không gian quốc tế đang hoạt động trên quỹ đạo Trái Đất tên là gì?", opts: ["A. NASA", "B. ISS", "C. Apollo", "D. Voyager"], ans: 1 },
+            { q: "Con người đầu tiên bước chân lên Mặt Trăng là ai?", opts: ["A. Yuri Gagarin", "B. Neil Armstrong", "C. Buzz Aldrin", "D. Elon Musk"], ans: 1 },
+            { q: "Khoảng cách ánh sáng đi được trong 1 năm gọi là gì?", opts: ["A. Năm ánh sáng", "B. Tốc độ vũ trụ", "C. Hải lý", "D. Thước thiên văn"], ans: 0 },
+            { q: "Mặt Trời là loại thiên thể nào?", opts: ["A. Hành tinh", "B. Ngôi sao", "C. Vệ tinh", "D. Sao chổi"], ans: 1 },
+            { q: "Vệ tinh tự nhiên duy nhất của Trái Đất là gì?", opts: ["A. Mặt Trăng", "B. Sao Hỏa", "C. ISS", "D. Titan"], ans: 0 },
+            { q: "Ngôi sao nào giúp xác định hướng Bắc trên bầu trời?", opts: ["A. Sao Kim", "B. Sao Bắc Đẩu (Polaris)", "C. Sao Hỏa", "D. Mặt Trời"], ans: 1 },
+            { q: "Lực nào giữ cho các hành tinh quay quanh Mặt Trời?", opts: ["A. Lực ma sát", "B. Lực hấp dẫn", "C. Lực từ trường", "D. Âm thanh"], ans: 1 },
+            { q: "Hành tinh duy nhất được biết tới hiện nay có sự sống là gì?", opts: ["A. Sao Hỏa", "B. Trái Đất", "C. Sao Kim", "D. Sao Mộc"], ans: 1 },
+            { q: "Cơn bão khổng lồ tồn tại hàng trăm năm trên Sao Mộc có tên là gì?", opts: ["A. Vết Đỏ Lớn", "B. Bão Mặt Trời", "C. Hố Đen", "D. Vành Đai Băng"], ans: 0 },
+            { q: "Đơn vị nào quản lý hàng không và vũ trụ quốc gia Hoa Kỳ?", opts: ["A. SpaceX", "B. NASA", "C. ESA", "D. JAXA"], ans: 1 },
+            { q: "Vật thể cấu tạo từ đá và băng bay quanh Mặt Trời đuôi sáng rực gọi là gì?", opts: ["A. Sao chổi", "B. Tiêu hành tinh", "C. Vệ tinh", "D. Khí cầu"], ans: 0 },
+            { q: "Thiên hà chứa Hệ Mặt Trời của chúng ta có tên là gì?", opts: ["A. Andromeda", "B. Ngân Hà (Milky Way)", "C. Sombrero", "D. Centaurus"], ans: 1 },
+            { q: "Hành tinh lạnh nhất và xa nhất trong 8 hành tinh chính của Hệ Mặt Trời là gì?", opts: ["A. Sao Thủy", "B. Sao Hải Vương", "C. Sao Kim", "D. Sao Mộc"], ans: 1 }
+        ];
+
+        function openRandomQuiz() {
+            let randomIdx = Math.floor(Math.random() * spaceQuestions.length);
+            let qData = spaceQuestions[randomIdx];
+
+            document.getElementById("quizQuestionText").innerText = `Câu hỏi (${randomIdx + 1}/20): ${qData.q}`;
+            let container = document.getElementById("quizOptionsContainer");
+            container.innerHTML = "";
+
+            qData.opts.forEach((opt, idx) => {
+                let btn = document.createElement("button");
+                btn.className = "quiz-opt-btn";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if (idx === qData.ans) {
+                        playerMoney += 50;
+                        localStorage.setItem('nasa_money', playerMoney);
+                        updateHomeUI();
+                        alert("🎉 Chính xác! Bạn nhận được +50 Xu thưởng!");
+                    } else {
+                        alert("❌ Chưa chính xác rồi! Thử lại ở câu hỏi khác nhé.");
+                    }
+                    closeQuizModal();
+                };
+                container.appendChild(btn);
+            });
+
+            document.getElementById("quizModal").style.display = "block";
+        }
+
+        function closeQuizModal() {
+            document.getElementById("quizModal").style.display = "none";
+        }
 
         let gameRunning = false;
         let score = 0;
@@ -416,7 +512,6 @@
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 400;
         let currentSkin = localStorage.getItem('nasa_skin') ? parseInt(localStorage.getItem('nasa_skin')) : 0;
         let unlockedSkins = localStorage.getItem('nasa_unlocked_skins') ? JSON.parse(localStorage.getItem('nasa_unlocked_skins')) : [0];
-        let completedMissions = localStorage.getItem('nasa_missions') ? JSON.parse(localStorage.getItem('nasa_missions')) : [];
 
         let upgrades = {
             damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1,
@@ -435,7 +530,6 @@
             document.getElementById("shopLives").innerText = shopInventory.lives;
             document.getElementById("shopShield").innerText = shopInventory.shield;
 
-            // Nút Skin
             for (let i = 0; i <= 2; i++) {
                 let btn = document.getElementById(`skinBtn${i}`);
                 if (unlockedSkins.includes(i)) {
@@ -447,27 +541,6 @@
                         btn.className = "action-btn";
                     }
                 }
-            }
-
-            // Nhiệm vụ
-            if (completedMissions.includes(1)) {
-                document.getElementById("m1Btn").innerText = "Đã Nhận";
-                document.getElementById("m1Btn").disabled = true;
-            }
-            if (completedMissions.includes(2)) {
-                document.getElementById("m2Btn").innerText = "Đã Nhận";
-                document.getElementById("m2Btn").disabled = true;
-            }
-        }
-
-        function claimMission(mId, reward) {
-            if (!completedMissions.includes(mId)) {
-                completedMissions.push(mId);
-                playerMoney += reward;
-                localStorage.setItem('nasa_money', playerMoney);
-                localStorage.setItem('nasa_missions', JSON.stringify(completedMissions));
-                updateHomeUI();
-                alert(`Chúc mừng bạn nhận được +${reward} Xu!`);
             }
         }
 
@@ -489,7 +562,7 @@
                     selectSkin(skinId);
                     alert("Mua trang phục thành công!");
                 } else {
-                    alert("Không đủ Xu để mua trang phục này!");
+                    alert("Không đủ Xu!");
                 }
             }
         }
@@ -534,7 +607,7 @@
             bulletSpeed: 16,
             bulletCount: 1,
             damage: upgrades.damage + (currentSkin === 1 ? 2 : 0),
-            magnetRadius: 140,
+            magnetRadius: 160,
             orbitalShield: false
         };
 
@@ -563,8 +636,8 @@
         let shootTimer = 0;
         let orbitalAngle = 0;
 
-        for (let i = 0; i < 120; i++) {
-            stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2, speed: Math.random() * 3 + 1 });
+        for (let i = 0; i < 150; i++) {
+            stars.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2, speed: Math.random() * 3 + 1 });
         }
 
         let audioCtx = null;
@@ -665,6 +738,7 @@
         function launchGame() {
             initAudio();
             if (!isMusicPlaying) startSpaceMusic();
+            resizeCanvas();
 
             document.getElementById("homeScreen").style.display = "none";
             document.getElementById("gameOverScreen").style.display = "none";
@@ -753,7 +827,7 @@
             shuffled.slice(0, 3).forEach(perk => {
                 let card = document.createElement("div");
                 card.className = "perk-card";
-                card.innerHTML = `<div style="color:var(--accent); font-weight:bold;">${perk.title}</div><div style="font-size:0.75rem; color:#cbd5e1;">${perk.desc}</div>`;
+                card.innerHTML = `<div style="color:var(--accent); font-weight:bold;">${perk.title}</div><div style="font-size:0.8rem; color:#cbd5e1;">${perk.desc}</div>`;
                 card.onclick = () => {
                     if (perk.id === 'multishot') stats.bulletCount++;
                     if (perk.id === 'firerate') stats.fireRate = Math.max(6, stats.fireRate - 4);
@@ -771,7 +845,7 @@
         }
 
         function spawnBoss() {
-            boss = { x: canvas.width - 150, y: canvas.height / 2 - 60, targetX: canvas.width - 200, width: 70, height: 120, hp: 100 + (level * 30), maxHp: 100 + (level * 30), dy: 3, shootTimer: 0 };
+            boss = { x: canvas.width - 150, y: canvas.height / 2 - 60, targetX: canvas.width - 220, width: 80, height: 130, hp: 100 + (level * 30), maxHp: 100 + (level * 30), dy: 3, shootTimer: 0 };
         }
 
         function spawnEntity() {
@@ -779,7 +853,7 @@
             let interval = gameMode === 'endless' ? 350 : 500;
             if (score > 0 && score % interval === 0 && !boss && meteors.length === 0) { spawnBoss(); return; }
             if (!boss && Math.random() < 0.04) {
-                let size = Math.random() * 36 + 20;
+                let size = Math.random() * 38 + 22;
                 meteors.push({ x: canvas.width + size, y: Math.random() * (canvas.height - size), size: size, speed: (Math.random() * 2 + 2) + (level * 0.35), hp: Math.ceil(size / 10) * stats.damage, maxHp: Math.ceil(size / 10) * stats.damage });
             }
         }
@@ -873,7 +947,7 @@
             for (let i = gems.length - 1; i >= 0; i--) {
                 let g = gems[i];
                 let dx = ship.x - g.x, dy = ship.y - g.y, dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 140) { g.x += (dx / dist) * 11; g.y += (dy / dist) * 11; }
+                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 11; g.y += (dy / dist) * 11; }
                 if (dist < ship.radius + 12) {
                     exp += g.value; gems.splice(i, 1);
                     if (exp >= maxExp) { exp = 0; maxExp = Math.floor(maxExp * 1.35); level++; showLevelUpModal(); }
