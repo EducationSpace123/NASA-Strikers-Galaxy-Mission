@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Galaxy Survivor - Trang Phục & Trang Bị</title>
+    <title>NASA Galaxy Survivor - Khám Phá Vũ Trụ Hoàn Chỉnh</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -37,9 +37,9 @@
         .game-container {
             position: relative;
             width: 100vw;
-            max-width: 900px;
+            max-width: 920px;
             height: 100vh;
-            max-height: 500px;
+            max-height: 520px;
             background: #020617;
             border: 3px solid var(--nasa-blue);
             border-radius: 16px;
@@ -92,7 +92,7 @@
         .money-badge {
             background: rgba(11, 61, 145, 0.5);
             border: 1px solid var(--accent);
-            padding: 3px 10px;
+            padding: 2px 10px;
             border-radius: 20px;
             font-size: 0.75rem;
             color: var(--gold);
@@ -102,7 +102,7 @@
 
         .menu-grid {
             width: 100%;
-            max-width: 650px;
+            max-width: 750px;
             display: flex;
             gap: 6px;
             margin-bottom: 4px;
@@ -128,7 +128,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             color: #e2e8f0;
             margin-bottom: 2px;
         }
@@ -150,9 +150,6 @@
 
         .action-btn.buy {
             background: #ca8a04;
-        }
-        .action-btn.buy:hover {
-            background: #eab308;
         }
 
         .action-btn.active-skin {
@@ -211,7 +208,7 @@
             box-shadow: 0 0 15px rgba(252, 61, 33, 0.6);
         }
 
-        /* Popup Giới Thiệu Hành Tinh */
+        /* POPUP KHOA HỌC HÀNH TINH */
         #planetPopup {
             display: none;
             position: absolute;
@@ -219,17 +216,17 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 85%;
-            max-width: 380px;
+            max-width: 420px;
             background: rgba(11, 61, 145, 0.95);
             border: 2px solid var(--accent);
             border-radius: 16px;
-            padding: 15px;
+            padding: 16px;
             z-index: 40;
             text-align: center;
             box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
         }
 
-        /* Màn hình Thua Trận */
+        /* MÀN HÌNH THUA TRẬN */
         .game-over-screen {
             position: absolute;
             top: 0;
@@ -246,7 +243,7 @@
             text-align: center;
         }
 
-        /* Bảng Kỹ Năng Lên Cấp */
+        /* BẢNG KỸ NĂNG LÊN CẤP */
         #perkModal {
             display: none;
             position: absolute;
@@ -279,7 +276,7 @@
             background: rgba(51, 65, 85, 0.95);
         }
 
-        /* HUD Trong Trận */
+        /* HUD TRONG TRẬN */
         .hud-top {
             position: absolute;
             top: 10px;
@@ -302,13 +299,26 @@
         <!-- TRANG CHỦ (MENU CHÍNH) -->
         <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
-            <h1>NASA <span>SURVIVOR</span> - TRANG PHỤC TÀU</h1>
-            <div class="money-badge">💰 Số Dư: <span id="playerMoney">300</span> Xu</div>
+            <h1>NASA <span>SURVIVOR</span> - KHÁM PHÁ VŨ TRỤ</h1>
+            <div class="money-badge">💰 Số Dư: <span id="playerMoney">400</span> Xu</div>
 
             <div class="menu-grid">
+                <!-- Nhiệm vụ học tập / Thử thách -->
+                <div class="panel-box">
+                    <div class="panel-title">🎯 NHIỆM VỤ KHÁM PHÁ</div>
+                    <div class="panel-item">
+                        <span>📍 Đi 1.500m (Trái Đất)</span>
+                        <button class="action-btn" id="m1Btn" onclick="claimMission(1, 100)">Thưởng 100Xu</button>
+                    </div>
+                    <div class="panel-item">
+                        <span>⭐ Đạt 500 điểm</span>
+                        <button class="action-btn" id="m2Btn" onclick="claimMission(2, 150)">Thưởng 150Xu</button>
+                    </div>
+                </div>
+
                 <!-- Chọn Trang Phục (Skin) -->
                 <div class="panel-box">
-                    <div class="panel-title">🎨 TỦ ĐỒ TRANG PHỤC</div>
+                    <div class="panel-title">🎨 TRANG PHỤC TÀU</div>
                     <div class="panel-item">
                         <span>🚀 Tiêu Chuẩn NASA</span>
                         <button class="action-btn" id="skinBtn0" onclick="selectSkin(0)">Dùng</button>
@@ -318,34 +328,25 @@
                         <button class="action-btn buy" id="skinBtn1" onclick="buyOrSelectSkin(1, 200)">Mua</button>
                     </div>
                     <div class="panel-item">
-                        <span>🟡 Phượng Hoàng Kim (400 Xu)</span>
+                        <span>🟡 Phượng Hoàng (400 Xu)</span>
                         <button class="action-btn buy" id="skinBtn2" onclick="buyOrSelectSkin(2, 400)">Mua</button>
                     </div>
                 </div>
 
-                <!-- Hangar Nâng Cấp -->
+                <!-- Nâng cấp & Shop -->
                 <div class="panel-box">
-                    <div class="panel-title">🚀 HANGAR NÂNG CẤP</div>
+                    <div class="panel-title">⚙️ TRANG BỊ & NÂNG CẤP</div>
                     <div class="panel-item">
-                        <span>Sức Súng (Lvl <span id="lvlDamage">1</span>) - <span id="costDmg">100</span> Xu</span>
+                        <span>💥 Sát Thương (Lvl <span id="lvlDamage">1</span>)</span>
                         <button class="action-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
                     </div>
                     <div class="panel-item">
-                        <span>Tốc Bắn (Lvl <span id="lvlFireRate">1</span>) - <span id="costFr">100</span> Xu</span>
-                        <button class="action-btn" onclick="upgradeStat('fireRate')">Nâng Cấp</button>
-                    </div>
-                </div>
-
-                <!-- Shop Tiêu Hao -->
-                <div class="panel-box">
-                    <div class="panel-title">🛒 SHOP TIÊU HAO</div>
-                    <div class="panel-item">
-                        <span>❤️ Mua Mạng (Sẵn: <span id="shopLives">0</span>) - 150 Xu</span>
-                        <button class="action-btn buy" onclick="buyShopItem('lives')">Mua</button>
+                        <span>❤️ Mua Mạng (Sẵn: <span id="shopLives">0</span>)</span>
+                        <button class="action-btn buy" onclick="buyShopItem('lives')">150 Xu</button>
                     </div>
                     <div class="panel-item">
-                        <span>🛡️ Khiên Plasma (Sẵn: <span id="shopShield">0</span>) - 200 Xu</span>
-                        <button class="action-btn buy" onclick="buyShopItem('shield')">Mua</button>
+                        <span>🛡️ Khiên Plasma (Sẵn: <span id="shopShield">0</span>)</span>
+                        <button class="action-btn buy" onclick="buyShopItem('shield')">200 Xu</button>
                     </div>
                 </div>
             </div>
@@ -362,11 +363,11 @@
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
 
-        <!-- Popup Giới Thiệu Hành Tinh -->
+        <!-- Popup Giới Thiệu Kiến Thức Hành Tinh -->
         <div id="planetPopup">
             <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 6px;">Khám Phá Hành Tinh</h2>
             <p id="popupDesc" style="font-size: 0.85rem; color: #e2e8f0; line-height: 1.4; margin-bottom: 12px;"></p>
-            <button class="play-btn" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closePlanetPopup()">TIẾP TỤC</button>
+            <button class="play-btn" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
         </div>
 
         <!-- Màn hình Thua Trận -->
@@ -394,7 +395,7 @@
             <span id="livesText">❤️ 3</span>
         </div>
 
-        <canvas id="gameCanvas" width="900" height="500"></canvas>
+        <canvas id="gameCanvas" width="920" height="520"></canvas>
     </div>
 
     <script>
@@ -415,6 +416,7 @@
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 400;
         let currentSkin = localStorage.getItem('nasa_skin') ? parseInt(localStorage.getItem('nasa_skin')) : 0;
         let unlockedSkins = localStorage.getItem('nasa_unlocked_skins') ? JSON.parse(localStorage.getItem('nasa_unlocked_skins')) : [0];
+        let completedMissions = localStorage.getItem('nasa_missions') ? JSON.parse(localStorage.getItem('nasa_missions')) : [];
 
         let upgrades = {
             damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1,
@@ -430,13 +432,10 @@
         function updateHomeUI() {
             document.getElementById("playerMoney").innerText = playerMoney;
             document.getElementById("lvlDamage").innerText = upgrades.damage;
-            document.getElementById("lvlFireRate").innerText = upgrades.fireRate;
-            document.getElementById("costDmg").innerText = 100 * upgrades.damage;
-            document.getElementById("costFr").innerText = 100 * upgrades.fireRate;
             document.getElementById("shopLives").innerText = shopInventory.lives;
             document.getElementById("shopShield").innerText = shopInventory.shield;
 
-            // Cập nhật trạng thái nút Skin
+            // Nút Skin
             for (let i = 0; i <= 2; i++) {
                 let btn = document.getElementById(`skinBtn${i}`);
                 if (unlockedSkins.includes(i)) {
@@ -447,11 +446,28 @@
                         btn.innerText = "Chọn Dùng";
                         btn.className = "action-btn";
                     }
-                } else {
-                    let cost = i === 1 ? 200 : 400;
-                    btn.innerText = `Mua (${cost} Xu)`;
-                    btn.className = "action-btn buy";
                 }
+            }
+
+            // Nhiệm vụ
+            if (completedMissions.includes(1)) {
+                document.getElementById("m1Btn").innerText = "Đã Nhận";
+                document.getElementById("m1Btn").disabled = true;
+            }
+            if (completedMissions.includes(2)) {
+                document.getElementById("m2Btn").innerText = "Đã Nhận";
+                document.getElementById("m2Btn").disabled = true;
+            }
+        }
+
+        function claimMission(mId, reward) {
+            if (!completedMissions.includes(mId)) {
+                completedMissions.push(mId);
+                playerMoney += reward;
+                localStorage.setItem('nasa_money', playerMoney);
+                localStorage.setItem('nasa_missions', JSON.stringify(completedMissions));
+                updateHomeUI();
+                alert(`Chúc mừng bạn nhận được +${reward} Xu!`);
             }
         }
 
@@ -485,7 +501,6 @@
                 upgrades[type]++;
                 localStorage.setItem('nasa_money', playerMoney);
                 if(type === 'damage') localStorage.setItem('nasa_up_dmg', upgrades.damage);
-                if(type === 'fireRate') localStorage.setItem('nasa_up_fr', upgrades.fireRate);
                 updateHomeUI();
             } else {
                 alert("Không đủ Xu!");
@@ -500,7 +515,7 @@
                 localStorage.setItem('nasa_money', playerMoney);
                 localStorage.setItem(`nasa_shop_${item}`, shopInventory[item]);
                 updateHomeUI();
-                alert("Mua thành công vật phẩm!");
+                alert("Mua thành công!");
             } else {
                 alert("Không đủ Xu!");
             }
@@ -518,12 +533,12 @@
             fireRate: Math.max(8, 22 - (upgrades.fireRate * 2)),
             bulletSpeed: 16,
             bulletCount: 1,
-            damage: upgrades.damage + (currentSkin === 1 ? 2 : 0), // Skin đỏ tăng sát thương
+            damage: upgrades.damage + (currentSkin === 1 ? 2 : 0),
             magnetRadius: 140,
             orbitalShield: false
         };
 
-        let ship = { x: 150, y: canvas.height / 2, radius: 24, speed: 8 + (currentSkin === 2 ? 2 : 0) }; // Skin vàng tăng tốc độ
+        let ship = { x: 150, y: canvas.height / 2, radius: 24, speed: 8 + (currentSkin === 2 ? 2 : 0) };
 
         let keys = {};
         let isPointerDown = false;
@@ -638,13 +653,13 @@
         }
 
         const planetsJourney = [
-            { name: "Sao Thủy ☿️", targetDist: 0, desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất." },
-            { name: "Sao Kim ♀️", targetDist: 600, desc: "Hành tinh nóng nhất Hệ Mặt Trời với bầu khí quyển CO2 dày đặc." },
-            { name: "Trái Đất 🌍", targetDist: 1500, desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất có sự sống." },
-            { name: "Sao Hỏa 🔴", targetDist: 2600, desc: "Hành tinh Đỏ với ngọn núi lửa khổng lồ Olympus Mons." },
-            { name: "Sao Mộc 🟠", targetDist: 4000, desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời." },
-            { name: "Sao Thổ 🪐", targetDist: 6000, desc: "Hành tinh nổi bật với vành đai băng đá rực rỡ." },
-            { name: "Sao Hải Vương 🌊", targetDist: 8500, desc: "Hành tinh băng giá ở rìa ngoài hệ mặt trời." }
+            { name: "Sao Thủy ☿️", targetDist: 0, desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất. Bề mặt có nhiệt độ cực kỳ khắc nghiệt." },
+            { name: "Sao Kim ♀️", targetDist: 600, desc: "Hành tinh nóng nhất Hệ Mặt Trời với khí quyển CO2 dày đặc và áp suất cực cao." },
+            { name: "Trái Đất 🌍", targetDist: 1500, desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất trong Hệ Mặt Trời được biết có sự sống." },
+            { name: "Sao Hỏa 🔴", targetDist: 2600, desc: "Hành tinh Đỏ với ngọn núi lửa khổng lồ Olympus Mons lớn nhất Hệ Mặt Trời." },
+            { name: "Sao Mộc 🟠", targetDist: 4000, desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời với cơn bão Vết Đỏ Lớn." },
+            { name: "Sao Thổ 🪐", targetDist: 6000, desc: "Hành tinh nổi bật nhất nhờ hệ thống vành đai rực rỡ cấu tạo từ hạt băng và đá." },
+            { name: "Sao Hải Vương 🌊", targetDist: 8500, desc: "Hành tinh băng giá nằm ở rìa ngoài với những cơn gió siêu tốc độ." }
         ];
 
         function launchGame() {
@@ -704,7 +719,7 @@
             gameRunning = false;
             document.getElementById("hudTop").style.display = "none";
             
-            let bonusMultiplier = currentSkin === 2 ? 1.5 : 1; // Skin vàng thưởng thêm 50% Xu
+            let bonusMultiplier = currentSkin === 2 ? 1.5 : 1;
             let earned = Math.floor((Math.floor(score / 10) + (level * 25)) * bonusMultiplier);
             playerMoney += earned;
             localStorage.setItem('nasa_money', playerMoney);
@@ -722,11 +737,11 @@
         }
 
         const perkPool = [
-            { id: 'multishot', title: '⚡ Bắn Kép', desc: 'Tăng thêm tia đạn.' },
+            { id: 'multishot', title: '⚡ Bắn Kép', desc: 'Tăng thêm tia đạn càn quét.' },
             { id: 'firerate', title: '🚀 Tốc Độ Bắn Nhanh', desc: 'Xả đạn liên thanh tốc độ cao.' },
-            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương.' },
-            { id: 'shield', title: '🛡️ Vòng Xoay Plasma', desc: 'Quả cầu xoay quanh thiêu đốt địch.' },
-            { id: 'heal', title: '❤️ Hồi Máu', desc: 'Phục hồi 1 mạng.' }
+            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương tiêu diệt thiên thạch nhanh hơn.' },
+            { id: 'shield', title: '🛡️ Vòng Xoay Plasma', desc: 'Quả cầu xoay quanh thiêu đốt va chạm.' },
+            { id: 'heal', title: '❤️ Hồi Máu', desc: 'Phục hồi 1 mạng sinh tồn.' }
         ];
 
         function showLevelUpModal() {
@@ -952,7 +967,6 @@
             }
 
             if (invincibleTimer === 0 || Math.floor(invincibleTimer / 4) % 2 === 0) {
-                // Đổi màu tàu theo Skin đã chọn
                 let mainColor = currentSkin === 1 ? "#dc2626" : currentSkin === 2 ? "#eab308" : "#0b3d91";
                 let glassColor = currentSkin === 1 ? "#fca5a5" : currentSkin === 2 ? "#fef08a" : "#38bdf8";
 
