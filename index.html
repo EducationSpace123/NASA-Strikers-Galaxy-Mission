@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Space Mission - Trò Chơi Không Gian</title>
+    <title>NASA Ultimate Space Mission - Game Không Gian</title>
     <style>
         :root {
-            --bg-color: #050714;
+            --bg-color: #03050d;
             --text-color: #f0f4f8;
-            --card-bg: rgba(11, 61, 145, 0.25);
+            --card-bg: rgba(11, 61, 145, 0.3);
             --card-border: rgba(30, 144, 255, 0.4);
             --nasa-blue: #0b3d91;
             --nasa-red: #fc3d21;
@@ -40,7 +40,7 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
-            background-image: radial-gradient(circle at 50% 20%, #101b3b 0%, var(--bg-color) 70%);
+            background-image: radial-gradient(circle at 50% 20%, #0c1836 0%, var(--bg-color) 75%);
         }
 
         header {
@@ -50,8 +50,9 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             padding: 0 20px;
+            z-index: 5;
         }
 
         .nasa-badge {
@@ -84,13 +85,13 @@
         .game-wrapper {
             position: relative;
             width: 100%;
-            max-width: 850px;
-            height: 550px;
-            background: rgba(5, 7, 20, 0.9);
+            max-width: 900px;
+            height: 580px;
+            background: rgba(3, 5, 13, 0.95);
             border: 2px solid var(--card-border);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             backdrop-filter: blur(10px);
         }
 
@@ -110,7 +111,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(5, 7, 20, 0.88);
+            background: rgba(3, 5, 13, 0.9);
             z-index: 10;
             text-align: center;
             padding: 20px;
@@ -128,6 +129,29 @@
             margin-bottom: 20px;
             opacity: 0.9;
             line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .ship-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .ship-option {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .ship-option.selected {
+            border-color: var(--nasa-red);
+            background: rgba(252, 61, 33, 0.2);
+            box-shadow: 0 0 12px var(--nasa-red);
         }
 
         .start-btn {
@@ -157,27 +181,34 @@
 <body data-theme="dark">
 
     <header>
-        <div class="nasa-badge">NASA ARCADE</div>
+        <div class="nasa-badge">NASA ULTIMATE</div>
         <button class="btn" onclick="toggleTheme()">☀️ / 🌙 Giao Diện</button>
     </header>
 
     <div class="game-wrapper">
-        <!-- Màn hình chờ -->
+        <!-- Màn hình bắt đầu & Chọn phi thuyền -->
         <div class="game-overlay" id="startScreen">
-            <h1>SỨ MỆNH KHÔNG GIAN</h1>
-            <p>Điều khiển phi thuyền NASA tiêu diệt thiên thạch và sinh tồn!<br>Nâng cấp hỏa lực và vượt qua các cấp độ khó khăn.</p>
+            <h1>SỨ MỆNH KHÔNG GIAN TỐI CAO</h1>
+            <p>Chọn dòng phi thuyền tối tân của bạn, tiêu diệt thiên thạch, thu thập vật phẩm nâng cấp hỏa lực và đối đầu với các Boss ngoài hành tinh!</p>
+            
+            <div class="ship-selector">
+                <div class="ship-option selected" onclick="selectShip(1, this)">🚀 Apollo X (Cân bằng)</div>
+                <div class="ship-option" onclick="selectShip(2, this)">⚡ Artemis V (Tốc độ cao)</div>
+                <div class="ship-option" onclick="selectShip(3, this)">🛡️ Titan IX (Hỏa lực kép)</div>
+            </div>
+
             <button class="start-btn" onclick="startGame()">KHỞI ĐỘNG SỨ MỆNH</button>
-            <div class="controls-hint">Di chuyển: <b>Phím Mũi Tên</b> hoặc <b>A / D</b> | Bắn Laser: Phím <b>SPACE (Dấu cách)</b></div>
+            <div class="controls-hint">Di chuyển: <b>Phím Mũi Tên / A-D</b> | Bắn: <b>SPACE</b> | Nhặt vật phẩm để tăng sức mạnh!</div>
         </div>
 
         <!-- Màn hình kết thúc -->
         <div class="game-overlay" id="gameOverScreen" style="display: none;">
             <h1>KẾT THÚC SỨ MỆNH</h1>
             <p id="finalStats">Tổng điểm: 0 | Cấp độ đạt được: 1</p>
-            <button class="start-btn" onclick="startGame()">CHƠI LẠI</button>
+            <button class="start-btn" onclick="startGame()">CHƠI LẠI TỪ ĐẦU</button>
         </div>
 
-        <canvas id="gameCanvas" width="850" height="550"></canvas>
+        <canvas id="gameCanvas" width="900" height="580"></canvas>
     </div>
 
     <script>
@@ -188,9 +219,11 @@
         let score = 0;
         let level = 1;
         let lives = 3;
-        let invincibleTimer = 0;
+        let weaponLevel = 1; // 1: Đơn, 2: Kép, 3: Chùm 3 tia
+        let shieldActive = false;
+        let shieldTimer = 0;
+        let selectedShipType = 1;
 
-        // Phi thuyền
         let ship = {
             x: canvas.width / 2 - 25,
             y: canvas.height - 80,
@@ -199,14 +232,24 @@
             speed: 7
         };
 
+        function selectShip(type, element) {
+            selectedShipType = type;
+            document.querySelectorAll('.ship-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            if(type === 2) ship.speed = 10;
+            else if(type === 1) ship.speed = 7;
+            else ship.speed = 6;
+        }
+
         let keys = {};
         let bullets = [];
         let meteors = [];
+        let powerUps = [];
         let particles = [];
         let stars = [];
+        let boss = null;
 
-        // Khởi tạo các ngôi sao nền
-        for (let i = 0; i < 120; i++) {
+        for (let i = 0; i < 150; i++) {
             stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -217,7 +260,6 @@
 
         window.addEventListener("keydown", (e) => {
             keys[e.key] = true;
-            // Bắn đạn bằng phím Space
             if (e.code === "Space" && gameRunning) {
                 shootBullet();
                 e.preventDefault();
@@ -226,13 +268,20 @@
         window.addEventListener("keyup", (e) => { keys[e.key] = false; });
 
         function shootBullet() {
-            bullets.push({
-                x: ship.x + ship.width / 2 - 3,
-                y: ship.y,
-                width: 6,
-                height: 15,
-                speed: 10
-            });
+            if (weaponLevel === 1 || selectedShipType === 3) {
+                bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, width: 6, height: 16, speed: 12, color: "#38bdf8" });
+                if(selectedShipType === 3) {
+                    bullets.push({ x: ship.x + 5, y: ship.y + 10, width: 5, height: 14, speed: 12, color: "#fc3d21" });
+                    bullets.push({ x: ship.x + ship.width - 10, y: ship.y + 10, width: 5, height: 14, speed: 12, color: "#fc3d21" });
+                }
+            } else if (weaponLevel === 2) {
+                bullets.push({ x: ship.x + 8, y: ship.y, width: 6, height: 16, speed: 12, color: "#38bdf8" });
+                bullets.push({ x: ship.x + ship.width - 14, y: ship.y, width: 6, height: 16, speed: 12, color: "#38bdf8" });
+            } else {
+                bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, width: 6, height: 16, speed: 12, color: "#facc15" });
+                bullets.push({ x: ship.x + 2, y: ship.y + 5, width: 5, height: 14, speed: 12, color: "#facc15" });
+                bullets.push({ x: ship.x + ship.width - 7, y: ship.y + 5, width: 5, height: 14, speed: 12, color: "#facc15" });
+            }
         }
 
         function startGame() {
@@ -241,11 +290,14 @@
             ship.x = canvas.width / 2 - 25;
             bullets = [];
             meteors = [];
+            powerUps = [];
             particles = [];
+            boss = null;
             score = 0;
             level = 1;
             lives = 3;
-            invincibleTimer = 0;
+            weaponLevel = 1;
+            shieldActive = false;
             gameRunning = true;
             loop();
         }
@@ -256,52 +308,74 @@
             document.getElementById("gameOverScreen").style.display = "flex";
         }
 
-        function spawnMeteor() {
-            let spawnRate = Math.max(0.015, 0.035 - (level * 0.003));
-            if (Math.random() < spawnRate) {
+        function spawnEntity() {
+            // Xuất hiện Boss mỗi 500 điểm nếu chưa có Boss
+            if (score > 0 && score % 500 === 0 && !boss && meteors.length === 0) {
+                boss = {
+                    x: canvas.width / 2 - 60,
+                    y: -120,
+                    targetY: 60,
+                    width: 120,
+                    height: 80,
+                    hp: 50 + (level * 10),
+                    maxHp: 50 + (level * 10),
+                    dx: 2
+                };
+                return;
+            }
+
+            if (!boss && Math.random() < 0.035) {
                 let size = Math.random() * 35 + 20;
                 meteors.push({
                     x: Math.random() * (canvas.width - size),
                     y: -size,
                     size: size,
-                    speed: (Math.random() * 2 + 2) + (level * 0.5),
-                    hp: Math.ceil(size / 20) // Thiên thạch to máu nhiều hơn
+                    speed: (Math.random() * 2 + 2) + (level * 0.4),
+                    hp: Math.ceil(size / 15)
                 });
             }
         }
 
         function createExplosion(x, y, color) {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 18; i++) {
                 particles.push({
-                    x: x,
-                    y: y,
-                    dx: (Math.random() - 0.5) * 6,
-                    dy: (Math.random() - 0.5) * 6,
+                    x: x, y: y,
+                    dx: (Math.random() - 0.5) * 7,
+                    dy: (Math.random() - 0.5) * 7,
                     size: Math.random() * 3 + 1,
-                    life: 30,
+                    life: 35,
                     color: color
                 });
             }
         }
 
         function update() {
-            // Tăng cấp độ theo điểm
-            level = Math.floor(score / 150) + 1;
+            level = Math.floor(score / 200) + 1;
 
-            // Điều khiển phi thuyền
             if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x -= ship.speed;
             if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x += ship.speed;
 
             if (ship.x < 0) ship.x = 0;
             if (ship.x + ship.width > canvas.width) ship.x = canvas.width - ship.width;
 
-            if (invincibleTimer > 0) invincibleTimer--;
+            if (shieldActive) {
+                shieldTimer--;
+                if (shieldTimer <= 0) shieldActive = false;
+            }
 
-            // Cập nhật sao nền
             stars.forEach(star => {
                 star.y += star.speed;
                 if (star.y > canvas.height) star.y = 0;
             });
+
+            // Cập nhật Boss
+            if (boss) {
+                if (boss.y < boss.targetY) boss.y += 1.5;
+                else {
+                    boss.x += boss.dx;
+                    if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) boss.dx *= -1;
+                }
+            }
 
             // Cập nhật đạn
             for (let i = bullets.length - 1; i >= 0; i--) {
@@ -309,62 +383,94 @@
                 if (bullets[i].y < 0) bullets.splice(i, 1);
             }
 
-            // Sinh và cập nhật thiên thạch
-            spawnMeteor();
+            // Cập nhật Vật phẩm rơi
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                let p = powerUps[i];
+                p.y += 2.5;
+                if (
+                    ship.x < p.x + p.width && ship.x + ship.width > p.x &&
+                    ship.y < p.y + p.height && ship.y + ship.height > p.y
+                ) {
+                    if (p.type === 'weapon') weaponLevel = Math.min(3, weaponLevel + 1);
+                    if (p.type === 'shield') { shieldActive = true; shieldTimer = 350; }
+                    if (p.type === 'life') lives = Math.min(5, lives + 1);
+                    powerUps.splice(i, 1);
+                } else if (p.y > canvas.height) {
+                    powerUps.splice(i, 1);
+                }
+            }
+
+            // Cập nhật Thiên thạch
+            spawnEntity();
             for (let i = meteors.length - 1; i >= 0; i--) {
                 let m = meteors[i];
                 m.y += m.speed;
 
-                // Kiểm tra đạn bắn trúng thiên thạch
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
                     if (
-                        b.x < m.x + m.size &&
-                        b.x + b.width > m.x &&
-                        b.y < m.y + m.size &&
-                        b.y + b.height > m.y
+                        b.x < m.x + m.size && b.x + b.width > m.x &&
+                        b.y < m.y + m.size && b.y + b.height > m.y
                     ) {
                         m.hp--;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
                             createExplosion(m.x + m.size/2, m.y + m.size/2, "#fc3d21");
+                            if (Math.random() < 0.25) {
+                                let types = ['weapon', 'shield', 'life'];
+                                powerUps.push({ x: m.x, y: m.y, width: 25, height: 25, type: types[Math.floor(Math.random()*types.length)] });
+                            }
                             meteors.splice(i, 1);
-                            score += 25;
+                            score += 30;
                             break;
                         }
                     }
                 }
 
-                // Kiểm tra va chạm với phi thuyền
-                if (
-                    invincibleTimer === 0 &&
-                    ship.x < m.x + m.size &&
-                    ship.x + ship.width > m.x &&
-                    ship.y < m.y + m.size &&
-                    ship.y + ship.height > m.y
-                ) {
-                    lives--;
-                    invincibleTimer = 60; // 1 giây bất tử tạm thời
-                    createExplosion(ship.x + ship.width/2, ship.y + ship.height/2, "#00b4d8");
-                    meteors.splice(i, 1);
-                    if (lives <= 0) {
-                        gameOver();
+                // Va chạm Boss với Đạn
+                if (boss && boss.y >= boss.targetY) {
+                    for (let j = bullets.length - 1; j >= 0; j--) {
+                        let b = bullets[j];
+                        if (
+                            b.x < boss.x + boss.width && b.x + b.width > boss.x &&
+                            b.y < boss.y + boss.height && b.y + b.height > boss.y
+                        ) {
+                            boss.hp--;
+                            bullets.splice(j, 1);
+                            if (boss.hp <= 0) {
+                                createExplosion(boss.x + boss.width/2, boss.y + boss.height/2, "#facc15");
+                                score += 300;
+                                boss = null;
+                                break;
+                            }
+                        }
                     }
                 }
 
-                // Xóa thiên thạch trôi qua màn hình
+                // Va chạm Phi thuyền với Thiên thạch
+                if (
+                    ship.x < m.x + m.size && ship.x + ship.width > m.x &&
+                    ship.y < m.y + m.size && ship.y + ship.height > m.y
+                ) {
+                    if (shieldActive) {
+                        shieldActive = false;
+                    } else {
+                        lives--;
+                        if (lives <= 0) gameOver();
+                    }
+                    createExplosion(ship.x + ship.width/2, ship.y + ship.height/2, "#00b4d8");
+                    meteors.splice(i, 1);
+                }
+
                 if (m.y > canvas.height) {
                     meteors.splice(i, 1);
                     score += 5;
                 }
             }
 
-            // Cập nhật hạt hiệu ứng nổ
             for (let i = particles.length - 1; i >= 0; i--) {
                 let p = particles[i];
-                p.x += p.dx;
-                p.y += p.dy;
-                p.life--;
+                p.x += p.dx; p.y += p.dy; p.life--;
                 if (p.life <= 0) particles.splice(i, 1);
             }
         }
@@ -372,65 +478,73 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Vẽ sao nền
             ctx.fillStyle = "#ffffff";
             stars.forEach(star => {
                 ctx.fillRect(star.x, star.y, star.size, star.size);
             });
 
-            // Vẽ phi thuyền NASA (nhấp nháy khi bất tử)
-            if (invincibleTimer === 0 || Math.floor(invincibleTimer / 5) % 2 === 0) {
-                ctx.fillStyle = "#1d4ed8";
-                ctx.beginPath();
-                ctx.moveTo(ship.x + ship.width / 2, ship.y);
-                ctx.lineTo(ship.x, ship.y + ship.height);
-                ctx.lineTo(ship.x + ship.width, ship.y + ship.height);
-                ctx.closePath();
-                ctx.fill();
+            // Vẽ Phi thuyền
+            ctx.fillStyle = selectedShipType === 2 ? "#00b4d8" : (selectedShipType === 3 ? "#facc15" : "#1d4ed8");
+            ctx.beginPath();
+            ctx.moveTo(ship.x + ship.width / 2, ship.y);
+            ctx.lineTo(ship.x, ship.y + ship.height);
+            ctx.lineTo(ship.x + ship.width, ship.y + ship.height);
+            ctx.closePath();
+            ctx.fill();
 
-                // Buồng lái phi thuyền
-                ctx.fillStyle = "#00b4d8";
+            if (shieldActive) {
+                ctx.strokeStyle = "#38bdf8";
+                ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(ship.x + ship.width / 2, ship.y + 25, 6, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Động cơ phản lực
-                ctx.fillStyle = "#fc3d21";
-                ctx.fillRect(ship.x + 12, ship.y + ship.height, 8, 10);
-                ctx.fillRect(ship.x + 30, ship.y + ship.height, 8, 10);
+                ctx.arc(ship.x + ship.width/2, ship.y + ship.height/2, 38, 0, Math.PI * 2);
+                ctx.stroke();
             }
 
-            // Vẽ đạn laser
-            ctx.fillStyle = "#38bdf8";
+            // Vẽ Đạn
             bullets.forEach(b => {
+                ctx.fillStyle = b.color;
                 ctx.fillRect(b.x, b.y, b.width, b.height);
             });
 
-            // Vẽ thiên thạch
+            // Vẽ Vật phẩm rơi
+            powerUps.forEach(p => {
+                ctx.fillStyle = p.type === 'weapon' ? '#38bdf8' : (p.type === 'shield' ? '#a855f7' : '#ef4444');
+                ctx.fillRect(p.x, p.y, p.width, p.height);
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 12px Segoe UI";
+                ctx.fillText(p.type === 'weapon' ? 'W' : (p.type === 'shield' ? 'S' : 'HP'), p.x + 5, p.y + 17);
+            });
+
+            // Vẽ Thiên thạch
             meteors.forEach(m => {
                 ctx.fillStyle = "#64748b";
                 ctx.beginPath();
                 ctx.arc(m.x + m.size / 2, m.y + m.size / 2, m.size / 2, 0, Math.PI * 2);
                 ctx.fill();
-                // Chi tiết bề mặt
-                ctx.fillStyle = "#334155";
-                ctx.beginPath();
-                ctx.arc(m.x + m.size / 3, m.y + m.size / 3, m.size / 5, 0, Math.PI * 2);
-                ctx.fill();
             });
 
-            // Vẽ hạt hiệu ứng nổ
+            // Vẽ Boss
+            if (boss) {
+                ctx.fillStyle = "#b91c1c";
+                ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+                ctx.fillStyle = "#ef4444";
+                ctx.fillRect(boss.x + 10, boss.y - 10, boss.width - 20, 6);
+                ctx.fillStyle = "#22c55e";
+                ctx.fillRect(boss.x + 10, boss.y - 10, (boss.width - 20) * (boss.hp / boss.maxHp), 6);
+            }
+
             particles.forEach(p => {
                 ctx.fillStyle = p.color;
                 ctx.fillRect(p.x, p.y, p.size, p.size);
             });
 
-            // Hiển thị thông tin HUD (Điểm, Cấp độ, Mạng)
+            // Giao diện HUD
             ctx.fillStyle = "#f0f4f8";
             ctx.font = "bold 16px Segoe UI";
             ctx.fillText(`Điểm: ${score}`, 20, 30);
             ctx.fillText(`Cấp độ: ${level}`, 20, 55);
-            ctx.fillText(`Mạng sống: ${"❤️ ".repeat(lives)}`, canvas.width - 160, 30);
+            ctx.fillText(`Hỏa lực (Lvl): ${weaponLevel}`, 20, 80);
+            ctx.fillText(`Mạng: ${"❤️ ".repeat(lives)}`, canvas.width - 160, 30);
         }
 
         function loop() {
