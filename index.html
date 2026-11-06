@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Galaxy Survivor - Hệ Mặt Trời</title>
+    <title>NASA Galaxy Survivor - Hệ Mặt Trời & Shop</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -11,6 +11,7 @@
             --nasa-blue: #0b3d91;
             --nasa-red: #fc3d21;
             --accent: #38bdf8;
+            --gold: #facc15;
         }
 
         * {
@@ -65,89 +66,101 @@
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
         }
 
         .nasa-logo {
-            width: 75px;
-            height: 75px;
-            margin-bottom: 6px;
-            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
+            width: 65px;
+            height: 65px;
+            margin-bottom: 4px;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
         }
 
         .home-screen h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #fff;
             margin-bottom: 2px;
             font-weight: 900;
-            letter-spacing: 1px;
         }
 
         .home-screen h1 span {
             color: var(--nasa-red);
         }
 
-        .home-screen p {
-            color: #94a3b8;
-            margin-bottom: 8px;
-            font-size: 0.8rem;
-        }
-
         .money-badge {
             background: rgba(11, 61, 145, 0.5);
             border: 1px solid var(--accent);
-            padding: 5px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            color: #facc15;
+            font-size: 0.85rem;
+            color: var(--gold);
             font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        /* Hangar & Shop Container */
+        .menu-grid {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
             margin-bottom: 8px;
         }
 
-        .upgrade-box {
-            width: 100%;
-            max-width: 380px;
+        .panel-box {
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid #334155;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 8px 12px;
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
             text-align: left;
         }
 
-        .upgrade-item {
+        .panel-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .panel-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: #e2e8f0;
+            margin-bottom: 3px;
         }
 
-        .upgrade-btn {
+        .action-btn {
             background: var(--nasa-blue);
             color: white;
             border: none;
             padding: 3px 8px;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             font-size: 0.7rem;
         }
 
-        .upgrade-btn:hover {
+        .action-btn:hover {
             background: #1d4ed8;
+        }
+
+        .action-btn.buy {
+            background: #ca8a04;
+        }
+        .action-btn.buy:hover {
+            background: #eab308;
         }
 
         .mode-container {
             width: 100%;
             max-width: 380px;
             display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .mode-btn {
@@ -155,52 +168,40 @@
             background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            padding: 8px 4px;
-            font-size: 0.75rem;
+            padding: 6px 4px;
+            font-size: 0.7rem;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
         .mode-btn.active {
             border-color: var(--nasa-red);
             background: rgba(252, 61, 33, 0.3);
-            box-shadow: 0 0 10px rgba(252, 61, 33, 0.4);
         }
 
         .audio-toggle-btn {
             background: rgba(14, 165, 233, 0.2);
             border: 1px solid var(--accent);
             color: #38bdf8;
-            padding: 8px 16px;
-            font-size: 0.85rem;
+            padding: 6px 12px;
+            font-size: 0.75rem;
             font-weight: bold;
             border-radius: 20px;
             cursor: pointer;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-        }
-
-        .audio-toggle-btn:hover {
-            background: rgba(14, 165, 233, 0.4);
+            margin-bottom: 8px;
         }
 
         .play-btn {
             background: linear-gradient(135deg, var(--nasa-red), #e11d48);
             color: white;
             border: none;
-            padding: 12px 35px;
-            font-size: 1.05rem;
+            padding: 10px 30px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(252, 61, 33, 0.6);
-            transition: transform 0.1s;
-        }
-
-        .play-btn:active {
-            transform: scale(0.95);
+            box-shadow: 0 0 15px rgba(252, 61, 33, 0.6);
         }
 
         /* Popup Giới Thiệu Hành Tinh */
@@ -319,17 +320,33 @@
             <h1>NASA <span>SURVIVOR</span></h1>
             <p>Hành Trình Khám Phá Hệ Mặt Trời</p>
 
-            <div class="money-badge">💰 Số Dư Cải Tiến: <span id="playerMoney">0</span> Xu</div>
+            <div class="money-badge">💰 Số Dư: <span id="playerMoney">200</span> Xu</div>
 
-            <div class="upgrade-box">
-                <div style="font-size:0.78rem; font-weight:bold; color:var(--accent);">🚀 HANGAR - CẢI TIẾN MÁY BAY</div>
-                <div class="upgrade-item">
-                    <span>Sức Mạnh Súng (Lvl <span id="lvlDamage">1</span>) - <span id="costDmg">100</span> Xu</span>
-                    <button class="upgrade-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
+            <div class="menu-grid">
+                <!-- Hangar Nâng Cấp -->
+                <div class="panel-box">
+                    <div class="panel-title">🚀 HANGAR - NÂNG CẤP TÀU</div>
+                    <div class="panel-item">
+                        <span>Sức Súng (Lvl <span id="lvlDamage">1</span>) - <span id="costDmg">100</span> Xu</span>
+                        <button class="action-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
+                    </div>
+                    <div class="panel-item">
+                        <span>Tốc Bắn (Lvl <span id="lvlFireRate">1</span>) - <span id="costFr">100</span> Xu</span>
+                        <button class="action-btn" onclick="upgradeStat('fireRate')">Nâng Cấp</button>
+                    </div>
                 </div>
-                <div class="upgrade-item">
-                    <span>Tốc Độ Bắn (Lvl <span id="lvlFireRate">1</span>) - <span id="costFr">100</span> Xu</span>
-                    <button class="upgrade-btn" onclick="upgradeStat('fireRate')">Nâng Cấp</button>
+
+                <!-- Phần Shop Vật Phẩm Tiêu Hao -->
+                <div class="panel-box">
+                    <div class="panel-title">🛒 SHOP VẬT PHẨM HỖ TRỢ</div>
+                    <div class="panel-item">
+                        <span>❤️ Mua Thêm 1 Mạng (Sẵn có: <span id="shopLives">0</span>) - 150 Xu</span>
+                        <button class="action-btn buy" onclick="buyShopItem('lives')">Mua Ngay</button>
+                    </div>
+                    <div class="panel-item">
+                        <span>🛡️ Kích Hoạt Khiên (Sẵn có: <span id="shopShield">0</span>) - 200 Xu</span>
+                        <button class="action-btn buy" onclick="buyShopItem('shield')">Mua Ngay</button>
+                    </div>
                 </div>
             </div>
 
@@ -339,7 +356,6 @@
                 <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 Vô Tận</button>
             </div>
 
-            <!-- Nút bật âm thanh thủ công vượt qua cơ chế chặn của trình duyệt -->
             <button class="audio-toggle-btn" id="audioToggleBtn" onclick="toggleAudio()">🎵 BẬT ÂM THANH NỀN</button>
 
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
@@ -347,7 +363,7 @@
 
         <!-- Popup Giới Thiệu Hành Tinh -->
         <div id="planetPopup">
-            <h2 id="popupTitle" style="color: #facc15; margin-bottom: 8px;">Khám Phá Hành Tinh</h2>
+            <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 8px;">Khám Phá Hành Tinh</h2>
             <p id="popupDesc" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 15px;"></p>
             <button class="play-btn" style="padding: 10px 25px; font-size: 1rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
         </div>
@@ -358,7 +374,7 @@
             <h1 style="color: var(--nasa-red);">SỨ MỆNH THẤT BẠI</h1>
             <p id="finalStats" style="color:#cbd5e1; margin-bottom: 4px;">Tổng điểm: 0</p>
             <p id="finalDistance" style="color:#38bdf8; margin-bottom: 8px;">Quãng đường: 0 mét</p>
-            <p id="earnedMoney" style="color: #facc15; font-weight: bold; font-size: 1.05rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
+            <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1.05rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
             <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
         </div>
 
@@ -402,108 +418,14 @@
         let currentPlanetIdx = 0;
         let invincibleTimer = 0;
 
-        // Hệ thống âm thanh nền 2 phút+ (Web Audio API Synthesizer)
-        let audioCtx = null;
-        let isMusicPlaying = false;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        function toggleAudio() {
-            initAudio();
-            if (!isMusicPlaying) {
-                startSpaceMusic();
-                document.getElementById("audioToggleBtn").innerText = "🔊 ĐÃ BẬT ÂM THANH NỀN";
-                document.getElementById("audioToggleBtn").style.borderColor = "#22c55e";
-                document.getElementById("audioToggleBtn").style.color = "#22c55e";
-            } else {
-                stopSpaceMusic();
-                document.getElementById("audioToggleBtn").innerText = "🎵 BẬT ÂM THANH NỀN";
-                document.getElementById("audioToggleBtn").style.borderColor = "var(--accent)";
-                document.getElementById("audioToggleBtn").style.color = "#38bdf8";
-            }
-        }
-
-        // Tạo giai điệu nhạc nền vũ trụ cuốn hút kéo dài liên tục hơn 2 phút và lặp lại
-        function startSpaceMusic() {
-            isMusicPlaying = true;
-            const notes = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392];
-            let step = 0;
-
-            function playNoteSequence() {
-                if (!isMusicPlaying || !audioCtx) return;
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 3.5);
-
-                step++;
-                setTimeout(playNoteSequence, 4000);
-            }
-            playNoteSequence();
-        }
-
-        function stopSpaceMusic() {
-            isMusicPlaying = false;
-        }
-
-        // Hiệu ứng âm thanh bắn súng & nổ
-        function playSound(type) {
-            if (!audioCtx || audioCtx.state !== 'running') return;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            if (type === 'shoot') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            } else if (type === 'explosion') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.3);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
-            }
-        }
-
-        const planetsJourney = [
-            { name: "Sao Thủy ☿️", targetDist: 0, desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất trong Hệ Mặt Trời. Nhiệt độ bề mặt dao động cực kỳ khắc nghiệt giữa ngày và đêm." },
-            { name: "Sao Kim ♀️", targetDist: 500, desc: "Hành tinh nóng nhất Hệ Mặt Trời với bầu khí quyển dày đặc chứa CO2 và áp suất cực cao, mây axit sulfuric bao phủ." },
-            { name: "Trái Đất 🌍", targetDist: 1200, desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất được biết đến có sự sống, với 71% bề mặt là nước dạng lỏng." },
-            { name: "Sao Hỏa 🔴", targetDist: 2200, desc: "Được mệnh danh là 'Hành tinh Đỏ' do đất đá giàu sắt oxit. Nơi có Olympus Mons - ngọn núi lửa lớn nhất Hệ Mặt Trời." },
-            { name: "Sao Mộc 🟠", targetDist: 3500, desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời, nổi tiếng với Vết Đỏ Lớn là một cơn bão khổng lồ đã tồn tại hàng thế kỷ." },
-            { name: "Sao Thổ 🪐", targetDist: 5000, desc: "Hành tinh nổi bật với hệ thống vành đai rực rỡ cấu tạo từ các hạt băng và đá vô cùng đẹp mắt." },
-            { name: "Sao Hải Vương 🌊", targetDist: 7000, desc: "Hành tinh băng giá nằm ở rìa ngoài hệ mặt trời, nổi tiếng với những cơn gió siêu mạnh và sắc xanh biển sâu thẳm." }
-        ];
-
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 200;
         let upgrades = {
             damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1,
             fireRate: localStorage.getItem('nasa_up_fr') ? parseInt(localStorage.getItem('nasa_up_fr')) : 1
+        };
+        let shopInventory = {
+            lives: localStorage.getItem('nasa_shop_lives') ? parseInt(localStorage.getItem('nasa_shop_lives')) : 0,
+            shield: localStorage.getItem('nasa_shop_shield') ? parseInt(localStorage.getItem('nasa_shop_shield')) : 0
         };
 
         updateHomeUI();
@@ -514,6 +436,8 @@
             document.getElementById("lvlFireRate").innerText = upgrades.fireRate;
             document.getElementById("costDmg").innerText = 100 * upgrades.damage;
             document.getElementById("costFr").innerText = 100 * upgrades.fireRate;
+            document.getElementById("shopLives").innerText = shopInventory.lives;
+            document.getElementById("shopShield").innerText = shopInventory.shield;
         }
 
         function upgradeStat(type) {
@@ -526,7 +450,21 @@
                 if(type === 'fireRate') localStorage.setItem('nasa_up_fr', upgrades.fireRate);
                 updateHomeUI();
             } else {
-                alert("Không đủ Xu cải tiến máy bay!");
+                alert("Không đủ Xu cải tiến!");
+            }
+        }
+
+        function buyShopItem(item) {
+            let cost = item === 'lives' ? 150 : 200;
+            if (playerMoney >= cost) {
+                playerMoney -= cost;
+                shopInventory[item]++;
+                localStorage.setItem('nasa_money', playerMoney);
+                localStorage.setItem(`nasa_shop_${item}`, shopInventory[item]);
+                updateHomeUI();
+                alert(`Mua thành công vật phẩm!`);
+            } else {
+                alert("Không đủ Xu để mua vật phẩm trong Shop!");
             }
         }
 
@@ -576,6 +514,101 @@
             stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2, speed: Math.random() * 3 + 1 });
         }
 
+        let audioCtx = null;
+        let isMusicPlaying = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleAudio() {
+            initAudio();
+            if (!isMusicPlaying) {
+                startSpaceMusic();
+                document.getElementById("audioToggleBtn").innerText = "🔊 ĐÃ BẬT ÂM THANH NỀN";
+                document.getElementById("audioToggleBtn").style.borderColor = "#22c55e";
+                document.getElementById("audioToggleBtn").style.color = "#22c55e";
+            } else {
+                stopSpaceMusic();
+                document.getElementById("audioToggleBtn").innerText = "🎵 BẬT ÂM THANH NỀN";
+                document.getElementById("audioToggleBtn").style.borderColor = "var(--accent)";
+                document.getElementById("audioToggleBtn").style.color = "#38bdf8";
+            }
+        }
+
+        function startSpaceMusic() {
+            isMusicPlaying = true;
+            const notes = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392];
+            let step = 0;
+
+            function playNoteSequence() {
+                if (!isMusicPlaying || !audioCtx) return;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 3.5);
+
+                step++;
+                setTimeout(playNoteSequence, 4000);
+            }
+            playNoteSequence();
+        }
+
+        function stopSpaceMusic() {
+            isMusicPlaying = false;
+        }
+
+        function playSound(type) {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'shoot') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'explosion') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        const planetsJourney = [
+            { name: "Sao Thủy ☿️", targetDist: 0, desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất trong Hệ Mặt Trời. Nhiệt độ bề mặt dao động cực kỳ khắc nghiệt giữa ngày và đêm." },
+            { name: "Sao Kim ♀️", targetDist: 500, desc: "Hành tinh nóng nhất Hệ Mặt Trời với bầu khí quyển dày đặc chứa CO2 và áp suất cực cao, mây axit sulfuric bao phủ." },
+            { name: "Trái Đất 🌍", targetDist: 1200, desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất được biết đến có sự sống, với 71% bề mặt là nước dạng lỏng." },
+            { name: "Sao Hỏa 🔴", targetDist: 2200, desc: "Được mệnh danh là 'Hành tinh Đỏ' do đất đá giàu sắt oxit. Nơi có Olympus Mons - ngọn núi lửa lớn nhất Hệ Mặt Trời." },
+            { name: "Sao Mộc 🟠", targetDist: 3500, desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời, nổi tiếng với Vết Đỏ Lớn là một cơn bão khổng lồ đã tồn tại hàng thế kỷ." },
+            { name: "Sao Thổ 🪐", targetDist: 5000, desc: "Hành tinh nổi bật với hệ thống vành đai rực rỡ cấu tạo từ các hạt băng và đá vô cùng đẹp mắt." },
+            { name: "Sao Hải Vương 🌊", targetDist: 7000, desc: "Hành tinh băng giá nằm ở rìa ngoài hệ mặt trời, nổi tiếng với những cơn gió siêu mạnh và sắc xanh biển sâu thẳm." }
+        ];
+
         function launchGame() {
             initAudio();
             if (!isMusicPlaying) startSpaceMusic();
@@ -588,7 +621,7 @@
             level = 1;
             exp = 0;
             maxExp = 100;
-            lives = 3;
+            lives = 3 + shopInventory.lives; // Cộng thêm mạng đã mua từ shop
             distanceMeters = 0;
             currentPlanetIdx = 0;
             invincibleTimer = 60;
@@ -602,7 +635,7 @@
             stats.damage = upgrades.damage;
             stats.fireRate = Math.max(8, 22 - (upgrades.fireRate * 2));
             stats.bulletCount = 1;
-            stats.orbitalShield = false;
+            stats.orbitalShield = shopInventory.shield > 0; // Kích hoạt khiên nếu đã mua từ shop
 
             ship.x = canvas.width / 2;
             ship.y = canvas.height - 120;
@@ -638,7 +671,7 @@
 
             document.getElementById("finalStats").innerText = `Tổng điểm: ${score} | Cấp: ${level}`;
             document.getElementById("finalDistance").innerText = `Quãng đường: ${Math.floor(distanceMeters)} mét`;
-            document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu cải tiến!`;
+            document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu!`;
             document.getElementById("gameOverScreen").style.display = "flex";
         }
 
