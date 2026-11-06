@@ -391,7 +391,7 @@
 
         let stats = {
             fireRate: Math.max(8, 22 - (upgrades.fireRate * 2)),
-            bulletSpeed: 12,
+            bulletSpeed: 14,
             bulletCount: 1,
             damage: upgrades.damage,
             magnetRadius: 140,
@@ -521,9 +521,9 @@
             if (gameMode === 'boss') { if (!boss) spawnBoss(); return; }
             let interval = gameMode === 'endless' ? 350 : 500;
             if (score > 0 && score % interval === 0 && !boss && meteors.length === 0) { spawnBoss(); return; }
-            if (!boss && Math.random() < 0.038) {
-                let size = Math.random() * 32 + 18;
-                meteors.push({ x: Math.random() * (canvas.width - size), y: -size, size: size, speed: (Math.random() * 2 + 2) + (level * 0.35), hp: Math.ceil(size / 12) * stats.damage, maxHp: Math.ceil(size / 12) * stats.damage });
+            if (!boss && Math.random() < 0.04) {
+                let size = Math.random() * 36 + 20;
+                meteors.push({ x: Math.random() * (canvas.width - size), y: -size, size: size, speed: (Math.random() * 2 + 2) + (level * 0.35), hp: Math.ceil(size / 10) * stats.damage, maxHp: Math.ceil(size / 10) * stats.damage });
             }
         }
 
@@ -541,8 +541,8 @@
             if (keys["ArrowDown"] || keys["s"]) ship.y += ship.speed;
 
             if (isPointerDown) {
-                ship.x += (pointerX - ship.x) * 0.2;
-                ship.y += (pointerY - ship.y) * 0.2;
+                ship.x += (pointerX - ship.x) * 0.25;
+                ship.y += (pointerY - ship.y) * 0.25;
             }
 
             ship.x = Math.max(ship.radius, Math.min(canvas.width - ship.radius, ship.x));
@@ -554,7 +554,7 @@
                 let spread = 14;
                 let startX = ship.x - ((stats.bulletCount - 1) * spread) / 2;
                 for (let i = 0; i < stats.bulletCount; i++) {
-                    bullets.push({ x: startX + (i * spread), y: ship.y - 15, width: 5, height: 16, speed: stats.bulletSpeed });
+                    bullets.push({ x: startX + (i * spread), y: ship.y - 15, width: 6, height: 18, speed: stats.bulletSpeed });
                 }
             }
 
@@ -574,7 +574,7 @@
 
             for (let i = bullets.length - 1; i >= 0; i--) {
                 bullets[i].y -= bullets[i].speed;
-                if (bullets[i].y < 0) bullets.splice(i, 1);
+                if (bullets[i].y < -20) bullets.splice(i, 1);
             }
 
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
@@ -601,8 +601,8 @@
             for (let i = gems.length - 1; i >= 0; i--) {
                 let g = gems[i];
                 let dx = ship.x - g.x, dy = ship.y - g.y, dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 8; g.y += (dy / dist) * 8; }
-                if (dist < ship.radius + 10) {
+                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 9; g.y += (dy / dist) * 9; }
+                if (dist < ship.radius + 12) {
                     exp += g.value; gems.splice(i, 1);
                     if (exp >= maxExp) { exp = 0; maxExp = Math.floor(maxExp * 1.35); level++; showLevelUpModal(); }
                 }
@@ -613,27 +613,31 @@
                 let m = meteors[i];
                 m.y += m.speed;
 
-                // Kiểm tra va chạm đạn chuẩn xác với thiên thạch (hình tròn)
+                // Kiểm tra va chạm cực nhạy giữa đạn và thiên thạch
+                let meteorDestroyed = false;
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
                     let mCenterX = m.x + m.size / 2;
-                    let mcenterY = m.y + m.size / 2;
+                    let mCenterY = m.y + m.size / 2;
                     let bCenterX = b.x + b.width / 2;
                     let bCenterY = b.y + b.height / 2;
-                    let distToBullet = Math.sqrt((bCenterX - mCenterX) ** 2 + (bCenterY - mcenterY) ** 2);
+                    let distance = Math.sqrt((bCenterX - mCenterX) ** 2 + (bCenterY - mCenterY) ** 2);
 
-                    if (distToBullet < m.size / 2) {
+                    // Nếu khoảng cách nhỏ hơn bán kính thiên thạch + một khoảng đệm an toàn
+                    if (distance < (m.size / 2) + 8) {
                         m.hp -= stats.damage;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
-                            createExplosion(mCenterX, mcenterY, "#38bdf8");
-                            gems.push({ x: mCenterX, y: mcenterY, value: Math.ceil(m.size / 5) });
+                            createExplosion(mCenterX, mCenterY, "#38bdf8");
+                            gems.push({ x: mCenterX, y: mCenterY, value: Math.ceil(m.size / 4) });
                             meteors.splice(i, 1);
                             score += 25;
+                            meteorDestroyed = true;
                             break;
                         }
                     }
                 }
+                if (meteorDestroyed) continue;
 
                 if (boss && boss.y >= boss.targetY) {
                     for (let j = bullets.length - 1; j >= 0; j--) {
@@ -652,11 +656,11 @@
                 }
 
                 let dx = ship.x - (m.x + m.size/2), dy = ship.y - (m.y + m.size/2);
-                if (Math.sqrt(dx * dx + dy * dy) < ship.radius + m.size/2) {
+                if (Math.sqrt(dx * dx + dy * dy) < ship.radius + m.size/2 - 4) {
                     lives--; createExplosion(ship.x, ship.y, "#fc3d21"); meteors.splice(i, 1);
                     if (lives <= 0) gameOver();
                 }
-                if (m.y > canvas.height) meteors.splice(i, 1);
+                if (m.y > canvas.height + 50) meteors.splice(i, 1);
             }
 
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -676,7 +680,7 @@
             stars.forEach(star => ctx.fillRect(star.x, star.y, star.size, star.size));
 
             gems.forEach(g => {
-                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(g.x, g.y, 5, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(g.x, g.y, 6, 0, Math.PI * 2); ctx.fill();
             });
 
             if (stats.orbitalShield) {
