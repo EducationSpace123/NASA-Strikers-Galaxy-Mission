@@ -70,16 +70,16 @@
         }
 
         .nasa-logo {
-            width: 85px;
-            height: 85px;
-            margin-bottom: 8px;
+            width: 75px;
+            height: 75px;
+            margin-bottom: 6px;
             filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
         }
 
         .home-screen h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #fff;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             font-weight: 900;
             letter-spacing: 1px;
         }
@@ -90,19 +90,19 @@
 
         .home-screen p {
             color: #94a3b8;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
         }
 
         .money-badge {
             background: rgba(11, 61, 145, 0.5);
             border: 1px solid var(--accent);
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #facc15;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .upgrade-box {
@@ -111,11 +111,11 @@
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid #334155;
             border-radius: 12px;
-            padding: 10px 14px;
-            margin-bottom: 12px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             text-align: left;
         }
 
@@ -123,7 +123,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #e2e8f0;
         }
 
@@ -131,11 +131,11 @@
             background: var(--nasa-blue);
             color: white;
             border: none;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
         .upgrade-btn:hover {
@@ -147,7 +147,7 @@
             max-width: 380px;
             display: flex;
             gap: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .mode-btn {
@@ -155,8 +155,8 @@
             background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            padding: 10px 5px;
-            font-size: 0.8rem;
+            padding: 8px 4px;
+            font-size: 0.75rem;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
@@ -169,12 +169,29 @@
             box-shadow: 0 0 10px rgba(252, 61, 33, 0.4);
         }
 
+        .audio-toggle-btn {
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid var(--accent);
+            color: #38bdf8;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .audio-toggle-btn:hover {
+            background: rgba(14, 165, 233, 0.4);
+        }
+
         .play-btn {
             background: linear-gradient(135deg, var(--nasa-red), #e11d48);
             color: white;
             border: none;
-            padding: 14px 40px;
-            font-size: 1.1rem;
+            padding: 12px 35px;
+            font-size: 1.05rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
@@ -305,7 +322,7 @@
             <div class="money-badge">💰 Số Dư Cải Tiến: <span id="playerMoney">0</span> Xu</div>
 
             <div class="upgrade-box">
-                <div style="font-size:0.8rem; font-weight:bold; color:var(--accent);">🚀 HANGAR - CẢI TIẾN MÁY BAY</div>
+                <div style="font-size:0.78rem; font-weight:bold; color:var(--accent);">🚀 HANGAR - CẢI TIẾN MÁY BAY</div>
                 <div class="upgrade-item">
                     <span>Sức Mạnh Súng (Lvl <span id="lvlDamage">1</span>) - <span id="costDmg">100</span> Xu</span>
                     <button class="upgrade-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
@@ -321,6 +338,9 @@
                 <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 Diệt Boss</button>
                 <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 Vô Tận</button>
             </div>
+
+            <!-- Nút bật âm thanh thủ công vượt qua cơ chế chặn của trình duyệt -->
+            <button class="audio-toggle-btn" id="audioToggleBtn" onclick="toggleAudio()">🎵 BẬT ÂM THANH NỀN</button>
 
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
@@ -395,24 +415,36 @@
             }
         }
 
-        // Tạo giai điệu âm nhạc cuốn hút kéo dài liên tục và lặp lại
-        function startSpaceMusic() {
+        function toggleAudio() {
             initAudio();
-            if (isMusicPlaying) return;
-            isMusicPlaying = true;
+            if (!isMusicPlaying) {
+                startSpaceMusic();
+                document.getElementById("audioToggleBtn").innerText = "🔊 ĐÃ BẬT ÂM THANH NỀN";
+                document.getElementById("audioToggleBtn").style.borderColor = "#22c55e";
+                document.getElementById("audioToggleBtn").style.color = "#22c55e";
+            } else {
+                stopSpaceMusic();
+                document.getElementById("audioToggleBtn").innerText = "🎵 BẬT ÂM THANH NỀN";
+                document.getElementById("audioToggleBtn").style.borderColor = "var(--accent)";
+                document.getElementById("audioToggleBtn").style.color = "#38bdf8";
+            }
+        }
 
+        // Tạo giai điệu nhạc nền vũ trụ cuốn hút kéo dài liên tục hơn 2 phút và lặp lại
+        function startSpaceMusic() {
+            isMusicPlaying = true;
             const notes = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392];
             let step = 0;
 
             function playNoteSequence() {
-                if (!isMusicPlaying) return;
+                if (!isMusicPlaying || !audioCtx) return;
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
 
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
 
-                gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
 
                 osc.connect(gain);
@@ -433,7 +465,7 @@
 
         // Hiệu ứng âm thanh bắn súng & nổ
         function playSound(type) {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state !== 'running') return;
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.connect(gain);
@@ -545,7 +577,9 @@
         }
 
         function launchGame() {
-            startSpaceMusic();
+            initAudio();
+            if (!isMusicPlaying) startSpaceMusic();
+
             document.getElementById("homeScreen").style.display = "none";
             document.getElementById("gameOverScreen").style.display = "none";
             document.getElementById("hudTop").style.display = "flex";
@@ -596,7 +630,6 @@
 
         function gameOver() {
             gameRunning = false;
-            stopSpaceMusic();
             document.getElementById("hudTop").style.display = "none";
             
             let earned = Math.floor(score / 10) + (level * 25);
