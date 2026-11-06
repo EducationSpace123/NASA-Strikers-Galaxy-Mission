@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galaxy Survivor: NASA Edition - Fix Controls</title>
+    <title>Galaxy Survivor: NASA Edition - Select Mode</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -48,7 +48,7 @@
             display: block;
             width: 100%;
             height: 100%;
-            touch-action: none; /* Giúp thao tác chạm cảm ứng mượt mà không bị cuộn trang */
+            touch-action: none;
         }
 
         .overlay {
@@ -57,42 +57,71 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 6, 23, 0.92);
+            background: rgba(2, 6, 23, 0.94);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
         }
 
         .overlay h1 {
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             background: linear-gradient(to right, #38bdf8, #818cf8, #f43f5e);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             font-weight: 900;
         }
 
         .overlay p {
             color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Nút chọn chế độ chơi */
+        .mode-btn {
+            background: rgba(30, 41, 59, 0.85);
+            border: 2px solid #475569;
+            color: white;
+            width: 100%;
+            max-width: 320px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 14px;
+            cursor: pointer;
+            margin: 8px 0;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            background: rgba(51, 65, 85, 0.95);
+            transform: translateY(-2px);
+        }
+
+        .mode-btn.active {
+            border-color: var(--accent);
+            background: rgba(244, 63, 94, 0.2);
         }
 
         .play-btn {
             background: linear-gradient(135deg, #f43f5e, #e11d48);
             color: white;
             border: none;
-            padding: 16px 40px;
-            font-size: 1.15rem;
+            padding: 15px 40px;
+            font-size: 1.1rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(244, 63, 94, 0.5);
+            margin-top: 15px;
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.5);
         }
 
         .play-btn:active {
@@ -196,11 +225,16 @@
 <body>
 
     <div class="game-container">
-        <!-- Màn hình Menu Chính -->
+        <!-- Màn hình Menu Chọn Chế Độ -->
         <div class="overlay" id="startScreen">
             <h1>GALAXY SURVIVOR</h1>
-            <p>Trải nghiệm sinh tồn không gian cực mượt!<br>Hỗ trợ cả Kéo chuột / Cảm ứng và Phím mũi tên (A/D) để di chuyển.</p>
-            <button class="play-btn" onclick="startGame()">BẮT ĐẦU CHƠI</button>
+            <p>Chọn chế độ chơi yêu thích của bạn:</p>
+            
+            <button class="mode-btn active" id="modeNormal" onclick="selectMode('normal')">🚀 1. Chế Độ Hành Trình (Hệ Mặt Trời)</button>
+            <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 2. Thử Thách Boss Liên Tục</button>
+            <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 3. Vô Tận (Endless Survival)</button>
+
+            <button class="play-btn" onclick="startGame()">VÀO TRẬN NGAY</button>
         </div>
 
         <!-- Màn hình Thua Cuộc -->
@@ -227,7 +261,7 @@
                 <div id="expBar"></div>
             </div>
             <div class="planet-progress-box">
-                <span id="planetInfo">📍 Mục tiêu: Sao Thủy ☿️</span>
+                <span id="planetInfo">📍 Chế độ: Bình thường</span>
                 <span id="bossAlert" style="color: #f43f5e; display: none; font-weight: bold;">⚠️ BOSS</span>
             </div>
         </div>
@@ -246,6 +280,7 @@
         let maxExp = 100;
         let lives = 3;
         let distance = 0;
+        let gameMode = 'normal'; // 'normal', 'boss', 'endless'
 
         let stats = {
             fireRate: 20,
@@ -273,23 +308,24 @@
             { name: "Sao Hải Vương 🌊", targetDist: 25000 }
         ];
 
+        function selectMode(mode) {
+            gameMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if(mode === 'normal') document.getElementById('modeNormal').classList.add('active');
+            if(mode === 'boss') document.getElementById('modeBoss').classList.add('active');
+            if(mode === 'endless') document.getElementById('modeEndless').classList.add('active');
+        }
+
         let keys = {};
         let isPointerDown = false;
         let pointerX = canvas.width / 2;
         let pointerY = canvas.height - 100;
 
-        // Xử lý sự kiện bàn phím
         window.addEventListener("keydown", (e) => { keys[e.key] = true; });
         window.addEventListener("keyup", (e) => { keys[e.key] = false; });
 
-        // Xử lý sự kiện chuột và chạm cảm ứng mượt mà
-        canvas.addEventListener("pointerdown", (e) => {
-            isPointerDown = true;
-            updatePointerPos(e);
-        });
-        canvas.addEventListener("pointermove", (e) => {
-            if (isPointerDown) updatePointerPos(e);
-        });
+        canvas.addEventListener("pointerdown", (e) => { isPointerDown = true; updatePointerPos(e); });
+        canvas.addEventListener("pointermove", (e) => { if (isPointerDown) updatePointerPos(e); });
         canvas.addEventListener("pointerup", () => { isPointerDown = false; });
         canvas.addEventListener("pointercancel", () => { isPointerDown = false; });
 
@@ -341,6 +377,10 @@
             ship.y = canvas.height - 120;
             pointerX = ship.x;
             pointerY = ship.y;
+
+            if (gameMode === 'boss') {
+                spawnBoss(); // Bắt đầu ngay vào đánh Boss
+            }
 
             gameRunning = true;
             loop();
@@ -395,29 +435,40 @@
             if (id === 'heal') lives = Math.min(5, lives + 1);
         }
 
+        function spawnBoss() {
+            boss = {
+                x: canvas.width / 2 - 60,
+                y: -120,
+                targetY: 80,
+                width: 120,
+                height: 70,
+                hp: 80 + (level * 20),
+                maxHp: 80 + (level * 20),
+                dx: 3,
+                shootTimer: 0
+            };
+        }
+
         function spawnEntity() {
-            if (score > 0 && score % 500 === 0 && !boss && meteors.length === 0) {
-                boss = {
-                    x: canvas.width / 2 - 60,
-                    y: -120,
-                    targetY: 80,
-                    width: 120,
-                    height: 70,
-                    hp: 50 + (level * 15),
-                    maxHp: 50 + (level * 15),
-                    dx: 2.5,
-                    shootTimer: 0
-                };
+            if (gameMode === 'boss') {
+                if (!boss) spawnBoss();
                 return;
             }
 
-            if (!boss && Math.random() < 0.035) {
+            let bossInterval = gameMode === 'endless' ? 350 : 500;
+            if (score > 0 && score % bossInterval === 0 && !boss && meteors.length === 0) {
+                spawnBoss();
+                return;
+            }
+
+            let spawnChance = gameMode === 'endless' ? 0.05 : 0.035;
+            if (!boss && Math.random() < spawnChance) {
                 let size = Math.random() * 32 + 18;
                 meteors.push({
                     x: Math.random() * (canvas.width - size),
                     y: -size,
                     size: size,
-                    speed: (Math.random() * 2 + 2) + (level * 0.3),
+                    speed: (Math.random() * 2 + 2) + (level * 0.35),
                     hp: Math.ceil(size / 12) * stats.damage,
                     maxHp: Math.ceil(size / 12) * stats.damage
                 });
@@ -441,23 +492,19 @@
             distance += 1;
             orbitalAngle += 0.08;
 
-            // Di chuyển bằng phím bàn phím
             if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x -= ship.speed;
             if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x += ship.speed;
             if (keys["ArrowUp"] || keys["w"] || keys["W"]) ship.y -= ship.speed;
             if (keys["ArrowDown"] || keys["s"] || keys["S"]) ship.y += ship.speed;
 
-            // Nếu người dùng kéo chuột hoặc chạm cảm ứng, di chuyển bám theo ngón tay
             if (isPointerDown) {
                 ship.x += (pointerX - ship.x) * 0.2;
                 ship.y += (pointerY - ship.y) * 0.2;
             }
 
-            // Giới hạn trong khung game
             ship.x = Math.max(ship.radius, Math.min(canvas.width - ship.radius, ship.x));
             ship.y = Math.max(ship.radius, Math.min(canvas.height - ship.radius, ship.y));
 
-            // Bắn đạn tự động
             shootTimer++;
             if (shootTimer >= stats.fireRate) {
                 shootTimer = 0;
@@ -485,8 +532,8 @@
                     boss.x += boss.dx;
                     if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) boss.dx *= -1;
                     boss.shootTimer++;
-                    if (boss.shootTimer % 45 === 0) {
-                        enemyBullets.push({ x: boss.x + boss.width/2 - 4, y: boss.y + boss.height, width: 8, height: 16, speed: 6 });
+                    if (boss.shootTimer % 40 === 0) {
+                        enemyBullets.push({ x: boss.x + boss.width/2 - 4, y: boss.y + boss.height, width: 8, height: 16, speed: 6.5 });
                     }
                 }
                 document.getElementById("bossAlert").style.display = "inline";
@@ -586,6 +633,10 @@
                                 createExplosion(boss.x + boss.width/2, boss.y + boss.height/2, "#facc15", 30);
                                 score += 300;
                                 boss = null;
+                                if (gameMode === 'boss') {
+                                    score += 500; // Thưởng phá boss
+                                    spawnBoss(); // Lại ra Boss tiếp theo mạnh hơn
+                                }
                                 break;
                             }
                         }
@@ -615,11 +666,17 @@
             document.getElementById("livesText").innerText = `❤️ ${lives}`;
             document.getElementById("expBar").style.width = `${(exp / maxExp) * 100}%`;
 
-            let currentPlanet = planets[0];
-            for (let p of planets) {
-                if (distance >= p.targetDist) currentPlanet = p;
+            if (gameMode === 'normal') {
+                let currentPlanet = planets[0];
+                for (let p of planets) {
+                    if (distance >= p.targetDist) currentPlanet = p;
+                }
+                document.getElementById("planetInfo").innerText = `📍 Hành tinh: ${currentPlanet.name}`;
+            } else if (gameMode === 'boss') {
+                document.getElementById("planetInfo").innerText = `👑 Chế độ: Thử Thách Boss`;
+            } else {
+                document.getElementById("planetInfo").innerText = `🌌 Chế độ: Sinh Tồn Vô Tận`;
             }
-            document.getElementById("planetInfo").innerText = `📍 Hành tinh: ${currentPlanet.name}`;
         }
 
         function draw() {
