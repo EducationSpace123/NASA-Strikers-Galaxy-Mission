@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Galaxy Survivor - Hành Trình Hệ Mặt Trời</title>
+    <title>NASA Galaxy Survivor - Hệ Mặt Trời</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -186,7 +186,7 @@
             transform: scale(0.95);
         }
 
-        /* Bảng Giới Thiệu Hành Tinh (Popup giữa trận khi đến mốc mới) */
+        /* Popup Giới Thiệu Hành Tinh */
         #planetPopup {
             display: none;
             position: absolute;
@@ -221,7 +221,7 @@
             text-align: center;
         }
 
-        /* Bảng Chọn Kỹ Năng Khi Lên Cấp */
+        /* Bảng Kỹ Năng Lên Cấp */
         #perkModal {
             display: none;
             position: absolute;
@@ -325,7 +325,7 @@
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
 
-        <!-- Popup Giới Thiệu Hành Tinh Khi Đạt Mốc -->
+        <!-- Popup Giới Thiệu Hành Tinh -->
         <div id="planetPopup">
             <h2 id="popupTitle" style="color: #facc15; margin-bottom: 8px;">Khám Phá Hành Tinh</h2>
             <p id="popupDesc" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 15px;"></p>
@@ -382,43 +382,90 @@
         let currentPlanetIdx = 0;
         let invincibleTimer = 0;
 
-        // Danh sách hành trình các hành tinh và thông tin giới thiệu
-        const planetsJourney = [
-            { 
-                name: "Sao Thủy ☿️", 
-                targetDist: 0, 
-                desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất trong Hệ Mặt Trời. Nhiệt độ bề mặt dao động cực kỳ khắc nghiệt giữa ngày và đêm." 
-            },
-            { 
-                name: "Sao Kim ♀️", 
-                targetDist: 500, 
-                desc: "Hành tinh nóng nhất Hệ Mặt Trời với bầu khí quyển dày đặc chứa CO2 và áp suất cực cao, mây axit sulfuric bao phủ." 
-            },
-            { 
-                name: "Trái Đất 🌍", 
-                targetDist: 1200, 
-                desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất được biết đến có sự sống, với 71% bề mặt là nước dạng lỏng." 
-            },
-            { 
-                name: "Sao Hỏa 🔴", 
-                targetDist: 2200, 
-                desc: "Được mệnh danh là 'Hành tinh Đỏ' do đất đá giàu sắt oxit. Nơi có Olympus Mons - ngọn núi lửa lớn nhất Hệ Mặt Trời." 
-            },
-            { 
-                name: "Sao Mộc 🟠", 
-                targetDist: 3500, 
-                desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời, nổi tiếng với Vết Đỏ Lớn là một cơn bão khổng lồ đã tồn tại hàng thế kỷ." 
-            },
-            { 
-                name: "Sao Thổ 🪐", 
-                targetDist: 5000, 
-                desc: "Hành tinh nổi bật với hệ thống vành đai rực rỡ cấu tạo từ các hạt băng và đá vô cùng đẹp mắt." 
-            },
-            { 
-                name: "Sao Hải Vương 🌊", 
-                targetDist: 7000, 
-                desc: "Hành tinh băng giá nằm ở rìa ngoài hệ mặt trời, nổi tiếng với những cơn gió siêu mạnh và sắc xanh biển sâu thẳm." 
+        // Hệ thống âm thanh nền 2 phút+ (Web Audio API Synthesizer)
+        let audioCtx = null;
+        let isMusicPlaying = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Tạo giai điệu âm nhạc cuốn hút kéo dài liên tục và lặp lại
+        function startSpaceMusic() {
+            initAudio();
+            if (isMusicPlaying) return;
+            isMusicPlaying = true;
+
+            const notes = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392];
+            let step = 0;
+
+            function playNoteSequence() {
+                if (!isMusicPlaying) return;
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 3.5);
+
+                step++;
+                setTimeout(playNoteSequence, 4000);
+            }
+            playNoteSequence();
+        }
+
+        function stopSpaceMusic() {
+            isMusicPlaying = false;
+        }
+
+        // Hiệu ứng âm thanh bắn súng & nổ
+        function playSound(type) {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'shoot') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'explosion') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        const planetsJourney = [
+            { name: "Sao Thủy ☿️", targetDist: 0, desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất trong Hệ Mặt Trời. Nhiệt độ bề mặt dao động cực kỳ khắc nghiệt giữa ngày và đêm." },
+            { name: "Sao Kim ♀️", targetDist: 500, desc: "Hành tinh nóng nhất Hệ Mặt Trời với bầu khí quyển dày đặc chứa CO2 và áp suất cực cao, mây axit sulfuric bao phủ." },
+            { name: "Trái Đất 🌍", targetDist: 1200, desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất được biết đến có sự sống, với 71% bề mặt là nước dạng lỏng." },
+            { name: "Sao Hỏa 🔴", targetDist: 2200, desc: "Được mệnh danh là 'Hành tinh Đỏ' do đất đá giàu sắt oxit. Nơi có Olympus Mons - ngọn núi lửa lớn nhất Hệ Mặt Trời." },
+            { name: "Sao Mộc 🟠", targetDist: 3500, desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời, nổi tiếng với Vết Đỏ Lớn là một cơn bão khổng lồ đã tồn tại hàng thế kỷ." },
+            { name: "Sao Thổ 🪐", targetDist: 5000, desc: "Hành tinh nổi bật với hệ thống vành đai rực rỡ cấu tạo từ các hạt băng và đá vô cùng đẹp mắt." },
+            { name: "Sao Hải Vương 🌊", targetDist: 7000, desc: "Hành tinh băng giá nằm ở rìa ngoài hệ mặt trời, nổi tiếng với những cơn gió siêu mạnh và sắc xanh biển sâu thẳm." }
         ];
 
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 200;
@@ -498,6 +545,7 @@
         }
 
         function launchGame() {
+            startSpaceMusic();
             document.getElementById("homeScreen").style.display = "none";
             document.getElementById("gameOverScreen").style.display = "none";
             document.getElementById("hudTop").style.display = "flex";
@@ -534,7 +582,7 @@
         }
 
         function triggerPlanetPopup(planet) {
-            gameRunning = false; // Tạm dừng game để đọc giới thiệu hành tinh
+            gameRunning = false;
             document.getElementById("popupTitle").innerText = `🪐 Đã Đến: ${planet.name}`;
             document.getElementById("popupDesc").innerText = planet.desc;
             document.getElementById("planetPopup").style.display = "block";
@@ -548,6 +596,7 @@
 
         function gameOver() {
             gameRunning = false;
+            stopSpaceMusic();
             document.getElementById("hudTop").style.display = "none";
             
             let earned = Math.floor(score / 10) + (level * 25);
@@ -615,6 +664,7 @@
         }
 
         function createExplosion(x, y, color) {
+            playSound('explosion');
             for (let i = 0; i < 10; i++) {
                 particles.push({ x, y, dx: (Math.random() - 0.5) * 6, dy: (Math.random() - 0.5) * 6, size: Math.random() * 4 + 1, life: 25, color });
             }
@@ -624,10 +674,8 @@
             orbitalAngle += 0.08;
             if (invincibleTimer > 0) invincibleTimer--;
             
-            // Cập nhật quãng đường hành trình
             distanceMeters += 0.5;
 
-            // Kiểm tra mốc hành tinh tiếp theo
             if (gameMode === 'normal' && currentPlanetIdx + 1 < planetsJourney.length) {
                 if (distanceMeters >= planetsJourney[currentPlanetIdx + 1].targetDist) {
                     currentPlanetIdx++;
@@ -651,6 +699,7 @@
             shootTimer++;
             if (shootTimer >= stats.fireRate) {
                 shootTimer = 0;
+                playSound('shoot');
                 let spread = 14;
                 let startX = ship.x - ((stats.bulletCount - 1) * spread) / 2;
                 for (let i = 0; i < stats.bulletCount; i++) {
