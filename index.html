@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NASA Galaxy Survivor - Fullscreen & Hộp Quà Tri Thức</title>
+    <title>NASA Galaxy Survivor - Chế Độ Màn Hình Rộng Dễ Nhìn</title>
     <style>
         :root {
-            --bg-color: #030712;
-            --text-color: #f8fafc;
+            --bg-color: #020617;
+            --text-color: #ffffff;
             --nasa-blue: #0b3d91;
             --nasa-red: #fc3d21;
             --accent: #38bdf8;
@@ -23,8 +23,8 @@
         }
 
         body, html {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -48,14 +48,14 @@
             touch-action: none;
         }
 
-        /* TRANG CHỦ (MENU CHÍNH) */
+        /* TRANG CHỦ (MENU CHÍNH) - TỐI ƯU HIỂN THỊ RÕ RÀNG */
         .home-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(3, 7, 18, 0.98), rgba(11, 61, 145, 0.88));
+            background: rgba(2, 6, 23, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -63,20 +63,22 @@
             z-index: 20;
             padding: 15px;
             text-align: center;
+            overflow-y: auto;
         }
 
         .nasa-logo {
-            width: 55px;
-            height: 55px;
-            margin-bottom: 4px;
-            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.8));
+            width: 60px;
+            height: 60px;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
         }
 
         .home-screen h1 {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 2px;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 4px;
             font-weight: 900;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
 
         .home-screen h1 span {
@@ -84,59 +86,65 @@
         }
 
         .money-badge {
-            background: rgba(11, 61, 145, 0.6);
-            border: 1px solid var(--accent);
-            padding: 4px 14px;
+            background: rgba(11, 61, 145, 0.8);
+            border: 2px solid var(--gold);
+            padding: 6px 18px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: var(--gold);
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
         }
 
         .menu-grid {
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .panel-box {
             flex: 1;
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid #334155;
-            border-radius: 10px;
-            padding: 8px 10px;
+            min-width: 250px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 10px 12px;
             text-align: left;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
 
         .panel-title {
-            font-size: 0.72rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 4px;
         }
 
         .panel-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.68rem;
-            color: #e2e8f0;
-            margin-bottom: 4px;
+            font-size: 0.8rem;
+            color: #f8fafc;
+            margin-bottom: 6px;
         }
 
         .action-btn {
             background: var(--nasa-blue);
             color: white;
             border: none;
-            padding: 3px 8px;
-            border-radius: 5px;
+            padding: 5px 10px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
         }
 
         .action-btn:hover {
@@ -153,24 +161,24 @@
 
         .controls-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
         .mode-container {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .mode-btn {
             background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            padding: 6px 12px;
-            font-size: 0.7rem;
+            padding: 8px 14px;
+            font-size: 0.8rem;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
@@ -178,22 +186,22 @@
 
         .mode-btn.active {
             border-color: var(--nasa-red);
-            background: rgba(252, 61, 33, 0.3);
+            background: rgba(252, 61, 33, 0.4);
         }
 
         .audio-toggle-btn, .fullscreen-toggle-btn, .quiz-btn {
-            background: rgba(14, 165, 233, 0.2);
-            border: 1px solid var(--accent);
+            background: rgba(14, 165, 233, 0.25);
+            border: 2px solid var(--accent);
             color: #38bdf8;
-            padding: 6px 12px;
-            font-size: 0.7rem;
+            padding: 8px 14px;
+            font-size: 0.8rem;
             font-weight: bold;
-            border-radius: 15px;
+            border-radius: 20px;
             cursor: pointer;
         }
 
         .quiz-btn {
-            background: rgba(250, 204, 21, 0.2);
+            background: rgba(250, 204, 21, 0.25);
             border-color: var(--gold);
             color: var(--gold);
         }
@@ -202,48 +210,49 @@
             background: linear-gradient(135deg, var(--nasa-red), #e11d48);
             color: white;
             border: none;
-            padding: 10px 35px;
-            font-size: 1.05rem;
+            padding: 12px 45px;
+            font-size: 1.2rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(252, 61, 33, 0.6);
+            box-shadow: 0 0 25px rgba(252, 61, 33, 0.7);
         }
 
-        /* POPUP KHOA HỌC / THỬ THÁCH TRI THỨC */
+        /* MODAL KHÁM PHÁ & THỬ THÁCH TRI THỨC */
         #planetPopup, #quizModal {
             display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 88%;
-            max-width: 460px;
-            background: rgba(11, 61, 145, 0.96);
-            border: 2px solid var(--accent);
+            width: 90%;
+            max-width: 500px;
+            background: rgba(11, 61, 145, 0.98);
+            border: 3px solid var(--accent);
             border-radius: 16px;
-            padding: 20px;
+            padding: 22px;
             z-index: 40;
             text-align: center;
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
         }
 
         .quiz-opt-btn {
             width: 100%;
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid #475569;
+            background: rgba(30, 41, 59, 0.95);
+            border: 2px solid #475569;
             color: white;
-            padding: 8px;
-            font-size: 0.8rem;
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
             border-radius: 8px;
-            margin: 4px 0;
+            margin: 6px 0;
             cursor: pointer;
             text-align: left;
         }
 
         .quiz-opt-btn:hover {
             border-color: var(--accent);
-            background: rgba(51, 65, 85, 0.9);
+            background: rgba(51, 65, 85, 0.95);
         }
 
         /* MÀN HÌNH THUA TRẬN */
@@ -253,7 +262,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 7, 18, 0.96);
+            background: rgba(3, 7, 18, 0.98);
             display: none;
             flex-direction: column;
             align-items: center;
@@ -271,7 +280,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 6, 23, 0.96);
+            background: rgba(2, 6, 23, 0.98);
             z-index: 30;
             flex-direction: column;
             align-items: center;
@@ -283,28 +292,29 @@
             background: rgba(30, 41, 59, 0.95);
             border: 2px solid #475569;
             width: 100%;
-            max-width: 400px;
-            padding: 12px 18px;
+            max-width: 420px;
+            padding: 14px 20px;
             border-radius: 12px;
-            margin: 6px 0;
+            margin: 8px 0;
             cursor: pointer;
             text-align: left;
         }
 
-        /* HUD TRONG TRẬN TOÀN MÀN HÌNH */
+        /* HUD HIỂN THỊ ĐỈNH MÀN HÌNH CỰC RÕ */
         .hud-top {
             position: absolute;
             top: 15px;
-            left: 20px;
-            right: 20px;
+            left: 25px;
+            right: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             pointer-events: none;
             z-index: 10;
-            font-weight: bold;
-            font-size: 0.95rem;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.9);
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,1);
         }
     </style>
 </head>
@@ -314,16 +324,16 @@
         <!-- TRANG CHỦ (MENU CHÍNH) -->
         <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
-            <h1>NASA <span>SURVIVOR</span> - HỘP QUÀ TRI THỨC</h1>
+            <h1>NASA <span>SURVIVOR</span> - MÀN HÌNH RỘNG</h1>
             <div class="money-badge">💰 Số Dư: <span id="playerMoney">400</span> Xu</div>
 
             <div class="menu-grid">
                 <!-- Hộp quà tri thức -->
                 <div class="panel-box">
                     <div class="panel-title">🎁 HỘP QUÀ TRI THỨC</div>
-                    <div class="panel-item" style="flex-direction:column; align-items:flex-start; gap:4px;">
-                        <span>Trả lời câu hỏi vũ trụ để nhận ngay +50 Xu!</span>
-                        <button class="quiz-btn" style="width:100%; margin-top:4px;" onclick="openRandomQuiz()">MỞ HỘP CÂU HỎI NGẪU NHIÊN</button>
+                    <div class="panel-item" style="flex-direction:column; align-items:flex-start; gap:6px;">
+                        <span>Trả lời câu hỏi vũ trụ nhận ngay +50 Xu!</span>
+                        <button class="quiz-btn" style="width:100%;" onclick="openRandomQuiz()">MỞ CÂU HỎI NGẪU NHIÊN</button>
                     </div>
                 </div>
 
@@ -377,32 +387,32 @@
 
         <!-- MODAL HỘP QUÀ TRI THỨC (20 CÂU HỎI) -->
         <div id="quizModal">
-            <h3 style="color: var(--gold); margin-bottom: 8px;">🎁 Thử Thách Tri Thức Vũ Trụ</h3>
-            <p id="quizQuestionText" style="font-size: 0.9rem; color: #fff; margin-bottom: 12px; line-height: 1.4;"></p>
+            <h3 style="color: var(--gold); margin-bottom: 10px; font-size:1.2rem;">🎁 Thử Thách Tri Thức Vũ Trụ</h3>
+            <p id="quizQuestionText" style="font-size: 1rem; color: #fff; margin-bottom: 14px; line-height: 1.5;"></p>
             <div id="quizOptionsContainer"></div>
-            <button class="action-btn" style="margin-top: 12px; padding: 6px 15px;" onclick="closeQuizModal()">Đóng</button>
+            <button class="action-btn" style="margin-top: 15px; padding: 8px 20px; font-size:0.9rem;" onclick="closeQuizModal()">Đóng</button>
         </div>
 
         <!-- Popup Giới Thiệu Hành Tinh -->
         <div id="planetPopup">
-            <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 8px;">Khám Phá Hành Tinh</h2>
-            <p id="popupDesc" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 15px;"></p>
-            <button class="play-btn" style="padding: 8px 22px; font-size: 0.95rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
+            <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 10px; font-size: 1.4rem;">Khám Phá Hành Tinh</h2>
+            <p id="popupDesc" style="font-size: 1rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 18px;"></p>
+            <button class="play-btn" style="padding: 10px 28px; font-size: 1rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
         </div>
 
         <!-- Màn hình Thua Trận -->
         <div class="game-over-screen" id="gameOverScreen">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:55px; height:55px;">
-            <h1 style="color: var(--nasa-red);">SỨ MỆNH THẤT BẠI</h1>
-            <p id="finalStats" style="color:#cbd5e1; margin-bottom: 4px;">Tổng điểm: 0</p>
-            <p id="finalDistance" style="color:#38bdf8; margin-bottom: 6px;">Quãng đường: 0 mét</p>
-            <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1.05rem; margin-bottom: 15px;">Nhận được: +0 Xu</p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:60px; height:60px;">
+            <h1 style="color: var(--nasa-red); font-size:2rem;">SỨ MỆNH THẤT BẠI</h1>
+            <p id="finalStats" style="color:#cbd5e1; font-size:1.1rem; margin-bottom: 6px;">Tổng điểm: 0</p>
+            <p id="finalDistance" style="color:#38bdf8; font-size:1.1rem; margin-bottom: 8px;">Quãng đường: 0 mét</p>
+            <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1.2rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
             <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
         </div>
 
         <!-- Bảng Kỹ Năng Lên Cấp -->
         <div id="perkModal">
-            <h2 style="color: var(--accent); margin-bottom: 12px;">🎉 NÂNG CẤP TRONG TRẬN</h2>
+            <h2 style="color: var(--accent); margin-bottom: 15px; font-size:1.4rem;">🎉 NÂNG CẤP TRONG TRẬN</h2>
             <div id="perkOptionsContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
         </div>
 
@@ -425,18 +435,25 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            if (ship) {
+                ship.y = Math.min(ship.y, canvas.height - ship.radius);
+            }
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
+                document.documentElement.requestFullscreen().then(() => {
+                    setTimeout(resizeCanvas, 100);
+                }).catch(err => {
                     alert(`Không thể mở toàn màn hình: ${err.message}`);
                 });
             } else {
                 if (document.exitFullscreen) {
-                    document.exitFullscreen();
+                    document.exitFullscreen().then(() => {
+                        setTimeout(resizeCanvas, 100);
+                    });
                 }
             }
         }
@@ -446,7 +463,7 @@
             { q: "Hành tinh nào gần Mặt Trời nhất?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Trái Đất", "D. Sao Hỏa"], ans: 0 },
             { q: "Hành tinh nào nóng nhất trong Hệ Mặt Trời?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Sao Mộc", "D. Sao Hỏa"], ans: 1 },
             { q: "Hành tinh nào có kích thước lớn nhất Hệ Mặt Trời?", opts: ["A. Sao Thổ", "B. Sao Mộc", "C. Sao Hải Vương", "D. Trái Đất"], ans: 1 },
-            { q: "Vùng tối đen trong vũ trụ có trọng lực cực mạnh đến mức ánh sáng cũng không thoát ra được gọi là gì?", opts: ["A. Tinh vân", "B. Lỗ đen (Black Hole)", "C. Tiêu hành tinh", "D. Sao băng"], ans: 1 },
+            { q: "Vùng tối đen trong vũ trụ có trọng lực cực mạnh đến mức ánh sáng cũng không thoát ra được gọi là gì?", opts: ["A. Tinh vân", "B. Lỗ đen (Black Hole)", "C. Tiểu hành tinh", "D. Sao băng"], ans: 1 },
             { q: "Hành tinh nào được gọi là 'Hành tinh Đỏ'?", opts: ["A. Sao Kim", "B. Sao Hỏa", "C. Sao Mộc", "D. Sao Thủy"], ans: 1 },
             { q: "Nơi nào lớn nhất chứa tất cả các ngôi sao, hành tinh và không gian?", opts: ["A. Vũ trụ", "B. Thiên hà", "C. Hệ mặt trời", "D. Tinh vân"], ans: 0 },
             { q: "Hành tinh nào có hệ thống vành đai rực rỡ nhất?", opts: ["A. Sao Thổ", "B. Sao Mộc", "C. Sao Thiên Vương", "D. Sao Hải Vương"], ans: 0 },
@@ -459,8 +476,8 @@
             { q: "Lực nào giữ cho các hành tinh quay quanh Mặt Trời?", opts: ["A. Lực ma sát", "B. Lực hấp dẫn", "C. Lực từ trường", "D. Âm thanh"], ans: 1 },
             { q: "Hành tinh duy nhất được biết tới hiện nay có sự sống là gì?", opts: ["A. Sao Hỏa", "B. Trái Đất", "C. Sao Kim", "D. Sao Mộc"], ans: 1 },
             { q: "Cơn bão khổng lồ tồn tại hàng trăm năm trên Sao Mộc có tên là gì?", opts: ["A. Vết Đỏ Lớn", "B. Bão Mặt Trời", "C. Hố Đen", "D. Vành Đai Băng"], ans: 0 },
-            { q: "Đơn vị nào quản lý hàng không và vũ trụ quốc gia Hoa Kỳ?", opts: ["A. SpaceX", "B. NASA", "C. ESA", "D. JAXA"], ans: 1 },
-            { q: "Vật thể cấu tạo từ đá và băng bay quanh Mặt Trời đuôi sáng rực gọi là gì?", opts: ["A. Sao chổi", "B. Tiêu hành tinh", "C. Vệ tinh", "D. Khí cầu"], ans: 0 },
+            { q: "Cơ quan hàng không và vũ trụ Hoa Kỳ tên là gì?", opts: ["A. SpaceX", "B. NASA", "C. ESA", "D. JAXA"], ans: 1 },
+            { q: "Vật thể cấu tạo từ đá và băng bay quanh Mặt Trời đuôi sáng rực gọi là gì?", opts: ["A. Sao chổi", "B. Tiểu hành tinh", "C. Vệ tinh", "D. Khí cầu"], ans: 0 },
             { q: "Thiên hà chứa Hệ Mặt Trời của chúng ta có tên là gì?", opts: ["A. Andromeda", "B. Ngân Hà (Milky Way)", "C. Sombrero", "D. Centaurus"], ans: 1 },
             { q: "Hành tinh lạnh nhất và xa nhất trong 8 hành tinh chính của Hệ Mặt Trời là gì?", opts: ["A. Sao Thủy", "B. Sao Hải Vương", "C. Sao Kim", "D. Sao Mộc"], ans: 1 }
         ];
@@ -604,14 +621,14 @@
 
         let stats = {
             fireRate: Math.max(8, 22 - (upgrades.fireRate * 2)),
-            bulletSpeed: 16,
+            bulletSpeed: 18,
             bulletCount: 1,
             damage: upgrades.damage + (currentSkin === 1 ? 2 : 0),
-            magnetRadius: 160,
+            magnetRadius: 180,
             orbitalShield: false
         };
 
-        let ship = { x: 150, y: canvas.height / 2, radius: 24, speed: 8 + (currentSkin === 2 ? 2 : 0) };
+        let ship = { x: 150, y: canvas.height / 2, radius: 26, speed: 9 + (currentSkin === 2 ? 2 : 0) };
 
         let keys = {};
         let isPointerDown = false;
@@ -636,8 +653,8 @@
         let shootTimer = 0;
         let orbitalAngle = 0;
 
-        for (let i = 0; i < 150; i++) {
-            stars.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2, speed: Math.random() * 3 + 1 });
+        for (let i = 0; i < 180; i++) {
+            stars.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 1, speed: Math.random() * 3 + 1 });
         }
 
         let audioCtx = null;
@@ -763,7 +780,7 @@
             stats.fireRate = Math.max(8, 22 - (upgrades.fireRate * 2));
             stats.bulletCount = 1;
             stats.orbitalShield = shopInventory.shield > 0;
-            ship.speed = 8 + (currentSkin === 2 ? 2 : 0);
+            ship.speed = 9 + (currentSkin === 2 ? 2 : 0);
 
             ship.x = 150;
             ship.y = canvas.height / 2;
@@ -827,7 +844,7 @@
             shuffled.slice(0, 3).forEach(perk => {
                 let card = document.createElement("div");
                 card.className = "perk-card";
-                card.innerHTML = `<div style="color:var(--accent); font-weight:bold;">${perk.title}</div><div style="font-size:0.8rem; color:#cbd5e1;">${perk.desc}</div>`;
+                card.innerHTML = `<div style="color:var(--accent); font-weight:bold; font-size:1rem;">${perk.title}</div><div style="font-size:0.85rem; color:#cbd5e1;">${perk.desc}</div>`;
                 card.onclick = () => {
                     if (perk.id === 'multishot') stats.bulletCount++;
                     if (perk.id === 'firerate') stats.fireRate = Math.max(6, stats.fireRate - 4);
@@ -845,7 +862,7 @@
         }
 
         function spawnBoss() {
-            boss = { x: canvas.width - 150, y: canvas.height / 2 - 60, targetX: canvas.width - 220, width: 80, height: 130, hp: 100 + (level * 30), maxHp: 100 + (level * 30), dy: 3, shootTimer: 0 };
+            boss = { x: canvas.width - 150, y: canvas.height / 2 - 65, targetX: canvas.width - 240, width: 90, height: 140, hp: 100 + (level * 30), maxHp: 100 + (level * 30), dy: 3.5, shootTimer: 0 };
         }
 
         function spawnEntity() {
@@ -853,15 +870,15 @@
             let interval = gameMode === 'endless' ? 350 : 500;
             if (score > 0 && score % interval === 0 && !boss && meteors.length === 0) { spawnBoss(); return; }
             if (!boss && Math.random() < 0.04) {
-                let size = Math.random() * 38 + 22;
+                let size = Math.random() * 40 + 24;
                 meteors.push({ x: canvas.width + size, y: Math.random() * (canvas.height - size), size: size, speed: (Math.random() * 2 + 2) + (level * 0.35), hp: Math.ceil(size / 10) * stats.damage, maxHp: Math.ceil(size / 10) * stats.damage });
             }
         }
 
         function createExplosion(x, y, color) {
             playSound('explosion');
-            for (let i = 0; i < 10; i++) {
-                particles.push({ x, y, dx: (Math.random() - 0.5) * 6, dy: (Math.random() - 0.5) * 6, size: Math.random() * 4 + 1, life: 25, color });
+            for (let i = 0; i < 12; i++) {
+                particles.push({ x, y, dx: (Math.random() - 0.5) * 7, dy: (Math.random() - 0.5) * 7, size: Math.random() * 5 + 1, life: 25, color });
             }
         }
 
@@ -895,10 +912,10 @@
             if (shootTimer >= stats.fireRate) {
                 shootTimer = 0;
                 playSound('shoot');
-                let spread = 14;
+                let spread = 16;
                 let startY = ship.y - ((stats.bulletCount - 1) * spread) / 2;
                 for (let i = 0; i < stats.bulletCount; i++) {
-                    bullets.push({ x: ship.x + 20, y: startY + (i * spread), width: 18, height: 6, speed: 16 });
+                    bullets.push({ x: ship.x + 22, y: startY + (i * spread), width: 20, height: 7, speed: 18 });
                 }
             }
 
@@ -911,7 +928,7 @@
                     if (boss.y <= 20 || boss.y + boss.height >= canvas.height - 20) boss.dy *= -1;
                     boss.shootTimer++;
                     if (boss.shootTimer % 40 === 0) {
-                        enemyBullets.push({ x: boss.x, y: boss.y + boss.height/2 - 4, width: 16, height: 8, speed: 6.5 });
+                        enemyBullets.push({ x: boss.x, y: boss.y + boss.height/2 - 4, width: 18, height: 9, speed: 7 });
                     }
                 }
             }
@@ -936,8 +953,8 @@
             }
 
             if (stats.orbitalShield) {
-                let shieldX = ship.x + Math.cos(orbitalAngle) * 55;
-                let shieldY = ship.y + Math.sin(orbitalAngle) * 55;
+                let shieldX = ship.x + Math.cos(orbitalAngle) * 60;
+                let shieldY = ship.y + Math.sin(orbitalAngle) * 60;
                 meteors.forEach(m => {
                     let mdx = shieldX - (m.x + m.size/2), mdy = shieldY - (m.y + m.size/2);
                     if (Math.sqrt(mdx*mdx + mdy*mdy) < m.size/2 + 12) { m.hp -= 2; createExplosion(shieldX, shieldY, "#38bdf8"); }
@@ -947,8 +964,8 @@
             for (let i = gems.length - 1; i >= 0; i--) {
                 let g = gems[i];
                 let dx = ship.x - g.x, dy = ship.y - g.y, dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 11; g.y += (dy / dist) * 11; }
-                if (dist < ship.radius + 12) {
+                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 12; g.y += (dy / dist) * 12; }
+                if (dist < ship.radius + 14) {
                     exp += g.value; gems.splice(i, 1);
                     if (exp >= maxExp) { exp = 0; maxExp = Math.floor(maxExp * 1.35); level++; showLevelUpModal(); }
                 }
@@ -968,7 +985,7 @@
                     let bCenterY = b.y + b.height / 2;
                     let distance = Math.sqrt((bCenterX - mCenterX) ** 2 + (bCenterY - mCenterY) ** 2);
 
-                    if (distance < (m.size / 2) + 10) {
+                    if (distance < (m.size / 2) + 12) {
                         m.hp -= stats.damage;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
@@ -1031,13 +1048,13 @@
             stars.forEach(star => ctx.fillRect(star.x, star.y, star.size, star.size));
 
             gems.forEach(g => {
-                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(g.x, g.y, 6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(g.x, g.y, 7, 0, Math.PI * 2); ctx.fill();
             });
 
             if (stats.orbitalShield) {
-                let shieldX = ship.x + Math.cos(orbitalAngle) * 55;
-                let shieldY = ship.y + Math.sin(orbitalAngle) * 55;
-                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 9, 0, Math.PI * 2); ctx.fill();
+                let shieldX = ship.x + Math.cos(orbitalAngle) * 60;
+                let shieldY = ship.y + Math.sin(orbitalAngle) * 60;
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 10, 0, Math.PI * 2); ctx.fill();
             }
 
             if (invincibleTimer === 0 || Math.floor(invincibleTimer / 4) % 2 === 0) {
@@ -1046,7 +1063,7 @@
 
                 ctx.fillStyle = mainColor;
                 ctx.beginPath();
-                ctx.moveTo(ship.x + ship.radius + 6, ship.y);
+                ctx.moveTo(ship.x + ship.radius + 8, ship.y);
                 ctx.lineTo(ship.x - ship.radius * 0.8, ship.y - ship.radius);
                 ctx.lineTo(ship.x - ship.radius * 0.4, ship.y);
                 ctx.lineTo(ship.x - ship.radius * 0.8, ship.y + ship.radius);
@@ -1059,7 +1076,7 @@
                 ctx.fill();
 
                 ctx.fillStyle = "#fc3d21";
-                ctx.fillRect(ship.x - ship.radius - 8, ship.y - 5, 12, 10);
+                ctx.fillRect(ship.x - ship.radius - 9, ship.y - 6, 14, 12);
             }
 
             bullets.forEach(b => { ctx.fillStyle = currentSkin === 1 ? "#ef4444" : currentSkin === 2 ? "#eab308" : "#38bdf8"; ctx.fillRect(b.x, b.y, b.width, b.height); });
@@ -1071,8 +1088,8 @@
 
             if (boss) {
                 ctx.fillStyle = "#991b1b"; ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
-                ctx.fillStyle = "#ef4444"; ctx.fillRect(boss.x - 10, boss.y, 6, boss.height);
-                ctx.fillStyle = "#22c55e"; ctx.fillRect(boss.x - 10, boss.y, 6, boss.height * (boss.hp / boss.maxHp));
+                ctx.fillStyle = "#ef4444"; ctx.fillRect(boss.x - 12, boss.y, 8, boss.height);
+                ctx.fillStyle = "#22c55e"; ctx.fillRect(boss.x - 12, boss.y, 8, boss.height * (boss.hp / boss.maxHp));
             }
 
             particles.forEach(p => { ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); });
