@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Ultimate Space Mission - Game Không Gian</title>
+    <title>NASA Strikers - Hành Trình Khám Phá Hành Tinh</title>
     <style>
         :root {
-            --bg-color: #03050d;
+            --bg-color: #02040a;
             --text-color: #f0f4f8;
-            --card-bg: rgba(11, 61, 145, 0.3);
+            --card-bg: rgba(11, 61, 145, 0.35);
             --card-border: rgba(30, 144, 255, 0.4);
             --nasa-blue: #0b3d91;
             --nasa-red: #fc3d21;
@@ -40,7 +40,7 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
-            background-image: radial-gradient(circle at 50% 20%, #0c1836 0%, var(--bg-color) 75%);
+            background-image: radial-gradient(circle at 50% 20%, #0a1736 0%, var(--bg-color) 80%);
         }
 
         header {
@@ -50,7 +50,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             padding: 0 20px;
             z-index: 5;
         }
@@ -85,14 +85,14 @@
         .game-wrapper {
             position: relative;
             width: 100%;
-            max-width: 900px;
-            height: 580px;
-            background: rgba(3, 5, 13, 0.95);
+            max-width: 950px;
+            height: 600px;
+            background: rgba(2, 4, 10, 0.95);
             border: 2px solid var(--card-border);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
         }
 
         canvas {
@@ -111,25 +111,25 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(3, 5, 13, 0.9);
+            background: rgba(2, 4, 10, 0.92);
             z-index: 10;
             text-align: center;
-            padding: 20px;
+            padding: 25px;
         }
 
         .game-overlay h1 {
             color: var(--nasa-red);
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
-            text-shadow: 0 0 15px rgba(252, 61, 33, 0.6);
+            text-shadow: 0 0 20px rgba(252, 61, 33, 0.7);
         }
 
         .game-overlay p {
             font-size: 1.1rem;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             opacity: 0.9;
-            line-height: 1.5;
-            max-width: 600px;
+            line-height: 1.6;
+            max-width: 650px;
         }
 
         .ship-selector {
@@ -141,7 +141,7 @@
         .ship-option {
             background: var(--card-bg);
             border: 2px solid var(--card-border);
-            padding: 12px 20px;
+            padding: 14px 22px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
@@ -150,20 +150,20 @@
 
         .ship-option.selected {
             border-color: var(--nasa-red);
-            background: rgba(252, 61, 33, 0.2);
-            box-shadow: 0 0 12px var(--nasa-red);
+            background: rgba(252, 61, 33, 0.25);
+            box-shadow: 0 0 15px var(--nasa-red);
         }
 
         .start-btn {
             background: var(--nasa-red);
             color: white;
             border: none;
-            padding: 14px 35px;
-            font-size: 1.2rem;
+            padding: 14px 40px;
+            font-size: 1.25rem;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(252, 61, 33, 0.7);
+            box-shadow: 0 0 25px rgba(252, 61, 33, 0.7);
         }
 
         .start-btn:hover {
@@ -181,34 +181,32 @@
 <body data-theme="dark">
 
     <header>
-        <div class="nasa-badge">NASA ULTIMATE</div>
+        <div class="nasa-badge">NASA STRIKERS</div>
         <button class="btn" onclick="toggleTheme()">☀️ / 🌙 Giao Diện</button>
     </header>
 
     <div class="game-wrapper">
-        <!-- Màn hình bắt đầu & Chọn phi thuyền -->
         <div class="game-overlay" id="startScreen">
-            <h1>SỨ MỆNH KHÔNG GIAN TỐI CAO</h1>
-            <p>Chọn dòng phi thuyền tối tân của bạn, tiêu diệt thiên thạch, thu thập vật phẩm nâng cấp hỏa lực và đối đầu với các Boss ngoài hành tinh!</p>
+            <h1>HÀNH TRÌNH HỆ MẶT TRỜI</h1>
+            <p>Điều khiển phi thuyền bay qua các hành tinh từ Sao Thủy ra đến Sao Hải Vương! Tiêu diệt thiên thạch và chiến boss để tiếp tục hành trình.</p>
             
             <div class="ship-selector">
-                <div class="ship-option selected" onclick="selectShip(1, this)">🚀 Apollo X (Cân bằng)</div>
+                <div class="ship-option selected" onclick="selectShip(1, this)">🚀 Apollo X (Tiêu chuẩn)</div>
                 <div class="ship-option" onclick="selectShip(2, this)">⚡ Artemis V (Tốc độ cao)</div>
                 <div class="ship-option" onclick="selectShip(3, this)">🛡️ Titan IX (Hỏa lực kép)</div>
             </div>
 
-            <button class="start-btn" onclick="startGame()">KHỞI ĐỘNG SỨ MỆNH</button>
-            <div class="controls-hint">Di chuyển: <b>Phím Mũi Tên / A-D</b> | Bắn: <b>SPACE</b> | Nhặt vật phẩm để tăng sức mạnh!</div>
+            <button class="start-btn" onclick="startGame()">BẮT ĐẦU KHÁM PHÁ</button>
+            <div class="controls-hint">Di chuyển: <b>Mũi Tên / A-D</b> | Bắn: <b>SPACE</b> | Siêu Bom hủy diệt: Phím <b>E</b></div>
         </div>
 
-        <!-- Màn hình kết thúc -->
         <div class="game-overlay" id="gameOverScreen" style="display: none;">
-            <h1>KẾT THÚC SỨ MỆNH</h1>
-            <p id="finalStats">Tổng điểm: 0 | Cấp độ đạt được: 1</p>
-            <button class="start-btn" onclick="startGame()">CHƠI LẠI TỪ ĐẦU</button>
+            <h1>SỨ MỆNH KẾT THÚC</h1>
+            <p id="finalStats">Hành tinh đã đến: Sao Thủy | Tổng điểm: 0</p>
+            <button class="start-btn" onclick="startGame()">BAY LẠI TỪ ĐẦU</button>
         </div>
 
-        <canvas id="gameCanvas" width="900" height="580"></canvas>
+        <canvas id="gameCanvas" width="950" height="600"></canvas>
     </div>
 
     <script>
@@ -217,16 +215,31 @@
 
         let gameRunning = false;
         let score = 0;
-        let level = 1;
+        let distanceTraveled = 0; // Quãng đường đã đi tính bằng km không gian
+        let currentPlanetIndex = 0;
         let lives = 3;
-        let weaponLevel = 1; // 1: Đơn, 2: Kép, 3: Chùm 3 tia
+        let weaponLevel = 1;
         let shieldActive = false;
         let shieldTimer = 0;
+        let ultimateCharges = 1;
         let selectedShipType = 1;
+        let screenShakeTimer = 0;
+
+        // Danh sách hành tinh trong hành trình bay qua
+        const planets = [
+            { name: "Sao Thủy ☿️", distanceReq: 0, color: "#a855f7" },
+            { name: "Sao Kim ♀️", distanceReq: 1000, color: "#facc15" },
+            { name: "Trái Đất 🌍", distanceReq: 2500, color: "#38bdf8" },
+            { name: "Sao Hỏa 🔴", distanceReq: 4500, color: "#fc3d21" },
+            { name: "Sao Mộc 🟠", distanceReq: 7000, color: "#fb923c" },
+            { name: "Sao Thổ 🪐", distanceReq: 10000, color: "#fde047" },
+            { name: "Sao Thiên Vương 🔵", distanceReq: 14000, color: "#2dd4bf" },
+            { name: "Sao Hải Vương 🌊", distanceReq: 19000, color: "#3b82f6" }
+        ];
 
         let ship = {
             x: canvas.width / 2 - 25,
-            y: canvas.height - 80,
+            y: canvas.height - 90,
             width: 50,
             height: 50,
             speed: 7
@@ -243,18 +256,19 @@
 
         let keys = {};
         let bullets = [];
+        let enemyBullets = [];
         let meteors = [];
         let powerUps = [];
         let particles = [];
         let stars = [];
         let boss = null;
 
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < 180; i++) {
             stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 size: Math.random() * 2 + 0.5,
-                speed: Math.random() * 2 + 0.5
+                speed: Math.random() * 3 + 1
             });
         }
 
@@ -264,23 +278,43 @@
                 shootBullet();
                 e.preventDefault();
             }
+            if ((e.key === "e" || e.key === "E") && gameRunning) {
+                triggerUltimate();
+            }
         });
         window.addEventListener("keyup", (e) => { keys[e.key] = false; });
 
+        function triggerUltimate() {
+            if (ultimateCharges > 0) {
+                ultimateCharges--;
+                screenShakeTimer = 30;
+                createExplosion(canvas.width/2, canvas.height/2, "#38bdf8", 50);
+                meteors = [];
+                enemyBullets = [];
+                if (boss) {
+                    boss.hp -= 150;
+                    if (boss.hp <= 0) {
+                        score += 500;
+                        boss = null;
+                    }
+                }
+            }
+        }
+
         function shootBullet() {
             if (weaponLevel === 1 || selectedShipType === 3) {
-                bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, width: 6, height: 16, speed: 12, color: "#38bdf8" });
+                bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, width: 6, height: 18, speed: 13, color: "#38bdf8" });
                 if(selectedShipType === 3) {
-                    bullets.push({ x: ship.x + 5, y: ship.y + 10, width: 5, height: 14, speed: 12, color: "#fc3d21" });
-                    bullets.push({ x: ship.x + ship.width - 10, y: ship.y + 10, width: 5, height: 14, speed: 12, color: "#fc3d21" });
+                    bullets.push({ x: ship.x + 4, y: ship.y + 10, width: 5, height: 15, speed: 13, color: "#fc3d21" });
+                    bullets.push({ x: ship.x + ship.width - 9, y: ship.y + 10, width: 5, height: 15, speed: 13, color: "#fc3d21" });
                 }
             } else if (weaponLevel === 2) {
-                bullets.push({ x: ship.x + 8, y: ship.y, width: 6, height: 16, speed: 12, color: "#38bdf8" });
-                bullets.push({ x: ship.x + ship.width - 14, y: ship.y, width: 6, height: 16, speed: 12, color: "#38bdf8" });
+                bullets.push({ x: ship.x + 8, y: ship.y, width: 6, height: 18, speed: 13, color: "#38bdf8" });
+                bullets.push({ x: ship.x + ship.width - 14, y: ship.y, width: 6, height: 18, speed: 13, color: "#38bdf8" });
             } else {
-                bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, width: 6, height: 16, speed: 12, color: "#facc15" });
-                bullets.push({ x: ship.x + 2, y: ship.y + 5, width: 5, height: 14, speed: 12, color: "#facc15" });
-                bullets.push({ x: ship.x + ship.width - 7, y: ship.y + 5, width: 5, height: 14, speed: 12, color: "#facc15" });
+                bullets.push({ x: ship.x + ship.width/2 - 3, y: ship.y, width: 6, height: 18, speed: 13, color: "#facc15" });
+                bullets.push({ x: ship.x + 2, y: ship.y + 6, width: 5, height: 15, speed: 13, color: "#facc15" });
+                bullets.push({ x: ship.x + ship.width - 7, y: ship.y + 6, width: 5, height: 15, speed: 13, color: "#facc15" });
             }
         }
 
@@ -289,68 +323,80 @@
             document.getElementById("gameOverScreen").style.display = "none";
             ship.x = canvas.width / 2 - 25;
             bullets = [];
+            enemyBullets = [];
             meteors = [];
             powerUps = [];
             particles = [];
             boss = null;
             score = 0;
-            level = 1;
+            distanceTraveled = 0;
+            currentPlanetIndex = 0;
             lives = 3;
             weaponLevel = 1;
             shieldActive = false;
+            ultimateCharges = 1;
             gameRunning = true;
             loop();
         }
 
         function gameOver() {
             gameRunning = false;
-            document.getElementById("finalStats").innerText = `Tổng điểm: ${score} | Cấp độ đạt được: ${level}`;
+            let currentPlanet = planets[currentPlanetIndex].name;
+            document.getElementById("finalStats").innerText = `Đã bay tới: ${currentPlanet} | Quãng đường: ${distanceTraveled} vạn km | Tổng điểm: ${score}`;
             document.getElementById("gameOverScreen").style.display = "flex";
         }
 
         function spawnEntity() {
-            // Xuất hiện Boss mỗi 500 điểm nếu chưa có Boss
-            if (score > 0 && score % 500 === 0 && !boss && meteors.length === 0) {
+            if (score > 0 && score % 600 === 0 && !boss && meteors.length === 0) {
                 boss = {
-                    x: canvas.width / 2 - 60,
-                    y: -120,
-                    targetY: 60,
-                    width: 120,
-                    height: 80,
-                    hp: 50 + (level * 10),
-                    maxHp: 50 + (level * 10),
-                    dx: 2
+                    x: canvas.width / 2 - 75,
+                    y: -140,
+                    targetY: 70,
+                    width: 150,
+                    height: 90,
+                    hp: 80 + (currentPlanetIndex * 20),
+                    maxHp: 80 + (currentPlanetIndex * 20),
+                    dx: 2.5,
+                    shootTimer: 0
                 };
                 return;
             }
 
-            if (!boss && Math.random() < 0.035) {
-                let size = Math.random() * 35 + 20;
+            if (!boss && Math.random() < 0.04) {
+                let size = Math.random() * 40 + 20;
                 meteors.push({
                     x: Math.random() * (canvas.width - size),
                     y: -size,
                     size: size,
-                    speed: (Math.random() * 2 + 2) + (level * 0.4),
+                    speed: (Math.random() * 2 + 2) + (currentPlanetIndex * 0.4),
                     hp: Math.ceil(size / 15)
                 });
             }
         }
 
-        function createExplosion(x, y, color) {
-            for (let i = 0; i < 18; i++) {
+        function createExplosion(x, y, color, count = 20) {
+            for (let i = 0; i < count; i++) {
                 particles.push({
                     x: x, y: y,
-                    dx: (Math.random() - 0.5) * 7,
-                    dy: (Math.random() - 0.5) * 7,
-                    size: Math.random() * 3 + 1,
-                    life: 35,
+                    dx: (Math.random() - 0.5) * 8,
+                    dy: (Math.random() - 0.5) * 8,
+                    size: Math.random() * 4 + 1,
+                    life: 40,
                     color: color
                 });
             }
         }
 
         function update() {
-            level = Math.floor(score / 200) + 1;
+            distanceTraveled += 2; // Tăng quãng đường bay theo thời gian thực
+            
+            // Cập nhật hành trình qua các hành tinh
+            for (let i = planets.length - 1; i >= 0; i--) {
+                if (distanceTraveled >= planets[i].distanceReq) {
+                    currentPlanetIndex = i;
+                    break;
+                }
+            }
 
             if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x -= ship.speed;
             if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x += ship.speed;
@@ -363,27 +409,51 @@
                 if (shieldTimer <= 0) shieldActive = false;
             }
 
+            if (screenShakeTimer > 0) screenShakeTimer--;
+
             stars.forEach(star => {
-                star.y += star.speed;
+                star.y += star.speed + (currentPlanetIndex * 0.5);
                 if (star.y > canvas.height) star.y = 0;
             });
 
-            // Cập nhật Boss
             if (boss) {
                 if (boss.y < boss.targetY) boss.y += 1.5;
                 else {
                     boss.x += boss.dx;
                     if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) boss.dx *= -1;
+
+                    boss.shootTimer++;
+                    if (boss.shootTimer % 40 === 0) {
+                        enemyBullets.push({ x: boss.x + boss.width/2 - 4, y: boss.y + boss.height, width: 8, height: 16, speed: 6 });
+                    }
                 }
             }
 
-            // Cập nhật đạn
             for (let i = bullets.length - 1; i >= 0; i--) {
                 bullets[i].y -= bullets[i].speed;
                 if (bullets[i].y < 0) bullets.splice(i, 1);
             }
 
-            // Cập nhật Vật phẩm rơi
+            for (let i = enemyBullets.length - 1; i >= 0; i--) {
+                let eb = enemyBullets[i];
+                eb.y += eb.speed;
+                if (
+                    ship.x < eb.x + eb.width && ship.x + ship.width > eb.x &&
+                    ship.y < eb.y + eb.height && ship.y + ship.height > eb.y
+                ) {
+                    enemyBullets.splice(i, 1);
+                    screenShakeTimer = 15;
+                    if (shieldActive) shieldActive = false;
+                    else {
+                        lives--;
+                        if (lives <= 0) gameOver();
+                    }
+                    createExplosion(ship.x + ship.width/2, ship.y + ship.height/2, "#fc3d21");
+                } else if (eb.y > canvas.height) {
+                    enemyBullets.splice(i, 1);
+                }
+            }
+
             for (let i = powerUps.length - 1; i >= 0; i--) {
                 let p = powerUps[i];
                 p.y += 2.5;
@@ -392,15 +462,14 @@
                     ship.y < p.y + p.height && ship.y + ship.height > p.y
                 ) {
                     if (p.type === 'weapon') weaponLevel = Math.min(3, weaponLevel + 1);
-                    if (p.type === 'shield') { shieldActive = true; shieldTimer = 350; }
-                    if (p.type === 'life') lives = Math.min(5, lives + 1);
+                    if (p.type === 'shield') { shieldActive = true; shieldTimer = 400; }
+                    if (p.type === 'ultimate') ultimateCharges = Math.min(3, ultimateCharges + 1);
                     powerUps.splice(i, 1);
                 } else if (p.y > canvas.height) {
                     powerUps.splice(i, 1);
                 }
             }
 
-            // Cập nhật Thiên thạch
             spawnEntity();
             for (let i = meteors.length - 1; i >= 0; i--) {
                 let m = meteors[i];
@@ -416,18 +485,17 @@
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
                             createExplosion(m.x + m.size/2, m.y + m.size/2, "#fc3d21");
-                            if (Math.random() < 0.25) {
-                                let types = ['weapon', 'shield', 'life'];
-                                powerUps.push({ x: m.x, y: m.y, width: 25, height: 25, type: types[Math.floor(Math.random()*types.length)] });
+                            if (Math.random() < 0.22) {
+                                let types = ['weapon', 'shield', 'ultimate'];
+                                powerUps.push({ x: m.x, y: m.y, width: 26, height: 26, type: types[Math.floor(Math.random()*types.length)] });
                             }
                             meteors.splice(i, 1);
-                            score += 30;
+                            score += 35;
                             break;
                         }
                     }
                 }
 
-                // Va chạm Boss với Đạn
                 if (boss && boss.y >= boss.targetY) {
                     for (let j = bullets.length - 1; j >= 0; j--) {
                         let b = bullets[j];
@@ -438,8 +506,8 @@
                             boss.hp--;
                             bullets.splice(j, 1);
                             if (boss.hp <= 0) {
-                                createExplosion(boss.x + boss.width/2, boss.y + boss.height/2, "#facc15");
-                                score += 300;
+                                createExplosion(boss.x + boss.width/2, boss.y + boss.height/2, "#facc15", 35);
+                                score += 600;
                                 boss = null;
                                 break;
                             }
@@ -447,14 +515,13 @@
                     }
                 }
 
-                // Va chạm Phi thuyền với Thiên thạch
                 if (
                     ship.x < m.x + m.size && ship.x + ship.width > m.x &&
                     ship.y < m.y + m.size && ship.y + ship.height > m.y
                 ) {
-                    if (shieldActive) {
-                        shieldActive = false;
-                    } else {
+                    screenShakeTimer = 20;
+                    if (shieldActive) shieldActive = false;
+                    else {
                         lives--;
                         if (lives <= 0) gameOver();
                     }
@@ -464,7 +531,7 @@
 
                 if (m.y > canvas.height) {
                     meteors.splice(i, 1);
-                    score += 5;
+                    score += 10;
                 }
             }
 
@@ -476,6 +543,13 @@
         }
 
         function draw() {
+            ctx.save();
+            if (screenShakeTimer > 0) {
+                let shakeX = (Math.random() - 0.5) * 8;
+                let shakeY = (Math.random() - 0.5) * 8;
+                ctx.translate(shakeX, shakeY);
+            }
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.fillStyle = "#ffffff";
@@ -496,26 +570,28 @@
                 ctx.strokeStyle = "#38bdf8";
                 ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(ship.x + ship.width/2, ship.y + ship.height/2, 38, 0, Math.PI * 2);
+                ctx.arc(ship.x + ship.width/2, ship.y + ship.height/2, 40, 0, Math.PI * 2);
                 ctx.stroke();
             }
 
-            // Vẽ Đạn
             bullets.forEach(b => {
                 ctx.fillStyle = b.color;
                 ctx.fillRect(b.x, b.y, b.width, b.height);
             });
 
-            // Vẽ Vật phẩm rơi
+            enemyBullets.forEach(eb => {
+                ctx.fillStyle = "#ef4444";
+                ctx.fillRect(eb.x, eb.y, eb.width, eb.height);
+            });
+
             powerUps.forEach(p => {
-                ctx.fillStyle = p.type === 'weapon' ? '#38bdf8' : (p.type === 'shield' ? '#a855f7' : '#ef4444');
+                ctx.fillStyle = p.type === 'weapon' ? '#38bdf8' : (p.type === 'shield' ? '#a855f7' : '#eab308');
                 ctx.fillRect(p.x, p.y, p.width, p.height);
                 ctx.fillStyle = "#fff";
                 ctx.font = "bold 12px Segoe UI";
-                ctx.fillText(p.type === 'weapon' ? 'W' : (p.type === 'shield' ? 'S' : 'HP'), p.x + 5, p.y + 17);
+                ctx.fillText(p.type === 'weapon' ? 'W' : (p.type === 'shield' ? 'S' : 'U'), p.x + 8, p.y + 18);
             });
 
-            // Vẽ Thiên thạch
             meteors.forEach(m => {
                 ctx.fillStyle = "#64748b";
                 ctx.beginPath();
@@ -523,14 +599,13 @@
                 ctx.fill();
             });
 
-            // Vẽ Boss
             if (boss) {
-                ctx.fillStyle = "#b91c1c";
+                ctx.fillStyle = "#991b1b";
                 ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
                 ctx.fillStyle = "#ef4444";
-                ctx.fillRect(boss.x + 10, boss.y - 10, boss.width - 20, 6);
+                ctx.fillRect(boss.x + 10, boss.y - 12, boss.width - 20, 7);
                 ctx.fillStyle = "#22c55e";
-                ctx.fillRect(boss.x + 10, boss.y - 10, (boss.width - 20) * (boss.hp / boss.maxHp), 6);
+                ctx.fillRect(boss.x + 10, boss.y - 12, (boss.width - 20) * (boss.hp / boss.maxHp), 7);
             }
 
             particles.forEach(p => {
@@ -538,13 +613,16 @@
                 ctx.fillRect(p.x, p.y, p.size, p.size);
             });
 
-            // Giao diện HUD
+            // HUD Giao diện hành trình hành tinh
             ctx.fillStyle = "#f0f4f8";
-            ctx.font = "bold 16px Segoe UI";
+            ctx.font = "bold 15px Segoe UI";
             ctx.fillText(`Điểm: ${score}`, 20, 30);
-            ctx.fillText(`Cấp độ: ${level}`, 20, 55);
-            ctx.fillText(`Hỏa lực (Lvl): ${weaponLevel}`, 20, 80);
+            ctx.fillText(`Hành tinh: ${planets[currentPlanetIndex].name}`, 20, 55);
+            ctx.fillText(`Quãng đường: ${distanceTraveled} vạn km`, 20, 80);
             ctx.fillText(`Mạng: ${"❤️ ".repeat(lives)}`, canvas.width - 160, 30);
+            ctx.fillText(`Siêu Bom (Phím E): ${"⚡ ".repeat(ultimateCharges)}`, canvas.width - 220, 55);
+
+            ctx.restore();
         }
 
         function loop() {
