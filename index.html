@@ -288,7 +288,6 @@
 
             <div class="money-badge">💰 Số Dư Cải Tiến: <span id="playerMoney">0</span> Xu</div>
 
-            <!-- Cửa hàng Hangar nâng cấp máy bay -->
             <div class="upgrade-box">
                 <div style="font-size:0.8rem; font-weight:bold; color:var(--accent);">🚀 HANGAR - CẢI TIẾN MÁY BAY</div>
                 <div class="upgrade-item">
@@ -301,7 +300,6 @@
                 </div>
             </div>
 
-            <!-- Chọn Chế Độ Chơi -->
             <div class="mode-container">
                 <button class="mode-btn active" id="modeNormal" onclick="selectMode('normal')">🚀 Hành Trình</button>
                 <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 Diệt Boss</button>
@@ -615,14 +613,21 @@
                 let m = meteors[i];
                 m.y += m.speed;
 
+                // Kiểm tra va chạm đạn chuẩn xác với thiên thạch (hình tròn)
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
-                    if (b.x < m.x + m.size && b.x + b.width > m.x && b.y < m.y + m.size && b.y + m.height > m.y) {
+                    let mCenterX = m.x + m.size / 2;
+                    let mcenterY = m.y + m.size / 2;
+                    let bCenterX = b.x + b.width / 2;
+                    let bCenterY = b.y + b.height / 2;
+                    let distToBullet = Math.sqrt((bCenterX - mCenterX) ** 2 + (bCenterY - mcenterY) ** 2);
+
+                    if (distToBullet < m.size / 2) {
                         m.hp -= stats.damage;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
-                            createExplosion(m.x + m.size/2, m.y + m.size/2, "#38bdf8");
-                            gems.push({ x: m.x + m.size/2, y: m.y + m.size/2, value: Math.ceil(m.size / 5) });
+                            createExplosion(mCenterX, mcenterY, "#38bdf8");
+                            gems.push({ x: mCenterX, y: mcenterY, value: Math.ceil(m.size / 5) });
                             meteors.splice(i, 1);
                             score += 25;
                             break;
