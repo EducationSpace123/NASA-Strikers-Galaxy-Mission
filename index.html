@@ -563,13 +563,14 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.1);
             } else if (type === 'explosion') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.3);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                // Đã làm mềm âm thanh nổ thành dạng sóng sine/triangle nhẹ nhàng, êm dịu hơn
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.35);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
+                osc.stop(audioCtx.currentTime + 0.35);
             }
         }
 
@@ -885,9 +886,7 @@
                 ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 9, 0, Math.PI * 2); ctx.fill();
             }
 
-            // Vẽ Tàu Vũ Trụ Tối Tân Hướng Ngang (Mũi hướng sang phải)
             if (invincibleTimer === 0 || Math.floor(invincibleTimer / 4) % 2 === 0) {
-                // Thân tàu chính cao cấp màu xanh NASA
                 ctx.fillStyle = "#0b3d91";
                 ctx.beginPath();
                 ctx.moveTo(ship.x + ship.radius + 6, ship.y);
@@ -897,13 +896,11 @@
                 ctx.closePath();
                 ctx.fill();
 
-                // Buồng lái kính phát sáng
                 ctx.fillStyle = "#38bdf8";
                 ctx.beginPath();
                 ctx.arc(ship.x, ship.y, ship.radius * 0.35, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Động cơ phản lực phía sau
                 ctx.fillStyle = "#fc3d21";
                 ctx.fillRect(ship.x - ship.radius - 8, ship.y - 5, 12, 10);
             }
