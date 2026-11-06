@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Galaxy Survivor - Trang Chủ</title>
+    <title>NASA Galaxy Survivor - Hành Trình Hệ Mặt Trời</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -105,7 +105,6 @@
             margin-bottom: 12px;
         }
 
-        /* Hangar Cải Tiến Máy Bay */
         .upgrade-box {
             width: 100%;
             max-width: 380px;
@@ -143,7 +142,6 @@
             background: #1d4ed8;
         }
 
-        /* Chọn chế độ chơi */
         .mode-container {
             width: 100%;
             max-width: 380px;
@@ -186,6 +184,24 @@
 
         .play-btn:active {
             transform: scale(0.95);
+        }
+
+        /* Bảng Giới Thiệu Hành Tinh (Popup giữa trận khi đến mốc mới) */
+        #planetPopup {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            max-width: 380px;
+            background: rgba(11, 61, 145, 0.95);
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            padding: 20px;
+            z-index: 40;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
         }
 
         /* Màn hình Thua Trận */
@@ -284,7 +300,7 @@
         <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
             <h1>NASA <span>SURVIVOR</span></h1>
-            <p>Hệ Thống Phòng Thủ Không Gian Tối Tân</p>
+            <p>Hành Trình Khám Phá Hệ Mặt Trời</p>
 
             <div class="money-badge">💰 Số Dư Cải Tiến: <span id="playerMoney">0</span> Xu</div>
 
@@ -309,11 +325,19 @@
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
 
+        <!-- Popup Giới Thiệu Hành Tinh Khi Đạt Mốc -->
+        <div id="planetPopup">
+            <h2 id="popupTitle" style="color: #facc15; margin-bottom: 8px;">Khám Phá Hành Tinh</h2>
+            <p id="popupDesc" style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 15px;"></p>
+            <button class="play-btn" style="padding: 10px 25px; font-size: 1rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
+        </div>
+
         <!-- Màn hình Thua Trận -->
         <div class="game-over-screen" id="gameOverScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:65px; height:65px;">
             <h1 style="color: var(--nasa-red);">SỨ MỆNH THẤT BẠI</h1>
-            <p id="finalStats" style="color:#cbd5e1; margin-bottom: 8px;">Tổng điểm: 0</p>
+            <p id="finalStats" style="color:#cbd5e1; margin-bottom: 4px;">Tổng điểm: 0</p>
+            <p id="finalDistance" style="color:#38bdf8; margin-bottom: 8px;">Quãng đường: 0 mét</p>
             <p id="earnedMoney" style="color: #facc15; font-weight: bold; font-size: 1.05rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
             <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
         </div>
@@ -334,6 +358,10 @@
             <div class="exp-bar-container">
                 <div id="expBar"></div>
             </div>
+            <div class="hud-row" style="font-size: 0.85rem; color: #38bdf8;">
+                <span id="distanceText">📍 Quãng đường: 0 m</span>
+                <span id="planetText">Hành tinh: Sao Thủy</span>
+            </div>
         </div>
 
         <canvas id="gameCanvas" width="480" height="750"></canvas>
@@ -350,6 +378,48 @@
         let maxExp = 100;
         let lives = 3;
         let gameMode = 'normal';
+        let distanceMeters = 0;
+        let currentPlanetIdx = 0;
+        let invincibleTimer = 0;
+
+        // Danh sách hành trình các hành tinh và thông tin giới thiệu
+        const planetsJourney = [
+            { 
+                name: "Sao Thủy ☿️", 
+                targetDist: 0, 
+                desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất trong Hệ Mặt Trời. Nhiệt độ bề mặt dao động cực kỳ khắc nghiệt giữa ngày và đêm." 
+            },
+            { 
+                name: "Sao Kim ♀️", 
+                targetDist: 500, 
+                desc: "Hành tinh nóng nhất Hệ Mặt Trời với bầu khí quyển dày đặc chứa CO2 và áp suất cực cao, mây axit sulfuric bao phủ." 
+            },
+            { 
+                name: "Trái Đất 🌍", 
+                targetDist: 1200, 
+                desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất được biết đến có sự sống, với 71% bề mặt là nước dạng lỏng." 
+            },
+            { 
+                name: "Sao Hỏa 🔴", 
+                targetDist: 2200, 
+                desc: "Được mệnh danh là 'Hành tinh Đỏ' do đất đá giàu sắt oxit. Nơi có Olympus Mons - ngọn núi lửa lớn nhất Hệ Mặt Trời." 
+            },
+            { 
+                name: "Sao Mộc 🟠", 
+                targetDist: 3500, 
+                desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời, nổi tiếng với Vết Đỏ Lớn là một cơn bão khổng lồ đã tồn tại hàng thế kỷ." 
+            },
+            { 
+                name: "Sao Thổ 🪐", 
+                targetDist: 5000, 
+                desc: "Hành tinh nổi bật với hệ thống vành đai rực rỡ cấu tạo từ các hạt băng và đá vô cùng đẹp mắt." 
+            },
+            { 
+                name: "Sao Hải Vương 🌊", 
+                targetDist: 7000, 
+                desc: "Hành tinh băng giá nằm ở rìa ngoài hệ mặt trời, nổi tiếng với những cơn gió siêu mạnh và sắc xanh biển sâu thẳm." 
+            }
+        ];
 
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 200;
         let upgrades = {
@@ -437,6 +507,9 @@
             exp = 0;
             maxExp = 100;
             lives = 3;
+            distanceMeters = 0;
+            currentPlanetIdx = 0;
+            invincibleTimer = 60;
             bullets = [];
             enemyBullets = [];
             meteors = [];
@@ -460,6 +533,19 @@
             loop();
         }
 
+        function triggerPlanetPopup(planet) {
+            gameRunning = false; // Tạm dừng game để đọc giới thiệu hành tinh
+            document.getElementById("popupTitle").innerText = `🪐 Đã Đến: ${planet.name}`;
+            document.getElementById("popupDesc").innerText = planet.desc;
+            document.getElementById("planetPopup").style.display = "block";
+        }
+
+        function closePlanetPopup() {
+            document.getElementById("planetPopup").style.display = "none";
+            gameRunning = true;
+            loop();
+        }
+
         function gameOver() {
             gameRunning = false;
             document.getElementById("hudTop").style.display = "none";
@@ -469,6 +555,7 @@
             localStorage.setItem('nasa_money', playerMoney);
 
             document.getElementById("finalStats").innerText = `Tổng điểm: ${score} | Cấp: ${level}`;
+            document.getElementById("finalDistance").innerText = `Quãng đường: ${Math.floor(distanceMeters)} mét`;
             document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu cải tiến!`;
             document.getElementById("gameOverScreen").style.display = "flex";
         }
@@ -535,6 +622,19 @@
 
         function update() {
             orbitalAngle += 0.08;
+            if (invincibleTimer > 0) invincibleTimer--;
+            
+            // Cập nhật quãng đường hành trình
+            distanceMeters += 0.5;
+
+            // Kiểm tra mốc hành tinh tiếp theo
+            if (gameMode === 'normal' && currentPlanetIdx + 1 < planetsJourney.length) {
+                if (distanceMeters >= planetsJourney[currentPlanetIdx + 1].targetDist) {
+                    currentPlanetIdx++;
+                    triggerPlanetPopup(planetsJourney[currentPlanetIdx]);
+                }
+            }
+
             if (keys["ArrowLeft"] || keys["a"]) ship.x -= ship.speed;
             if (keys["ArrowRight"] || keys["d"]) ship.x += ship.speed;
             if (keys["ArrowUp"] || keys["w"]) ship.y -= ship.speed;
@@ -583,9 +683,11 @@
                 let dx = ship.x - (eb.x + eb.width/2), dy = ship.y - (eb.y + eb.height/2);
                 if (Math.sqrt(dx*dx + dy*dy) < ship.radius + 6) {
                     enemyBullets.splice(i, 1);
-                    lives--;
-                    createExplosion(ship.x, ship.y, "#fc3d21");
-                    if (lives <= 0) gameOver();
+                    if (invincibleTimer === 0) {
+                        lives--;
+                        createExplosion(ship.x, ship.y, "#fc3d21");
+                        if (lives <= 0) gameOver();
+                    }
                 } else if (eb.y > canvas.height) enemyBullets.splice(i, 1);
             }
 
@@ -613,7 +715,6 @@
                 let m = meteors[i];
                 m.y += m.speed;
 
-                // Kiểm tra va chạm cực nhạy giữa đạn và thiên thạch
                 let meteorDestroyed = false;
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
@@ -623,8 +724,7 @@
                     let bCenterY = b.y + b.height / 2;
                     let distance = Math.sqrt((bCenterX - mCenterX) ** 2 + (bCenterY - mCenterY) ** 2);
 
-                    // Nếu khoảng cách nhỏ hơn bán kính thiên thạch + một khoảng đệm an toàn
-                    if (distance < (m.size / 2) + 8) {
+                    if (distance < (m.size / 2) + 10) {
                         m.hp -= stats.damage;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
@@ -657,8 +757,14 @@
 
                 let dx = ship.x - (m.x + m.size/2), dy = ship.y - (m.y + m.size/2);
                 if (Math.sqrt(dx * dx + dy * dy) < ship.radius + m.size/2 - 4) {
-                    lives--; createExplosion(ship.x, ship.y, "#fc3d21"); meteors.splice(i, 1);
-                    if (lives <= 0) gameOver();
+                    if (invincibleTimer === 0) {
+                        lives--; 
+                        createExplosion(ship.x, ship.y, "#fc3d21"); 
+                        meteors.splice(i, 1);
+                        if (lives <= 0) gameOver();
+                    } else {
+                        meteors.splice(i, 1);
+                    }
                 }
                 if (m.y > canvas.height + 50) meteors.splice(i, 1);
             }
@@ -672,6 +778,8 @@
             document.getElementById("levelText").innerText = `LV. ${level}`;
             document.getElementById("livesText").innerText = `❤️ ${lives}`;
             document.getElementById("expBar").style.width = `${(exp / maxExp) * 100}%`;
+            document.getElementById("distanceText").innerText = `📍 Quãng đường: ${Math.floor(distanceMeters)} m`;
+            document.getElementById("planetText").innerText = `Hành tinh: ${planetsJourney[currentPlanetIdx].name}`;
         }
 
         function draw() {
@@ -689,17 +797,19 @@
                 ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 9, 0, Math.PI * 2); ctx.fill();
             }
 
-            ctx.fillStyle = "#0b3d91";
-            ctx.beginPath();
-            ctx.moveTo(ship.x, ship.y - ship.radius);
-            ctx.lineTo(ship.x - ship.radius * 0.8, ship.y + ship.radius);
-            ctx.lineTo(ship.x, ship.y + ship.radius * 0.6);
-            ctx.lineTo(ship.x + ship.radius * 0.8, ship.y + ship.radius);
-            ctx.closePath();
-            ctx.fill();
+            if (invincibleTimer === 0 || Math.floor(invincibleTimer / 4) % 2 === 0) {
+                ctx.fillStyle = "#0b3d91";
+                ctx.beginPath();
+                ctx.moveTo(ship.x, ship.y - ship.radius);
+                ctx.lineTo(ship.x - ship.radius * 0.8, ship.y + ship.radius);
+                ctx.lineTo(ship.x, ship.y + ship.radius * 0.6);
+                ctx.lineTo(ship.x + ship.radius * 0.8, ship.y + ship.radius);
+                ctx.closePath();
+                ctx.fill();
 
-            ctx.fillStyle = "#fc3d21";
-            ctx.fillRect(ship.x - 4, ship.y + ship.radius * 0.6, 8, 12);
+                ctx.fillStyle = "#fc3d21";
+                ctx.fillRect(ship.x - 4, ship.y + ship.radius * 0.6, 8, 12);
+            }
 
             bullets.forEach(b => { ctx.fillStyle = "#38bdf8"; ctx.fillRect(b.x, b.y, b.width, b.height); });
             enemyBullets.forEach(eb => { ctx.fillStyle = "#fc3d21"; ctx.fillRect(eb.x, eb.y, eb.width, eb.height); });
