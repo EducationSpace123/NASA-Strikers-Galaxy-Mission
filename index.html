@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Galaxy Survivor - Cải Tiến Máy Bay</title>
+    <title>NASA Galaxy Survivor - Trang Chủ</title>
     <style>
         :root {
             --bg-color: #030712;
@@ -42,7 +42,7 @@
             border: 3px solid var(--nasa-blue);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(11, 61, 145, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(11, 61, 145, 0.6);
         }
 
         canvas {
@@ -52,14 +52,14 @@
             touch-action: none;
         }
 
-        /* Màn hình Menu và Các Overlay */
-        .overlay {
+        /* TRANG CHỦ (MENU CHÍNH) */
+        .home-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 7, 18, 0.95);
+            background: linear-gradient(135deg, rgba(3, 7, 18, 0.98), rgba(11, 61, 145, 0.85));
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -70,80 +70,80 @@
         }
 
         .nasa-logo {
-            width: 90px;
-            height: 90px;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+            width: 85px;
+            height: 85px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
         }
 
-        .overlay h1 {
+        .home-screen h1 {
             font-size: 2rem;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-weight: 900;
             letter-spacing: 1px;
         }
 
-        .overlay h1 span {
+        .home-screen h1 span {
             color: var(--nasa-red);
         }
 
-        .overlay p {
+        .home-screen p {
             color: #94a3b8;
-            margin-bottom: 15px;
-            font-size: 0.88rem;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
         }
 
         .money-badge {
-            background: rgba(11, 61, 145, 0.4);
+            background: rgba(11, 61, 145, 0.5);
             border: 1px solid var(--accent);
             padding: 6px 16px;
             border-radius: 20px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #facc15;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
-        /* Bảng Cải Tiến Máy Bay (Shop) */
+        /* Hangar Cải Tiến Máy Bay */
         .upgrade-box {
             width: 100%;
             max-width: 380px;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid #334155;
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
+            text-align: left;
         }
 
         .upgrade-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(30, 41, 59, 0.7);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            color: #e2e8f0;
         }
 
         .upgrade-btn {
             background: var(--nasa-blue);
             color: white;
             border: none;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .upgrade-btn:hover {
             background: #1d4ed8;
         }
 
+        /* Chọn chế độ chơi */
         .mode-container {
             width: 100%;
             max-width: 380px;
@@ -157,8 +157,8 @@
             background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            padding: 10px;
-            font-size: 0.85rem;
+            padding: 10px 5px;
+            font-size: 0.8rem;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
@@ -167,25 +167,45 @@
 
         .mode-btn.active {
             border-color: var(--nasa-red);
-            background: rgba(252, 61, 33, 0.25);
+            background: rgba(252, 61, 33, 0.3);
+            box-shadow: 0 0 10px rgba(252, 61, 33, 0.4);
         }
 
         .play-btn {
             background: linear-gradient(135deg, var(--nasa-red), #e11d48);
             color: white;
             border: none;
-            padding: 14px 35px;
+            padding: 14px 40px;
             font-size: 1.1rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(252, 61, 33, 0.5);
+            box-shadow: 0 0 20px rgba(252, 61, 33, 0.6);
+            transition: transform 0.1s;
         }
 
         .play-btn:active {
             transform: scale(0.95);
         }
 
+        /* Màn hình Thua Trận */
+        .game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.96);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Bảng Chọn Kỹ Năng Khi Lên Cấp */
         #perkModal {
             display: none;
             position: absolute;
@@ -206,7 +226,7 @@
             border: 2px solid #475569;
             width: 100%;
             max-width: 380px;
-            padding: 15px 20px;
+            padding: 14px 18px;
             border-radius: 14px;
             margin: 8px 0;
             cursor: pointer;
@@ -218,6 +238,7 @@
             background: rgba(51, 65, 85, 0.95);
         }
 
+        /* HUD Trong Trận */
         .hud-top {
             position: absolute;
             top: 15px;
@@ -259,47 +280,47 @@
 <body>
 
     <div class="game-container">
-        <!-- Màn hình Menu Chính với Logo NASA -->
-        <div class="overlay" id="startScreen">
-            <!-- Sử dụng trực tiếp ảnh logo NASA chính hãng từ nguồn cung cấp[cite: 1] -->
+        <!-- TRANG CHỦ (MENU CHÍNH) -->
+        <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
             <h1>NASA <span>SURVIVOR</span></h1>
-            <p>Hệ thống phòng thủ không gian tối tân</p>
+            <p>Hệ Thống Phòng Thủ Không Gian Tối Tân</p>
 
-            <div class="money-badge">💰 Số Dư: <span id="playerMoney">0</span> VNĐ / Xu</div>
+            <div class="money-badge">💰 Số Dư Cải Tiến: <span id="playerMoney">0</span> Xu</div>
 
-            <!-- Cửa hàng cải tiến máy bay -->
+            <!-- Cửa hàng Hangar nâng cấp máy bay -->
             <div class="upgrade-box">
-                <div style="font-size:0.85rem; font-weight:bold; color:var(--accent); margin-bottom:2px;"> hangar - CẢI TIẾN MÁY BAY</div>
+                <div style="font-size:0.8rem; font-weight:bold; color:var(--accent);">🚀 HANGAR - CẢI TIẾN MÁY BAY</div>
                 <div class="upgrade-item">
-                    <span>Sức Mạnh Súng (Lvl <span id="lvlDamage">1</span>) - 100 Xu</span>
+                    <span>Sức Mạnh Súng (Lvl <span id="lvlDamage">1</span>) - <span id="costDmg">100</span> Xu</span>
                     <button class="upgrade-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
                 </div>
                 <div class="upgrade-item">
-                    <span>Tốc Độ Bắn (Lvl <span id="lvlFireRate">1</span>) - 100 Xu</span>
+                    <span>Tốc Độ Bắn (Lvl <span id="lvlFireRate">1</span>) - <span id="costFr">100</span> Xu</span>
                     <button class="upgrade-btn" onclick="upgradeStat('fireRate')">Nâng Cấp</button>
                 </div>
             </div>
 
+            <!-- Chọn Chế Độ Chơi -->
             <div class="mode-container">
                 <button class="mode-btn active" id="modeNormal" onclick="selectMode('normal')">🚀 Hành Trình</button>
                 <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 Diệt Boss</button>
                 <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 Vô Tận</button>
             </div>
 
-            <button class="play-btn" onclick="startGame()">XUẤT KÍCH</button>
+            <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
 
-        <!-- Màn hình Thua Trận & Tổng kết tiền thưởng -->
-        <div class="overlay" id="gameOverScreen" style="display: none;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:70px; height:70px;">
-            <h1 style="color: var(--nasa-red);">SỨ MỆNH KẾT THÚC</h1>
-            <p id="finalStats">Tổng điểm: 0</p>
-            <p id="earnedMoney" style="color: #facc15; font-weight: bold; font-size: 1.1rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
-            <button class="play-btn" onclick="returnToMenu()">VỀ TRANG CHỦ</button>
+        <!-- Màn hình Thua Trận -->
+        <div class="game-over-screen" id="gameOverScreen">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:65px; height:65px;">
+            <h1 style="color: var(--nasa-red);">SỨ MỆNH THẤT BẠI</h1>
+            <p id="finalStats" style="color:#cbd5e1; margin-bottom: 8px;">Tổng điểm: 0</p>
+            <p id="earnedMoney" style="color: #facc15; font-weight: bold; font-size: 1.05rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
+            <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
         </div>
 
-        <!-- Bảng Lên Cấp Kỹ Năng -->
+        <!-- Bảng Kỹ Năng Lên Cấp -->
         <div id="perkModal">
             <h2 style="color: var(--accent); margin-bottom: 12px;">🎉 NÂNG CẤP TRONG TRẬN</h2>
             <div id="perkOptionsContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
@@ -332,19 +353,20 @@
         let lives = 3;
         let gameMode = 'normal';
 
-        // Hệ thống tiền và nâng cấp hangar
-        let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 250;
+        let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 200;
         let upgrades = {
             damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1,
             fireRate: localStorage.getItem('nasa_up_fr') ? parseInt(localStorage.getItem('nasa_up_fr')) : 1
         };
 
-        updateMenuUI();
+        updateHomeUI();
 
-        function updateMenuUI() {
+        function updateHomeUI() {
             document.getElementById("playerMoney").innerText = playerMoney;
             document.getElementById("lvlDamage").innerText = upgrades.damage;
             document.getElementById("lvlFireRate").innerText = upgrades.fireRate;
+            document.getElementById("costDmg").innerText = 100 * upgrades.damage;
+            document.getElementById("costFr").innerText = 100 * upgrades.fireRate;
         }
 
         function upgradeStat(type) {
@@ -355,10 +377,18 @@
                 localStorage.setItem('nasa_money', playerMoney);
                 if(type === 'damage') localStorage.setItem('nasa_up_dmg', upgrades.damage);
                 if(type === 'fireRate') localStorage.setItem('nasa_up_fr', upgrades.fireRate);
-                updateMenuUI();
+                updateHomeUI();
             } else {
-                alert("Không đủ Xu để nâng cấp! Hãy chơi thêm để kiếm tiền.");
+                alert("Không đủ Xu cải tiến máy bay!");
             }
+        }
+
+        function selectMode(mode) {
+            gameMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if(mode === 'normal') document.getElementById('modeNormal').classList.add('active');
+            if(mode === 'boss') document.getElementById('modeBoss').classList.add('active');
+            if(mode === 'endless') document.getElementById('modeEndless').classList.add('active');
         }
 
         let stats = {
@@ -370,20 +400,7 @@
             orbitalShield: false
         };
 
-        let ship = {
-            x: canvas.width / 2,
-            y: canvas.height - 100,
-            radius: 22,
-            speed: 8
-        };
-
-        function selectMode(mode) {
-            gameMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            if(mode === 'normal') document.getElementById('modeNormal').classList.add('active');
-            if(mode === 'boss') document.getElementById('modeBoss').classList.add('active');
-            if(mode === 'endless') document.getElementById('modeEndless').classList.add('active');
-        }
+        let ship = { x: canvas.width / 2, y: canvas.height - 100, radius: 22, speed: 8 };
 
         let keys = {};
         let isPointerDown = false;
@@ -409,16 +426,11 @@
         let orbitalAngle = 0;
 
         for (let i = 0; i < 100; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2,
-                speed: Math.random() * 3 + 1
-            });
+            stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2, speed: Math.random() * 3 + 1 });
         }
 
-        function startGame() {
-            document.getElementById("startScreen").style.display = "none";
+        function launchGame() {
+            document.getElementById("homeScreen").style.display = "none";
             document.getElementById("gameOverScreen").style.display = "none";
             document.getElementById("hudTop").style.display = "flex";
 
@@ -454,20 +466,19 @@
             gameRunning = false;
             document.getElementById("hudTop").style.display = "none";
             
-            // Tính số tiền thưởng nhận được sau khi chơi xong
-            let earned = Math.floor(score / 10) + (level * 20);
+            let earned = Math.floor(score / 10) + (level * 25);
             playerMoney += earned;
             localStorage.setItem('nasa_money', playerMoney);
 
-            document.getElementById("finalStats").innerText = `Tổng điểm đạt được: ${score} | Cấp: ${level}`;
-            document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu cải tiến máy bay!`;
+            document.getElementById("finalStats").innerText = `Tổng điểm: ${score} | Cấp: ${level}`;
+            document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu cải tiến!`;
             document.getElementById("gameOverScreen").style.display = "flex";
         }
 
-        function returnToMenu() {
+        function returnToHome() {
             document.getElementById("gameOverScreen").style.display = "none";
-            document.getElementById("startScreen").style.display = "flex";
-            updateMenuUI();
+            document.getElementById("homeScreen").style.display = "flex";
+            updateHomeUI();
         }
 
         const perkPool = [
@@ -505,11 +516,7 @@
         }
 
         function spawnBoss() {
-            boss = {
-                x: canvas.width / 2 - 60, y: -120, targetY: 80,
-                width: 120, height: 70, hp: 80 + (level * 25), maxHp: 80 + (level * 25),
-                dx: 3, shootTimer: 0
-            };
+            boss = { x: canvas.width / 2 - 60, y: -120, targetY: 80, width: 120, height: 70, hp: 80 + (level * 25), maxHp: 80 + (level * 25), dx: 3, shootTimer: 0 };
         }
 
         function spawnEntity() {
@@ -518,11 +525,7 @@
             if (score > 0 && score % interval === 0 && !boss && meteors.length === 0) { spawnBoss(); return; }
             if (!boss && Math.random() < 0.038) {
                 let size = Math.random() * 32 + 18;
-                meteors.push({
-                    x: Math.random() * (canvas.width - size), y: -size, size: size,
-                    speed: (Math.random() * 2 + 2) + (level * 0.35),
-                    hp: Math.ceil(size / 12) * stats.damage, maxHp: Math.ceil(size / 12) * stats.damage
-                });
+                meteors.push({ x: Math.random() * (canvas.width - size), y: -size, size: size, speed: (Math.random() * 2 + 2) + (level * 0.35), hp: Math.ceil(size / 12) * stats.damage, maxHp: Math.ceil(size / 12) * stats.damage });
             }
         }
 
@@ -614,7 +617,7 @@
 
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
-                    if (b.x < m.x + m.size && b.x + b.width > m.x && b.y < m.y + m.size && b.y + b.height > m.y) {
+                    if (b.x < m.x + m.size && b.x + b.width > m.x && b.y < m.y + m.size && b.y + m.height > m.y) {
                         m.hp -= stats.damage;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
@@ -677,7 +680,6 @@
                 ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 9, 0, Math.PI * 2); ctx.fill();
             }
 
-            // Phi thuyền phong cách NASA
             ctx.fillStyle = "#0b3d91";
             ctx.beginPath();
             ctx.moveTo(ship.x, ship.y - ship.radius);
