@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NASA Galaxy Survivor - Full Version + Leaderboard</title>
+    <title>NASA Galaxy Survivor - Ultimate Edition</title>
     <style>
         :root {
             --bg-color: #020617;
@@ -54,13 +54,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 6, 23, 0.96);
+            background: rgba(2, 6, 23, 0.97);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             overflow-y: auto;
         }
@@ -68,14 +68,14 @@
         .nasa-logo {
             width: 60px;
             height: 60px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
         }
 
         .home-screen h1 {
             font-size: 1.8rem;
             color: #ffffff;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             font-weight: 900;
         }
 
@@ -88,35 +88,35 @@
             gap: 12px;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
 
         .name-input-box {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             border: 2px solid var(--accent);
             color: #fff;
-            padding: 6px 14px;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: bold;
             outline: none;
             text-align: center;
-            width: 180px;
+            width: 190px;
         }
 
         .money-badge {
             background: rgba(11, 61, 145, 0.8);
             border: 2px solid var(--gold);
-            padding: 6px 16px;
+            padding: 6px 18px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--gold);
             font-weight: bold;
         }
 
         .menu-grid {
             width: 100%;
-            max-width: 950px;
+            max-width: 980px;
             display: flex;
             gap: 12px;
             margin-bottom: 15px;
@@ -126,11 +126,11 @@
 
         .panel-box {
             flex: 1;
-            min-width: 260px;
+            min-width: 290px;
             background: rgba(15, 23, 42, 0.95);
             border: 2px solid #334155;
             border-radius: 12px;
-            padding: 12px;
+            padding: 12px 15px;
             text-align: left;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
@@ -157,19 +157,21 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            max-height: 125px;
+            overflow-y: auto;
         }
 
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             font-size: 0.8rem;
-            padding: 4px 0;
+            padding: 4px 6px;
             border-bottom: 1px dashed rgba(255,255,255,0.15);
         }
 
-        .leaderboard-item:nth-child(1) { color: var(--gold); font-weight: bold; }
+        .leaderboard-item:nth-child(1) { color: var(--gold); font-weight: bold; background: rgba(250, 204, 21, 0.1); border-radius: 4px; }
         .leaderboard-item:nth-child(2) { color: #cbd5e1; font-weight: bold; }
-        .leaderboard-item:nth-child(3) { color: #b45309; font-weight: bold; }
+        .leaderboard-item:nth-child(3) { color: #d97706; font-weight: bold; }
 
         .action-btn {
             background: var(--nasa-blue);
@@ -184,7 +186,6 @@
 
         .action-btn:hover { background: #1d4ed8; }
         .action-btn.buy { background: #ca8a04; }
-        .action-btn.active-skin { background: #15803d; }
 
         .controls-row {
             display: flex;
@@ -315,7 +316,7 @@
         <!-- TRANG CHỦ -->
         <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
-            <h1>NASA <span>SURVIVOR</span></h1>
+            <h1>NASA <span>SURVIVOR</span> - ULTIMATE</h1>
 
             <div class="player-info-bar">
                 <input type="text" id="playerNameInput" class="name-input-box" placeholder="Tên phi công..." maxlength="12" onchange="savePlayerName()">
@@ -338,12 +339,12 @@
                     </div>
                 </div>
 
-                <!-- PHI THUYỀN & TRANG BỊ -->
+                <!-- PHI THUYỀN & SHOP -->
                 <div class="panel-box">
                     <div class="panel-title">🎨 PHI THUYỀN & SHOP</div>
                     <div class="panel-item">
                         <span>🚀 Trang Phục Tàu</span>
-                        <button class="action-btn" id="skinBtn0" onclick="cycleSkin()">Đổi Skin</button>
+                        <button class="action-btn" onclick="cycleSkin()">Đổi Skin</button>
                     </div>
                     <div class="panel-item">
                         <span>💥 Sát Thương (Lvl <span id="lvlDamage">1</span>)</span>
@@ -433,7 +434,6 @@
             }
         }
 
-        // TÊN PHI CÔNG & BẢNG XẾP HẠNG
         let playerName = localStorage.getItem('nasa_player_name') || "Phi Công " + Math.floor(Math.random() * 899 + 100);
         document.getElementById("playerNameInput").value = playerName;
 
@@ -442,6 +442,7 @@
             if (inputVal.length > 0) {
                 playerName = inputVal;
                 localStorage.setItem('nasa_player_name', playerName);
+                alert(`✅ Đã lưu thành công tên phi công: "${playerName}"! Sẵn sàng xuất kích.`);
             }
         }
 
@@ -453,6 +454,7 @@
 
         function updateLeaderboardUI() {
             let listEl = document.getElementById("leaderboardList");
+            if (!listEl) return;
             listEl.innerHTML = "";
             leaderboard.sort((a, b) => b.score - a.score);
             leaderboard.slice(0, 5).forEach((item, index) => {
@@ -471,7 +473,6 @@
             updateLeaderboardUI();
         }
 
-        // FULL BỘ 20 CÂU HỎI KHOA HỌC VŨ TRỤ
         const spaceQuestions = [
             { q: "Hành tinh nào gần Mặt Trời nhất?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Trái Đất", "D. Sao Hỏa"], ans: 0 },
             { q: "Hành tinh nào nóng nhất trong Hệ Mặt Trời?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Sao Mộc", "D. Sao Hỏa"], ans: 1 },
@@ -524,8 +525,8 @@
         let gameRunning = false, score = 0, level = 1, exp = 0, maxExp = 100, lives = 3, gameMode = 'normal', distanceMeters = 0, currentPlanetIdx = 0, invincibleTimer = 0;
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 400;
         let currentSkin = localStorage.getItem('nasa_skin') ? parseInt(localStorage.getItem('nasa_skin')) : 0;
-        let upgrades = { damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1, fireRate: 1 };
-        let shopInventory = { lives: localStorage.getItem('nasa_shop_lives') ? parseInt(localStorage.getItem('nasa_shop_lives')) : 0, shield: 0 };
+        let upgrades = { damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1 };
+        let shopInventory = { lives: localStorage.getItem('nasa_shop_lives') ? parseInt(localStorage.getItem('nasa_shop_lives')) : 0 };
 
         updateHomeUI();
 
@@ -670,7 +671,6 @@
             bullets = []; enemyBullets = []; meteors = []; gems = []; particles = []; boss = null;
             stats.damage = upgrades.damage + (currentSkin === 1 ? 2 : 0);
             stats.bulletCount = 1;
-            stats.orbitalShield = shopInventory.shield > 0;
             ship.speed = 9 + (currentSkin === 2 ? 2 : 0);
             ship.x = 150; ship.y = canvas.height / 2; pointerX = ship.x; pointerY = ship.y;
 
