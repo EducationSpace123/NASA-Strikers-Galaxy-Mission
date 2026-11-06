@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galaxy Survivor: NASA Edition - Ultimate</title>
+    <title>Galaxy Survivor: NASA Edition - Fix Controls</title>
     <style>
         :root {
             --bg-color: #030712;
             --text-color: #f8fafc;
             --primary: #38bdf8;
             --accent: #f43f5e;
-            --panel-bg: rgba(15, 23, 42, 0.9);
         }
 
         * {
@@ -49,6 +48,7 @@
             display: block;
             width: 100%;
             height: 100%;
+            touch-action: none; /* Giúp thao tác chạm cảm ứng mượt mà không bị cuộn trang */
         }
 
         .overlay {
@@ -93,7 +93,6 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 0 25px rgba(244, 63, 94, 0.5);
-            transition: transform 0.2s;
         }
 
         .play-btn:active {
@@ -126,12 +125,10 @@
             cursor: pointer;
             text-align: left;
             transition: all 0.2s;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
         }
 
         .perk-card:hover {
             border-color: var(--primary);
-            transform: translateY(-3px);
             background: rgba(51, 65, 85, 0.95);
         }
 
@@ -202,7 +199,7 @@
         <!-- Màn hình Menu Chính -->
         <div class="overlay" id="startScreen">
             <h1>GALAXY SURVIVOR</h1>
-            <p>Trải nghiệm tựa game sinh tồn không gian đỉnh cao!<br>Tiêu diệt thiên thạch, chạm trán Boss hệ mặt trời, thu thập tinh thể nâng cấp kỹ năng tối thượng.</p>
+            <p>Trải nghiệm sinh tồn không gian cực mượt!<br>Hỗ trợ cả Kéo chuột / Cảm ứng và Phím mũi tên (A/D) để di chuyển.</p>
             <button class="play-btn" onclick="startGame()">BẮT ĐẦU CHƠI</button>
         </div>
 
@@ -231,7 +228,7 @@
             </div>
             <div class="planet-progress-box">
                 <span id="planetInfo">📍 Mục tiêu: Sao Thủy ☿️</span>
-                <span id="bossAlert" style="color: #f43f5e; display: none; font-weight: bold;">⚠️ CẢNH BÁO BOSS</span>
+                <span id="bossAlert" style="color: #f43f5e; display: none; font-weight: bold;">⚠️ BOSS</span>
             </div>
         </div>
 
@@ -250,22 +247,20 @@
         let lives = 3;
         let distance = 0;
 
-        // Chỉ số chiến đấu phi thuyền
         let stats = {
-            fireRate: 22,
+            fireRate: 20,
             bulletSpeed: 12,
             bulletCount: 1,
             damage: 1,
-            magnetRadius: 130,
-            orbitalShield: false // Vòng xoay năng lượng bảo vệ
+            magnetRadius: 140,
+            orbitalShield: false
         };
 
         let ship = {
             x: canvas.width / 2,
             y: canvas.height - 100,
             radius: 22,
-            targetX: canvas.width / 2,
-            targetY: canvas.height - 100
+            speed: 8
         };
 
         const planets = [
@@ -275,9 +270,34 @@
             { name: "Sao Hỏa 🔴", targetDist: 6000 },
             { name: "Sao Mộc 🟠", targetDist: 10000 },
             { name: "Sao Thổ 🪐", targetDist: 15000 },
-            { name: "Sao Thiên Vương 🔵", targetDist: 21000 },
-            { name: "Sao Hải Vương 🌊", targetDist: 28000 }
+            { name: "Sao Hải Vương 🌊", targetDist: 25000 }
         ];
+
+        let keys = {};
+        let isPointerDown = false;
+        let pointerX = canvas.width / 2;
+        let pointerY = canvas.height - 100;
+
+        // Xử lý sự kiện bàn phím
+        window.addEventListener("keydown", (e) => { keys[e.key] = true; });
+        window.addEventListener("keyup", (e) => { keys[e.key] = false; });
+
+        // Xử lý sự kiện chuột và chạm cảm ứng mượt mà
+        canvas.addEventListener("pointerdown", (e) => {
+            isPointerDown = true;
+            updatePointerPos(e);
+        });
+        canvas.addEventListener("pointermove", (e) => {
+            if (isPointerDown) updatePointerPos(e);
+        });
+        canvas.addEventListener("pointerup", () => { isPointerDown = false; });
+        canvas.addEventListener("pointercancel", () => { isPointerDown = false; });
+
+        function updatePointerPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            pointerX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            pointerY = (e.clientY - rect.top) * (canvas.height / rect.height);
+        }
 
         let bullets = [];
         let enemyBullets = [];
@@ -298,17 +318,6 @@
             });
         }
 
-        let isTouching = false;
-        canvas.addEventListener("pointerdown", (e) => { isTouching = true; updateTouchPos(e); });
-        canvas.addEventListener("pointermove", (e) => { if (isTouching) updateTouchPos(e); });
-        canvas.addEventListener("pointerup", () => { isTouching = false; });
-
-        function updateTouchPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            ship.targetX = (e.clientX - rect.left) * (canvas.width / rect.width);
-            ship.targetY = (e.clientY - rect.top) * (canvas.height / rect.height);
-        }
-
         function startGame() {
             document.getElementById("startScreen").style.display = "none";
             document.getElementById("gameOverScreen").style.display = "none";
@@ -327,11 +336,11 @@
             particles = [];
             boss = null;
             
-            stats = { fireRate: 22, bulletSpeed: 12, bulletCount: 1, damage: 1, magnetRadius: 130, orbitalShield: false };
+            stats = { fireRate: 20, bulletSpeed: 12, bulletCount: 1, damage: 1, magnetRadius: 140, orbitalShield: false };
             ship.x = canvas.width / 2;
             ship.y = canvas.height - 120;
-            ship.targetX = ship.x;
-            ship.targetY = ship.y;
+            pointerX = ship.x;
+            pointerY = ship.y;
 
             gameRunning = true;
             loop();
@@ -345,12 +354,12 @@
         }
 
         const perkPool = [
-            { id: 'multishot', title: '⚡ Bắn Kép (Multi-Shot)', desc: 'Tăng thêm số lượng tia đạn bắn ra.' },
-            { id: 'firerate', title: '🚀 Quá Tải Tốc Độ Bắn', desc: 'Tốc độ xả đạn nhanh hơn rõ rệt.' },
-            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương đạn gây ra.' },
-            { id: 'shield', title: '🛡️ Vòng Xoay Năng Lượng', desc: 'Kích hoạt quả cầu plasma xoay quanh thiêu đốt kẻ địch.' },
-            { id: 'magnet', title: '🧲 Hút Tinh Thể Xa', desc: 'Mở rộng phạm vi hút tinh thể XP.' },
-            { id: 'heal', title: '❤️ Trạm Tiếp Xăng (Hồi Máu)', desc: 'Phục hồi ngay 1 điểm Mạng sống.' }
+            { id: 'multishot', title: '⚡ Bắn Kép (Multi-Shot)', desc: 'Tăng thêm số lượng tia đạn.' },
+            { id: 'firerate', title: '🚀 Tốc Độ Bắn Cực Nhanh', desc: 'Xả đạn liên thanh với tốc độ cao.' },
+            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương đạn.' },
+            { id: 'shield', title: '🛡️ Vòng Xoay Năng Lượng', desc: 'Quả cầu plasma xoay quanh thiêu đốt thiên thạch.' },
+            { id: 'magnet', title: '🧲 Nam Châm Tinh Thể', desc: 'Hút tinh thể kinh nghiệm ở phạm vi rộng.' },
+            { id: 'heal', title: '❤️ Hồi Máu', desc: 'Phục hồi 1 Mạng sống.' }
         ];
 
         function showLevelUpModal() {
@@ -387,7 +396,6 @@
         }
 
         function spawnEntity() {
-            // Xuất hiện Boss khi đạt mốc điểm hoặc khoảng cách nhất định
             if (score > 0 && score % 500 === 0 && !boss && meteors.length === 0) {
                 boss = {
                     x: canvas.width / 2 - 60,
@@ -417,11 +425,11 @@
         }
 
         function createExplosion(x, y, color) {
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 10; i++) {
                 particles.push({
                     x: x, y: y,
-                    dx: (Math.random() - 0.5) * 7,
-                    dy: (Math.random() - 0.5) * 7,
+                    dx: (Math.random() - 0.5) * 6,
+                    dy: (Math.random() - 0.5) * 6,
                     size: Math.random() * 4 + 1,
                     life: 25,
                     color: color
@@ -433,12 +441,23 @@
             distance += 1;
             orbitalAngle += 0.08;
 
-            ship.x += (ship.targetX - ship.x) * 0.15;
-            ship.y += (ship.targetY - ship.y) * 0.15;
+            // Di chuyển bằng phím bàn phím
+            if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x -= ship.speed;
+            if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x += ship.speed;
+            if (keys["ArrowUp"] || keys["w"] || keys["W"]) ship.y -= ship.speed;
+            if (keys["ArrowDown"] || keys["s"] || keys["S"]) ship.y += ship.speed;
+
+            // Nếu người dùng kéo chuột hoặc chạm cảm ứng, di chuyển bám theo ngón tay
+            if (isPointerDown) {
+                ship.x += (pointerX - ship.x) * 0.2;
+                ship.y += (pointerY - ship.y) * 0.2;
+            }
+
+            // Giới hạn trong khung game
             ship.x = Math.max(ship.radius, Math.min(canvas.width - ship.radius, ship.x));
             ship.y = Math.max(ship.radius, Math.min(canvas.height - ship.radius, ship.y));
 
-            // Bắn đạn
+            // Bắn đạn tự động
             shootTimer++;
             if (shootTimer >= stats.fireRate) {
                 shootTimer = 0;
@@ -460,13 +479,11 @@
                 if (star.y > canvas.height) star.y = 0;
             });
 
-            // Cập nhật Boss
             if (boss) {
                 if (boss.y < boss.targetY) boss.y += 1.5;
                 else {
                     boss.x += boss.dx;
                     if (boss.x <= 20 || boss.x + boss.width >= canvas.width - 20) boss.dx *= -1;
-
                     boss.shootTimer++;
                     if (boss.shootTimer % 45 === 0) {
                         enemyBullets.push({ x: boss.x + boss.width/2 - 4, y: boss.y + boss.height, width: 8, height: 16, speed: 6 });
@@ -477,13 +494,11 @@
                 document.getElementById("bossAlert").style.display = "none";
             }
 
-            // Đạn người chơi
             for (let i = bullets.length - 1; i >= 0; i--) {
                 bullets[i].y -= bullets[i].speed;
                 if (bullets[i].y < 0) bullets.splice(i, 1);
             }
 
-            // Đạn Boss bắn ra
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
                 let eb = enemyBullets[i];
                 eb.y += eb.speed;
@@ -499,11 +514,10 @@
                 }
             }
 
-            // Vòng xoay năng lượng bảo vệ (Orbital Shield)
             if (stats.orbitalShield) {
                 let shieldX = ship.x + Math.cos(orbitalAngle) * 55;
                 let shieldY = ship.y + Math.sin(orbitalAngle) * 55;
-                meteors.forEach((m, idx) => {
+                meteors.forEach((m) => {
                     let mdx = shieldX - (m.x + m.size/2);
                     let mdy = shieldY - (m.y + m.size/2);
                     if (Math.sqrt(mdx*mdx + mdy*mdy) < m.size/2 + 12) {
@@ -513,7 +527,6 @@
                 });
             }
 
-            // Tinh thể XP
             for (let i = gems.length - 1; i >= 0; i--) {
                 let g = gems[i];
                 let dx = ship.x - g.x;
@@ -537,7 +550,6 @@
                 }
             }
 
-            // Thiên thạch
             spawnEntity();
             for (let i = meteors.length - 1; i >= 0; i--) {
                 let m = meteors[i];
@@ -561,7 +573,6 @@
                     }
                 }
 
-                // Va chạm Boss với Đạn
                 if (boss && boss.y >= boss.targetY) {
                     for (let j = bullets.length - 1; j >= 0; j--) {
                         let b = bullets[j];
@@ -599,7 +610,6 @@
                 if (p.life <= 0) particles.splice(i, 1);
             }
 
-            // Cập nhật HUD
             document.getElementById("scoreText").innerText = `Điểm: ${score}`;
             document.getElementById("levelText").innerText = `LV. ${level}`;
             document.getElementById("livesText").innerText = `❤️ ${lives}`;
@@ -620,7 +630,6 @@
                 ctx.fillRect(star.x, star.y, star.size, star.size);
             });
 
-            // Tinh thể XP
             gems.forEach(g => {
                 ctx.fillStyle = "#38bdf8";
                 ctx.beginPath();
@@ -628,7 +637,6 @@
                 ctx.fill();
             });
 
-            // Vòng xoay plasma bảo vệ
             if (stats.orbitalShield) {
                 let shieldX = ship.x + Math.cos(orbitalAngle) * 55;
                 let shieldY = ship.y + Math.sin(orbitalAngle) * 55;
@@ -638,7 +646,6 @@
                 ctx.fill();
             }
 
-            // Phi thuyền
             ctx.fillStyle = "#38bdf8";
             ctx.beginPath();
             ctx.moveTo(ship.x, ship.y - ship.radius);
@@ -648,13 +655,11 @@
             ctx.closePath();
             ctx.fill();
 
-            // Động cơ phản lực
             ctx.fillStyle = "#f43f5e";
             ctx.fillRect(ship.x - 4, ship.y + ship.radius * 0.6, 8, 12);
 
-            // Đạn
-            ctx.fillStyle = "#38bdf8";
             bullets.forEach(b => {
+                ctx.fillStyle = "#38bdf8";
                 ctx.fillRect(b.x, b.y, b.width, b.height);
             });
 
@@ -663,7 +668,6 @@
                 ctx.fillRect(eb.x, eb.y, eb.width, eb.height);
             });
 
-            // Thiên thạch
             meteors.forEach(m => {
                 ctx.fillStyle = "#475569";
                 ctx.beginPath();
@@ -671,7 +675,6 @@
                 ctx.fill();
             });
 
-            // Boss
             if (boss) {
                 ctx.fillStyle = "#991b1b";
                 ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
