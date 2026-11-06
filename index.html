@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NASA Galaxy Survivor - Chế Độ Màn Hình Rộng Dễ Nhìn</title>
+    <title>NASA Galaxy Survivor - Full Version + Leaderboard</title>
     <style>
         :root {
             --bg-color: #020617;
@@ -48,14 +48,13 @@
             touch-action: none;
         }
 
-        /* TRANG CHỦ (MENU CHÍNH) - TỐI ƯU HIỂN THỊ RÕ RÀNG */
         .home-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 6, 23, 0.95);
+            background: rgba(2, 6, 23, 0.96);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -69,7 +68,7 @@
         .nasa-logo {
             width: 60px;
             height: 60px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
         }
 
@@ -78,28 +77,46 @@
             color: #ffffff;
             margin-bottom: 4px;
             font-weight: 900;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
 
         .home-screen h1 span {
             color: var(--nasa-red);
         }
 
+        .player-info-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .name-input-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid var(--accent);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            outline: none;
+            text-align: center;
+            width: 180px;
+        }
+
         .money-badge {
             background: rgba(11, 61, 145, 0.8);
             border: 2px solid var(--gold);
-            padding: 6px 18px;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--gold);
             font-weight: bold;
-            margin-bottom: 12px;
-            box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
         }
 
         .menu-grid {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             display: flex;
             gap: 12px;
             margin-bottom: 15px;
@@ -109,11 +126,11 @@
 
         .panel-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 260px;
             background: rgba(15, 23, 42, 0.95);
             border: 2px solid #334155;
             border-radius: 12px;
-            padding: 10px 12px;
+            padding: 12px;
             text-align: left;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
@@ -136,6 +153,24 @@
             margin-bottom: 6px;
         }
 
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.15);
+        }
+
+        .leaderboard-item:nth-child(1) { color: var(--gold); font-weight: bold; }
+        .leaderboard-item:nth-child(2) { color: #cbd5e1; font-weight: bold; }
+        .leaderboard-item:nth-child(3) { color: #b45309; font-weight: bold; }
+
         .action-btn {
             background: var(--nasa-blue);
             color: white;
@@ -147,17 +182,9 @@
             font-size: 0.75rem;
         }
 
-        .action-btn:hover {
-            background: #1d4ed8;
-        }
-
-        .action-btn.buy {
-            background: #ca8a04;
-        }
-
-        .action-btn.active-skin {
-            background: #15803d;
-        }
+        .action-btn:hover { background: #1d4ed8; }
+        .action-btn.buy { background: #ca8a04; }
+        .action-btn.active-skin { background: #15803d; }
 
         .controls-row {
             display: flex;
@@ -168,10 +195,7 @@
             flex-wrap: wrap;
         }
 
-        .mode-container {
-            display: flex;
-            gap: 8px;
-        }
+        .mode-container { display: flex; gap: 8px; }
 
         .mode-btn {
             background: rgba(30, 41, 59, 0.9);
@@ -200,11 +224,7 @@
             cursor: pointer;
         }
 
-        .quiz-btn {
-            background: rgba(250, 204, 21, 0.25);
-            border-color: var(--gold);
-            color: var(--gold);
-        }
+        .quiz-btn { background: rgba(250, 204, 21, 0.25); border-color: var(--gold); color: var(--gold); }
 
         .play-btn {
             background: linear-gradient(135deg, var(--nasa-red), #e11d48);
@@ -218,7 +238,6 @@
             box-shadow: 0 0 25px rgba(252, 61, 33, 0.7);
         }
 
-        /* MODAL KHÁM PHÁ & THỬ THÁCH TRI THỨC */
         #planetPopup, #quizModal {
             display: none;
             position: absolute;
@@ -255,108 +274,77 @@
             background: rgba(51, 65, 85, 0.95);
         }
 
-        /* MÀN HÌNH THUA TRẬN */
         .game-over-screen {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(3, 7, 18, 0.98);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            padding: 20px;
-            text-align: center;
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 20; padding: 20px; text-align: center;
         }
 
-        /* BẢNG KỸ NĂNG LÊN CẤP */
         #perkModal {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 6, 23, 0.98);
-            z-index: 30;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: none; position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.98); z-index: 30;
+            flex-direction: column; align-items: center; justify-content: center;
             padding: 20px;
         }
 
         .perk-card {
             background: rgba(30, 41, 59, 0.95);
             border: 2px solid #475569;
-            width: 100%;
-            max-width: 420px;
-            padding: 14px 20px;
-            border-radius: 12px;
-            margin: 8px 0;
-            cursor: pointer;
-            text-align: left;
+            width: 100%; max-width: 420px;
+            padding: 14px 20px; border-radius: 12px;
+            margin: 8px 0; cursor: pointer; text-align: left;
         }
 
-        /* HUD HIỂN THỊ ĐỈNH MÀN HÌNH CỰC RÕ */
         .hud-top {
             position: absolute;
-            top: 15px;
-            left: 25px;
-            right: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none;
-            z-index: 10;
-            font-weight: 900;
-            font-size: 1.1rem;
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,1);
+            top: 15px; left: 25px; right: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            pointer-events: none; z-index: 10;
+            font-weight: 900; font-size: 1.1rem; color: #ffffff;
+            text-shadow: 0 0 8px rgba(0,0,0,0.9);
         }
     </style>
 </head>
 <body>
 
     <div class="game-container" id="gameContainer">
-        <!-- TRANG CHỦ (MENU CHÍNH) -->
+        <!-- TRANG CHỦ -->
         <div class="home-screen" id="homeScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
-            <h1>NASA <span>SURVIVOR</span> - MÀN HÌNH RỘNG</h1>
-            <div class="money-badge">💰 Số Dư: <span id="playerMoney">400</span> Xu</div>
+            <h1>NASA <span>SURVIVOR</span></h1>
+
+            <div class="player-info-bar">
+                <input type="text" id="playerNameInput" class="name-input-box" placeholder="Tên phi công..." maxlength="12" onchange="savePlayerName()">
+                <div class="money-badge">💰 <span id="playerMoney">400</span> Xu</div>
+            </div>
 
             <div class="menu-grid">
-                <!-- Hộp quà tri thức -->
+                <!-- BẢNG XẾP HẠNG -->
+                <div class="panel-box">
+                    <div class="panel-title">🏆 BẢNG XẾP HẠNG TOP 5</div>
+                    <ul class="leaderboard-list" id="leaderboardList"></ul>
+                </div>
+
+                <!-- HỘP QUÀ TRI THỨC -->
                 <div class="panel-box">
                     <div class="panel-title">🎁 HỘP QUÀ TRI THỨC</div>
                     <div class="panel-item" style="flex-direction:column; align-items:flex-start; gap:6px;">
-                        <span>Trả lời câu hỏi vũ trụ nhận ngay +50 Xu!</span>
+                        <span>Trả lời câu hỏi vũ trụ ngẫu nhiên nhận +50 Xu!</span>
                         <button class="quiz-btn" style="width:100%;" onclick="openRandomQuiz()">MỞ CÂU HỎI NGẪU NHIÊN</button>
                     </div>
                 </div>
 
-                <!-- Chọn Trang Phục -->
+                <!-- PHI THUYỀN & TRANG BỊ -->
                 <div class="panel-box">
-                    <div class="panel-title">🎨 TRANG PHỤC TÀU</div>
+                    <div class="panel-title">🎨 PHI THUYỀN & SHOP</div>
                     <div class="panel-item">
-                        <span>🚀 Tiêu Chuẩn NASA</span>
-                        <button class="action-btn" id="skinBtn0" onclick="selectSkin(0)">Dùng</button>
+                        <span>🚀 Trang Phục Tàu</span>
+                        <button class="action-btn" id="skinBtn0" onclick="cycleSkin()">Đổi Skin</button>
                     </div>
-                    <div class="panel-item">
-                        <span>🔴 Kẻ Hủy Diệt (200 Xu)</span>
-                        <button class="action-btn buy" id="skinBtn1" onclick="buyOrSelectSkin(1, 200)">Mua</button>
-                    </div>
-                    <div class="panel-item">
-                        <span>🟡 Phượng Hoàng (400 Xu)</span>
-                        <button class="action-btn buy" id="skinBtn2" onclick="buyOrSelectSkin(2, 400)">Mua</button>
-                    </div>
-                </div>
-
-                <!-- Nâng cấp & Shop -->
-                <div class="panel-box">
-                    <div class="panel-title">⚙️ TRANG BỊ & NÂNG CẤP</div>
                     <div class="panel-item">
                         <span>💥 Sát Thương (Lvl <span id="lvlDamage">1</span>)</span>
                         <button class="action-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
@@ -364,10 +352,6 @@
                     <div class="panel-item">
                         <span>❤️ Mua Mạng (Sẵn: <span id="shopLives">0</span>)</span>
                         <button class="action-btn buy" onclick="buyShopItem('lives')">150 Xu</button>
-                    </div>
-                    <div class="panel-item">
-                        <span>🛡️ Khiên Plasma (Sẵn: <span id="shopShield">0</span>)</span>
-                        <button class="action-btn buy" onclick="buyShopItem('shield')">200 Xu</button>
                     </div>
                 </div>
             </div>
@@ -385,7 +369,7 @@
             <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
         </div>
 
-        <!-- MODAL HỘP QUÀ TRI THỨC (20 CÂU HỎI) -->
+        <!-- MODAL CÂU HỎI -->
         <div id="quizModal">
             <h3 style="color: var(--gold); margin-bottom: 10px; font-size:1.2rem;">🎁 Thử Thách Tri Thức Vũ Trụ</h3>
             <p id="quizQuestionText" style="font-size: 1rem; color: #fff; margin-bottom: 14px; line-height: 1.5;"></p>
@@ -393,31 +377,33 @@
             <button class="action-btn" style="margin-top: 15px; padding: 8px 20px; font-size:0.9rem;" onclick="closeQuizModal()">Đóng</button>
         </div>
 
-        <!-- Popup Giới Thiệu Hành Tinh -->
+        <!-- POPUP HÀNH TINH -->
         <div id="planetPopup">
             <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 10px; font-size: 1.4rem;">Khám Phá Hành Tinh</h2>
             <p id="popupDesc" style="font-size: 1rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 18px;"></p>
             <button class="play-btn" style="padding: 10px 28px; font-size: 1rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
         </div>
 
-        <!-- Màn hình Thua Trận -->
+        <!-- MÀN HÌNH THUA TRẬN -->
         <div class="game-over-screen" id="gameOverScreen">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:60px; height:60px;">
             <h1 style="color: var(--nasa-red); font-size:2rem;">SỨ MỆNH THẤT BẠI</h1>
+            <p id="finalPlayerName" style="color: var(--gold); font-size: 1.2rem; font-weight: bold; margin-bottom: 6px;"></p>
             <p id="finalStats" style="color:#cbd5e1; font-size:1.1rem; margin-bottom: 6px;">Tổng điểm: 0</p>
             <p id="finalDistance" style="color:#38bdf8; font-size:1.1rem; margin-bottom: 8px;">Quãng đường: 0 mét</p>
             <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1.2rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
             <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
         </div>
 
-        <!-- Bảng Kỹ Năng Lên Cấp -->
+        <!-- BẢNG LÊN CẤP -->
         <div id="perkModal">
             <h2 style="color: var(--accent); margin-bottom: 15px; font-size:1.4rem;">🎉 NÂNG CẤP TRONG TRẬN</h2>
             <div id="perkOptionsContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
         </div>
 
-        <!-- HUD Trong Trận -->
+        <!-- HUD TRONG TRẬN -->
         <div class="hud-top" id="hudTop" style="display: none;">
+            <span id="hudPlayerName" style="color: var(--gold);">Phi Công</span>
             <span id="scoreText">Điểm: 0</span>
             <span id="distanceText">📍 0 m</span>
             <span id="planetText">Sao Thủy</span>
@@ -435,30 +421,57 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            if (ship) {
-                ship.y = Math.min(ship.y, canvas.height - ship.radius);
-            }
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => {
-                    setTimeout(resizeCanvas, 100);
-                }).catch(err => {
-                    alert(`Không thể mở toàn màn hình: ${err.message}`);
-                });
+                document.documentElement.requestFullscreen().then(() => setTimeout(resizeCanvas, 100));
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen().then(() => {
-                        setTimeout(resizeCanvas, 100);
-                    });
-                }
+                if (document.exitFullscreen) document.exitFullscreen().then(() => setTimeout(resizeCanvas, 100));
             }
         }
 
-        // BỘ 20 CÂU HỎI TRI THỨC VŨ TRỤ
+        // TÊN PHI CÔNG & BẢNG XẾP HẠNG
+        let playerName = localStorage.getItem('nasa_player_name') || "Phi Công " + Math.floor(Math.random() * 899 + 100);
+        document.getElementById("playerNameInput").value = playerName;
+
+        function savePlayerName() {
+            let inputVal = document.getElementById("playerNameInput").value.trim();
+            if (inputVal.length > 0) {
+                playerName = inputVal;
+                localStorage.setItem('nasa_player_name', playerName);
+            }
+        }
+
+        let leaderboard = localStorage.getItem('nasa_leaderboard') ? JSON.parse(localStorage.getItem('nasa_leaderboard')) : [
+            { name: "NASA Alpha", score: 850 },
+            { name: "Star Voyager", score: 620 },
+            { name: "Apollo 11", score: 400 }
+        ];
+
+        function updateLeaderboardUI() {
+            let listEl = document.getElementById("leaderboardList");
+            listEl.innerHTML = "";
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard.slice(0, 5).forEach((item, index) => {
+                let li = document.createElement("li");
+                li.className = "leaderboard-item";
+                li.innerHTML = `<span>${index + 1}. ${item.name}</span><span>${item.score} điểm</span>`;
+                listEl.appendChild(li);
+            });
+        }
+
+        function saveScoreToLeaderboard(name, scoreVal) {
+            leaderboard.push({ name: name, score: scoreVal });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('nasa_leaderboard', JSON.stringify(leaderboard));
+            updateLeaderboardUI();
+        }
+
+        // FULL BỘ 20 CÂU HỎI KHOA HỌC VŨ TRỤ
         const spaceQuestions = [
             { q: "Hành tinh nào gần Mặt Trời nhất?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Trái Đất", "D. Sao Hỏa"], ans: 0 },
             { q: "Hành tinh nào nóng nhất trong Hệ Mặt Trời?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Sao Mộc", "D. Sao Hỏa"], ans: 1 },
@@ -485,11 +498,9 @@
         function openRandomQuiz() {
             let randomIdx = Math.floor(Math.random() * spaceQuestions.length);
             let qData = spaceQuestions[randomIdx];
-
             document.getElementById("quizQuestionText").innerText = `Câu hỏi (${randomIdx + 1}/20): ${qData.q}`;
             let container = document.getElementById("quizOptionsContainer");
             container.innerHTML = "";
-
             qData.opts.forEach((opt, idx) => {
                 let btn = document.createElement("button");
                 btn.className = "quiz-opt-btn";
@@ -499,45 +510,22 @@
                         playerMoney += 50;
                         localStorage.setItem('nasa_money', playerMoney);
                         updateHomeUI();
-                        alert("🎉 Chính xác! Bạn nhận được +50 Xu thưởng!");
-                    } else {
-                        alert("❌ Chưa chính xác rồi! Thử lại ở câu hỏi khác nhé.");
-                    }
+                        alert("🎉 Chính xác! Bạn nhận được +50 Xu!");
+                    } else alert("❌ Chưa chính xác rồi!");
                     closeQuizModal();
                 };
                 container.appendChild(btn);
             });
-
             document.getElementById("quizModal").style.display = "block";
         }
 
-        function closeQuizModal() {
-            document.getElementById("quizModal").style.display = "none";
-        }
+        function closeQuizModal() { document.getElementById("quizModal").style.display = "none"; }
 
-        let gameRunning = false;
-        let score = 0;
-        let level = 1;
-        let exp = 0;
-        let maxExp = 100;
-        let lives = 3;
-        let gameMode = 'normal';
-        let distanceMeters = 0;
-        let currentPlanetIdx = 0;
-        let invincibleTimer = 0;
-
+        let gameRunning = false, score = 0, level = 1, exp = 0, maxExp = 100, lives = 3, gameMode = 'normal', distanceMeters = 0, currentPlanetIdx = 0, invincibleTimer = 0;
         let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 400;
         let currentSkin = localStorage.getItem('nasa_skin') ? parseInt(localStorage.getItem('nasa_skin')) : 0;
-        let unlockedSkins = localStorage.getItem('nasa_unlocked_skins') ? JSON.parse(localStorage.getItem('nasa_unlocked_skins')) : [0];
-
-        let upgrades = {
-            damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1,
-            fireRate: localStorage.getItem('nasa_up_fr') ? parseInt(localStorage.getItem('nasa_up_fr')) : 1
-        };
-        let shopInventory = {
-            lives: localStorage.getItem('nasa_shop_lives') ? parseInt(localStorage.getItem('nasa_shop_lives')) : 0,
-            shield: localStorage.getItem('nasa_shop_shield') ? parseInt(localStorage.getItem('nasa_shop_shield')) : 0
-        };
+        let upgrades = { damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1, fireRate: 1 };
+        let shopInventory = { lives: localStorage.getItem('nasa_shop_lives') ? parseInt(localStorage.getItem('nasa_shop_lives')) : 0, shield: 0 };
 
         updateHomeUI();
 
@@ -545,70 +533,34 @@
             document.getElementById("playerMoney").innerText = playerMoney;
             document.getElementById("lvlDamage").innerText = upgrades.damage;
             document.getElementById("shopLives").innerText = shopInventory.lives;
-            document.getElementById("shopShield").innerText = shopInventory.shield;
-
-            for (let i = 0; i <= 2; i++) {
-                let btn = document.getElementById(`skinBtn${i}`);
-                if (unlockedSkins.includes(i)) {
-                    if (currentSkin === i) {
-                        btn.innerText = "Đang Dùng";
-                        btn.className = "action-btn active-skin";
-                    } else {
-                        btn.innerText = "Chọn Dùng";
-                        btn.className = "action-btn";
-                    }
-                }
-            }
+            updateLeaderboardUI();
         }
 
-        function selectSkin(skinId) {
-            currentSkin = skinId;
+        function cycleSkin() {
+            currentSkin = (currentSkin + 1) % 3;
             localStorage.setItem('nasa_skin', currentSkin);
-            updateHomeUI();
-        }
-
-        function buyOrSelectSkin(skinId, cost) {
-            if (unlockedSkins.includes(skinId)) {
-                selectSkin(skinId);
-            } else {
-                if (playerMoney >= cost) {
-                    playerMoney -= cost;
-                    unlockedSkins.push(skinId);
-                    localStorage.setItem('nasa_money', playerMoney);
-                    localStorage.setItem('nasa_unlocked_skins', JSON.stringify(unlockedSkins));
-                    selectSkin(skinId);
-                    alert("Mua trang phục thành công!");
-                } else {
-                    alert("Không đủ Xu!");
-                }
-            }
+            alert(`Đã đổi Skin tàu: ${currentSkin === 0 ? 'Tiêu chuẩn NASA' : currentSkin === 1 ? 'Kẻ Hủy Diệt Đỏ' : 'Phượng Hoàng Kim'}!`);
         }
 
         function upgradeStat(type) {
             let cost = 100 * upgrades[type];
             if (playerMoney >= cost) {
-                playerMoney -= cost;
-                upgrades[type]++;
+                playerMoney -= cost; upgrades[type]++;
                 localStorage.setItem('nasa_money', playerMoney);
-                if(type === 'damage') localStorage.setItem('nasa_up_dmg', upgrades.damage);
+                localStorage.setItem('nasa_up_dmg', upgrades.damage);
                 updateHomeUI();
-            } else {
-                alert("Không đủ Xu!");
-            }
+            } else alert("Không đủ Xu!");
         }
 
         function buyShopItem(item) {
-            let cost = item === 'lives' ? 150 : 200;
+            let cost = 150;
             if (playerMoney >= cost) {
-                playerMoney -= cost;
-                shopInventory[item]++;
+                playerMoney -= cost; shopInventory[item]++;
                 localStorage.setItem('nasa_money', playerMoney);
-                localStorage.setItem(`nasa_shop_${item}`, shopInventory[item]);
+                localStorage.setItem('nasa_shop_lives', shopInventory.lives);
                 updateHomeUI();
-                alert("Mua thành công!");
-            } else {
-                alert("Không đủ Xu!");
-            }
+                alert("Mua thêm 1 mạng thành công!");
+            } else alert("Không đủ Xu!");
         }
 
         function selectMode(mode) {
@@ -619,25 +571,12 @@
             if(mode === 'endless') document.getElementById('modeEndless').classList.add('active');
         }
 
-        let stats = {
-            fireRate: Math.max(8, 22 - (upgrades.fireRate * 2)),
-            bulletSpeed: 18,
-            bulletCount: 1,
-            damage: upgrades.damage + (currentSkin === 1 ? 2 : 0),
-            magnetRadius: 180,
-            orbitalShield: false
-        };
-
-        let ship = { x: 150, y: canvas.height / 2, radius: 26, speed: 9 + (currentSkin === 2 ? 2 : 0) };
-
-        let keys = {};
-        let isPointerDown = false;
-        let pointerX = 150;
-        let pointerY = canvas.height / 2;
+        let stats = { fireRate: 10, bulletSpeed: 18, bulletCount: 1, damage: upgrades.damage, magnetRadius: 180, orbitalShield: false };
+        let ship = { x: 150, y: canvas.height / 2, radius: 26, speed: 9 };
+        let keys = {}, isPointerDown = false, pointerX = 150, pointerY = canvas.height / 2;
 
         window.addEventListener("keydown", (e) => { keys[e.key] = true; });
         window.addEventListener("keyup", (e) => { keys[e.key] = false; });
-
         canvas.addEventListener("pointerdown", (e) => { isPointerDown = true; updatePointerPos(e); });
         canvas.addEventListener("pointermove", (e) => { if (isPointerDown) updatePointerPos(e); });
         canvas.addEventListener("pointerup", () => { isPointerDown = false; });
@@ -649,24 +588,14 @@
         }
 
         let bullets = [], enemyBullets = [], meteors = [], gems = [], particles = [], stars = [];
-        let boss = null;
-        let shootTimer = 0;
-        let orbitalAngle = 0;
+        let boss = null, shootTimer = 0, orbitalAngle = 0;
 
-        for (let i = 0; i < 180; i++) {
-            stars.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 1, speed: Math.random() * 3 + 1 });
-        }
+        for (let i = 0; i < 180; i++) stars.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 1, speed: Math.random() * 3 + 1 });
 
-        let audioCtx = null;
-        let isMusicPlaying = false;
-
+        let audioCtx = null, isMusicPlaying = false;
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
         function toggleAudio() {
@@ -674,13 +603,9 @@
             if (!isMusicPlaying) {
                 startSpaceMusic();
                 document.getElementById("audioToggleBtn").innerText = "🔊 BẬT";
-                document.getElementById("audioToggleBtn").style.borderColor = "#22c55e";
-                document.getElementById("audioToggleBtn").style.color = "#22c55e";
             } else {
                 stopSpaceMusic();
                 document.getElementById("audioToggleBtn").innerText = "🎵 ÂM THANH";
-                document.getElementById("audioToggleBtn").style.borderColor = "var(--accent)";
-                document.getElementById("audioToggleBtn").style.color = "#38bdf8";
             }
         }
 
@@ -688,57 +613,35 @@
             isMusicPlaying = true;
             const notes = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392];
             let step = 0;
-
             function playNoteSequence() {
                 if (!isMusicPlaying || !audioCtx) return;
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-
+                let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
                 gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 3.5);
-
-                step++;
-                setTimeout(playNoteSequence, 4000);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 3.5);
+                step++; setTimeout(playNoteSequence, 4000);
             }
             playNoteSequence();
         }
 
-        function stopSpaceMusic() {
-            isMusicPlaying = false;
-        }
+        function stopSpaceMusic() { isMusicPlaying = false; }
 
         function playSound(type) {
             if (!audioCtx || audioCtx.state !== 'running') return;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
             if (type === 'shoot') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
             } else if (type === 'explosion') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(180, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.35);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.35);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.35);
             }
         }
 
@@ -753,6 +656,7 @@
         ];
 
         function launchGame() {
+            savePlayerName();
             initAudio();
             if (!isMusicPlaying) startSpaceMusic();
             resizeCanvas();
@@ -760,37 +664,18 @@
             document.getElementById("homeScreen").style.display = "none";
             document.getElementById("gameOverScreen").style.display = "none";
             document.getElementById("hudTop").style.display = "flex";
+            document.getElementById("hudPlayerName").innerText = playerName;
 
-            score = 0;
-            level = 1;
-            exp = 0;
-            maxExp = 100;
-            lives = 3 + shopInventory.lives;
-            distanceMeters = 0;
-            currentPlanetIdx = 0;
-            invincibleTimer = 60;
-            bullets = [];
-            enemyBullets = [];
-            meteors = [];
-            gems = [];
-            particles = [];
-            boss = null;
-            
+            score = 0; level = 1; exp = 0; maxExp = 100; lives = 3 + shopInventory.lives; distanceMeters = 0; currentPlanetIdx = 0; invincibleTimer = 60;
+            bullets = []; enemyBullets = []; meteors = []; gems = []; particles = []; boss = null;
             stats.damage = upgrades.damage + (currentSkin === 1 ? 2 : 0);
-            stats.fireRate = Math.max(8, 22 - (upgrades.fireRate * 2));
             stats.bulletCount = 1;
             stats.orbitalShield = shopInventory.shield > 0;
             ship.speed = 9 + (currentSkin === 2 ? 2 : 0);
-
-            ship.x = 150;
-            ship.y = canvas.height / 2;
-            pointerX = ship.x;
-            pointerY = ship.y;
+            ship.x = 150; ship.y = canvas.height / 2; pointerX = ship.x; pointerY = ship.y;
 
             if (gameMode === 'boss') spawnBoss();
-
-            gameRunning = true;
-            loop();
+            gameRunning = true; loop();
         }
 
         function triggerPlanetPopup(planet) {
@@ -802,19 +687,20 @@
 
         function closePlanetPopup() {
             document.getElementById("planetPopup").style.display = "none";
-            gameRunning = true;
-            loop();
+            gameRunning = true; loop();
         }
 
         function gameOver() {
             gameRunning = false;
             document.getElementById("hudTop").style.display = "none";
-            
             let bonusMultiplier = currentSkin === 2 ? 1.5 : 1;
             let earned = Math.floor((Math.floor(score / 10) + (level * 25)) * bonusMultiplier);
             playerMoney += earned;
             localStorage.setItem('nasa_money', playerMoney);
 
+            saveScoreToLeaderboard(playerName, score);
+
+            document.getElementById("finalPlayerName").innerText = `Phi công: ${playerName}`;
             document.getElementById("finalStats").innerText = `Tổng điểm: ${score} | Cấp: ${level}`;
             document.getElementById("finalDistance").innerText = `Quãng đường: ${Math.floor(distanceMeters)} mét`;
             document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu!`;
@@ -839,7 +725,6 @@
             gameRunning = false;
             const container = document.getElementById("perkOptionsContainer");
             container.innerHTML = "";
-
             let shuffled = [...perkPool].sort(() => 0.5 - Math.random());
             shuffled.slice(0, 3).forEach(perk => {
                 let card = document.createElement("div");
@@ -853,8 +738,7 @@
                     if (perk.id === 'heal') lives = Math.min(5, lives + 1);
 
                     document.getElementById("perkModal").style.display = "none";
-                    gameRunning = true;
-                    loop();
+                    gameRunning = true; loop();
                 };
                 container.appendChild(card);
             });
@@ -885,7 +769,6 @@
         function update() {
             orbitalAngle += 0.08;
             if (invincibleTimer > 0) invincibleTimer--;
-            
             distanceMeters += 0.5;
 
             if (gameMode === 'normal' && currentPlanetIdx + 1 < planetsJourney.length) {
@@ -973,9 +856,7 @@
 
             spawnEntity();
             for (let i = meteors.length - 1; i >= 0; i--) {
-                let m = meteors[i];
-                m.x -= m.speed;
-
+                let m = meteors[i]; m.x -= m.speed;
                 let meteorDestroyed = false;
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
