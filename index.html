@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galaxy Survivor: NASA Edition - Select Mode</title>
+    <title>NASA Galaxy Survivor - Cải Tiến Máy Bay</title>
     <style>
         :root {
             --bg-color: #030712;
             --text-color: #f8fafc;
-            --primary: #38bdf8;
-            --accent: #f43f5e;
+            --nasa-blue: #0b3d91;
+            --nasa-red: #fc3d21;
+            --accent: #38bdf8;
         }
 
         * {
@@ -29,7 +30,7 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
-            background-image: radial-gradient(circle at 50% 30%, #1e1b4b 0%, var(--bg-color) 85%);
+            background-image: radial-gradient(circle at 50% 30%, #0b3d91 0%, var(--bg-color) 85%);
         }
 
         .game-container {
@@ -38,10 +39,10 @@
             max-width: 480px;
             height: 750px;
             background: #020617;
-            border: 3px solid #334155;
+            border: 3px solid var(--nasa-blue);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 25px 50px -12px rgba(11, 61, 145, 0.5);
         }
 
         canvas {
@@ -51,77 +52,134 @@
             touch-action: none;
         }
 
+        /* Màn hình Menu và Các Overlay */
         .overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 6, 23, 0.94);
+            background: rgba(3, 7, 18, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 20;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
         }
 
+        .nasa-logo {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+        }
+
         .overlay h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(to right, #38bdf8, #818cf8, #f43f5e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 5px;
             font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .overlay h1 span {
+            color: var(--nasa-red);
         }
 
         .overlay p {
             color: #94a3b8;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 0.88rem;
         }
 
-        /* Nút chọn chế độ chơi */
+        .money-badge {
+            background: rgba(11, 61, 145, 0.4);
+            border: 1px solid var(--accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 1rem;
+            color: #facc15;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Bảng Cải Tiến Máy Bay (Shop) */
+        .upgrade-box {
+            width: 100%;
+            max-width: 380px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .upgrade-btn {
+            background: var(--nasa-blue);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .upgrade-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .mode-container {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
         .mode-btn {
-            background: rgba(30, 41, 59, 0.85);
+            flex: 1;
+            background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            width: 100%;
-            max-width: 320px;
-            padding: 14px 20px;
-            font-size: 1rem;
+            padding: 10px;
+            font-size: 0.85rem;
             font-weight: bold;
-            border-radius: 14px;
+            border-radius: 10px;
             cursor: pointer;
-            margin: 8px 0;
             transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        .mode-btn:hover {
-            border-color: var(--primary);
-            background: rgba(51, 65, 85, 0.95);
-            transform: translateY(-2px);
         }
 
         .mode-btn.active {
-            border-color: var(--accent);
-            background: rgba(244, 63, 94, 0.2);
+            border-color: var(--nasa-red);
+            background: rgba(252, 61, 33, 0.25);
         }
 
         .play-btn {
-            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            background: linear-gradient(135deg, var(--nasa-red), #e11d48);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 14px 35px;
             font-size: 1.1rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 0 20px rgba(244, 63, 94, 0.5);
+            box-shadow: 0 0 20px rgba(252, 61, 33, 0.5);
         }
 
         .play-btn:active {
@@ -148,29 +206,16 @@
             border: 2px solid #475569;
             width: 100%;
             max-width: 380px;
-            padding: 16px 20px;
-            border-radius: 16px;
-            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 14px;
+            margin: 8px 0;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
         }
 
         .perk-card:hover {
-            border-color: var(--primary);
+            border-color: var(--accent);
             background: rgba(51, 65, 85, 0.95);
-        }
-
-        .perk-title {
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 4px;
-        }
-
-        .perk-desc {
-            color: #cbd5e1;
-            font-size: 0.85rem;
         }
 
         .hud-top {
@@ -180,7 +225,7 @@
             right: 15px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             pointer-events: none;
             z-index: 10;
         }
@@ -196,7 +241,7 @@
 
         .exp-bar-container {
             width: 100%;
-            height: 8px;
+            height: 7px;
             background: rgba(255,255,255,0.2);
             border-radius: 4px;
             overflow: hidden;
@@ -206,51 +251,61 @@
         #expBar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            background: linear-gradient(90deg, var(--accent), #818cf8);
             transition: width 0.2s;
-        }
-
-        .planet-progress-box {
-            background: rgba(15, 23, 42, 0.85);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid #334155;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
     </style>
 </head>
 <body>
 
     <div class="game-container">
-        <!-- Màn hình Menu Chọn Chế Độ -->
+        <!-- Màn hình Menu Chính với Logo NASA -->
         <div class="overlay" id="startScreen">
-            <h1>GALAXY SURVIVOR</h1>
-            <p>Chọn chế độ chơi yêu thích của bạn:</p>
-            
-            <button class="mode-btn active" id="modeNormal" onclick="selectMode('normal')">🚀 1. Chế Độ Hành Trình (Hệ Mặt Trời)</button>
-            <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 2. Thử Thách Boss Liên Tục</button>
-            <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 3. Vô Tận (Endless Survival)</button>
+            <!-- Sử dụng trực tiếp ảnh logo NASA chính hãng từ nguồn cung cấp[cite: 1] -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
+            <h1>NASA <span>SURVIVOR</span></h1>
+            <p>Hệ thống phòng thủ không gian tối tân</p>
 
-            <button class="play-btn" onclick="startGame()">VÀO TRẬN NGAY</button>
+            <div class="money-badge">💰 Số Dư: <span id="playerMoney">0</span> VNĐ / Xu</div>
+
+            <!-- Cửa hàng cải tiến máy bay -->
+            <div class="upgrade-box">
+                <div style="font-size:0.85rem; font-weight:bold; color:var(--accent); margin-bottom:2px;"> hangar - CẢI TIẾN MÁY BAY</div>
+                <div class="upgrade-item">
+                    <span>Sức Mạnh Súng (Lvl <span id="lvlDamage">1</span>) - 100 Xu</span>
+                    <button class="upgrade-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
+                </div>
+                <div class="upgrade-item">
+                    <span>Tốc Độ Bắn (Lvl <span id="lvlFireRate">1</span>) - 100 Xu</span>
+                    <button class="upgrade-btn" onclick="upgradeStat('fireRate')">Nâng Cấp</button>
+                </div>
+            </div>
+
+            <div class="mode-container">
+                <button class="mode-btn active" id="modeNormal" onclick="selectMode('normal')">🚀 Hành Trình</button>
+                <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 Diệt Boss</button>
+                <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 Vô Tận</button>
+            </div>
+
+            <button class="play-btn" onclick="startGame()">XUẤT KÍCH</button>
         </div>
 
-        <!-- Màn hình Thua Cuộc -->
+        <!-- Màn hình Thua Trận & Tổng kết tiền thưởng -->
         <div class="overlay" id="gameOverScreen" style="display: none;">
-            <h1 style="color: var(--accent);">SỨ MỆNH THẤT BẠI</h1>
-            <p id="finalStats">Đạt cấp: 1 | Tổng điểm: 0</p>
-            <button class="play-btn" onclick="startGame()">CHƠI LẠI</button>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:70px; height:70px;">
+            <h1 style="color: var(--nasa-red);">SỨ MỆNH KẾT THÚC</h1>
+            <p id="finalStats">Tổng điểm: 0</p>
+            <p id="earnedMoney" style="color: #facc15; font-weight: bold; font-size: 1.1rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
+            <button class="play-btn" onclick="returnToMenu()">VỀ TRANG CHỦ</button>
         </div>
 
-        <!-- Bảng Chọn Kỹ Năng Khi Lên Cấp -->
+        <!-- Bảng Lên Cấp Kỹ Năng -->
         <div id="perkModal">
-            <h2 style="color: #38bdf8; margin-bottom: 15px;">🎉 LÊN CẤP! CHỌN KỸ NĂNG</h2>
+            <h2 style="color: var(--accent); margin-bottom: 12px;">🎉 NÂNG CẤP TRONG TRẬN</h2>
             <div id="perkOptionsContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
         </div>
 
-        <!-- Giao diện HUD Trong Trận -->
+        <!-- HUD Trong Trận -->
         <div class="hud-top" id="hudTop" style="display: none;">
             <div class="hud-row">
                 <span id="scoreText">Điểm: 0</span>
@@ -259,10 +314,6 @@
             </div>
             <div class="exp-bar-container">
                 <div id="expBar"></div>
-            </div>
-            <div class="planet-progress-box">
-                <span id="planetInfo">📍 Chế độ: Bình thường</span>
-                <span id="bossAlert" style="color: #f43f5e; display: none; font-weight: bold;">⚠️ BOSS</span>
             </div>
         </div>
 
@@ -279,14 +330,42 @@
         let exp = 0;
         let maxExp = 100;
         let lives = 3;
-        let distance = 0;
-        let gameMode = 'normal'; // 'normal', 'boss', 'endless'
+        let gameMode = 'normal';
+
+        // Hệ thống tiền và nâng cấp hangar
+        let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 250;
+        let upgrades = {
+            damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1,
+            fireRate: localStorage.getItem('nasa_up_fr') ? parseInt(localStorage.getItem('nasa_up_fr')) : 1
+        };
+
+        updateMenuUI();
+
+        function updateMenuUI() {
+            document.getElementById("playerMoney").innerText = playerMoney;
+            document.getElementById("lvlDamage").innerText = upgrades.damage;
+            document.getElementById("lvlFireRate").innerText = upgrades.fireRate;
+        }
+
+        function upgradeStat(type) {
+            let cost = 100 * upgrades[type];
+            if (playerMoney >= cost) {
+                playerMoney -= cost;
+                upgrades[type]++;
+                localStorage.setItem('nasa_money', playerMoney);
+                if(type === 'damage') localStorage.setItem('nasa_up_dmg', upgrades.damage);
+                if(type === 'fireRate') localStorage.setItem('nasa_up_fr', upgrades.fireRate);
+                updateMenuUI();
+            } else {
+                alert("Không đủ Xu để nâng cấp! Hãy chơi thêm để kiếm tiền.");
+            }
+        }
 
         let stats = {
-            fireRate: 20,
+            fireRate: Math.max(8, 22 - (upgrades.fireRate * 2)),
             bulletSpeed: 12,
             bulletCount: 1,
-            damage: 1,
+            damage: upgrades.damage,
             magnetRadius: 140,
             orbitalShield: false
         };
@@ -297,16 +376,6 @@
             radius: 22,
             speed: 8
         };
-
-        const planets = [
-            { name: "Sao Thủy ☿️", targetDist: 0 },
-            { name: "Sao Kim ♀️", targetDist: 1500 },
-            { name: "Trái Đất 🌍", targetDist: 3500 },
-            { name: "Sao Hỏa 🔴", targetDist: 6000 },
-            { name: "Sao Mộc 🟠", targetDist: 10000 },
-            { name: "Sao Thổ 🪐", targetDist: 15000 },
-            { name: "Sao Hải Vương 🌊", targetDist: 25000 }
-        ];
 
         function selectMode(mode) {
             gameMode = mode;
@@ -327,7 +396,6 @@
         canvas.addEventListener("pointerdown", (e) => { isPointerDown = true; updatePointerPos(e); });
         canvas.addEventListener("pointermove", (e) => { if (isPointerDown) updatePointerPos(e); });
         canvas.addEventListener("pointerup", () => { isPointerDown = false; });
-        canvas.addEventListener("pointercancel", () => { isPointerDown = false; });
 
         function updatePointerPos(e) {
             const rect = canvas.getBoundingClientRect();
@@ -335,12 +403,7 @@
             pointerY = (e.clientY - rect.top) * (canvas.height / rect.height);
         }
 
-        let bullets = [];
-        let enemyBullets = [];
-        let meteors = [];
-        let gems = [];
-        let particles = [];
-        let stars = [];
+        let bullets = [], enemyBullets = [], meteors = [], gems = [], particles = [], stars = [];
         let boss = null;
         let shootTimer = 0;
         let orbitalAngle = 0;
@@ -364,7 +427,6 @@
             exp = 0;
             maxExp = 100;
             lives = 3;
-            distance = 0;
             bullets = [];
             enemyBullets = [];
             meteors = [];
@@ -372,15 +434,17 @@
             particles = [];
             boss = null;
             
-            stats = { fireRate: 20, bulletSpeed: 12, bulletCount: 1, damage: 1, magnetRadius: 140, orbitalShield: false };
+            stats.damage = upgrades.damage;
+            stats.fireRate = Math.max(8, 22 - (upgrades.fireRate * 2));
+            stats.bulletCount = 1;
+            stats.orbitalShield = false;
+
             ship.x = canvas.width / 2;
             ship.y = canvas.height - 120;
             pointerX = ship.x;
             pointerY = ship.y;
 
-            if (gameMode === 'boss') {
-                spawnBoss(); // Bắt đầu ngay vào đánh Boss
-            }
+            if (gameMode === 'boss') spawnBoss();
 
             gameRunning = true;
             loop();
@@ -389,17 +453,29 @@
         function gameOver() {
             gameRunning = false;
             document.getElementById("hudTop").style.display = "none";
-            document.getElementById("finalStats").innerText = `Đạt cấp độ: ${level} | Tổng điểm: ${score}`;
+            
+            // Tính số tiền thưởng nhận được sau khi chơi xong
+            let earned = Math.floor(score / 10) + (level * 20);
+            playerMoney += earned;
+            localStorage.setItem('nasa_money', playerMoney);
+
+            document.getElementById("finalStats").innerText = `Tổng điểm đạt được: ${score} | Cấp: ${level}`;
+            document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu cải tiến máy bay!`;
             document.getElementById("gameOverScreen").style.display = "flex";
         }
 
+        function returnToMenu() {
+            document.getElementById("gameOverScreen").style.display = "none";
+            document.getElementById("startScreen").style.display = "flex";
+            updateMenuUI();
+        }
+
         const perkPool = [
-            { id: 'multishot', title: '⚡ Bắn Kép (Multi-Shot)', desc: 'Tăng thêm số lượng tia đạn.' },
-            { id: 'firerate', title: '🚀 Tốc Độ Bắn Cực Nhanh', desc: 'Xả đạn liên thanh với tốc độ cao.' },
-            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương đạn.' },
-            { id: 'shield', title: '🛡️ Vòng Xoay Năng Lượng', desc: 'Quả cầu plasma xoay quanh thiêu đốt thiên thạch.' },
-            { id: 'magnet', title: '🧲 Nam Châm Tinh Thể', desc: 'Hút tinh thể kinh nghiệm ở phạm vi rộng.' },
-            { id: 'heal', title: '❤️ Hồi Máu', desc: 'Phục hồi 1 Mạng sống.' }
+            { id: 'multishot', title: '⚡ Bắn Kép', desc: 'Tăng thêm tia đạn.' },
+            { id: 'firerate', title: '🚀 Tốc Độ Bắn Nhanh', desc: 'Xả đạn liên thanh tốc độ cao.' },
+            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương.' },
+            { id: 'shield', title: '🛡️ Vòng Xoay Plasma', desc: 'Quả cầu xoay quanh thiêu đốt địch.' },
+            { id: 'heal', title: '❤️ Hồi Máu', desc: 'Phục hồi 1 mạng.' }
         ];
 
         function showLevelUpModal() {
@@ -408,94 +484,60 @@
             container.innerHTML = "";
 
             let shuffled = [...perkPool].sort(() => 0.5 - Math.random());
-            let choices = shuffled.slice(0, 3);
-
-            choices.forEach(perk => {
+            shuffled.slice(0, 3).forEach(perk => {
                 let card = document.createElement("div");
                 card.className = "perk-card";
-                card.innerHTML = `<div class="perk-title">${perk.title}</div><div class="perk-desc">${perk.desc}</div>`;
+                card.innerHTML = `<div style="color:var(--accent); font-weight:bold;">${perk.title}</div><div style="font-size:0.8rem; color:#cbd5e1;">${perk.desc}</div>`;
                 card.onclick = () => {
-                    applyPerk(perk.id);
+                    if (perk.id === 'multishot') stats.bulletCount++;
+                    if (perk.id === 'firerate') stats.fireRate = Math.max(6, stats.fireRate - 4);
+                    if (perk.id === 'damage') stats.damage++;
+                    if (perk.id === 'shield') stats.orbitalShield = true;
+                    if (perk.id === 'heal') lives = Math.min(5, lives + 1);
+
                     document.getElementById("perkModal").style.display = "none";
                     gameRunning = true;
                     loop();
                 };
                 container.appendChild(card);
             });
-
             document.getElementById("perkModal").style.display = "flex";
-        }
-
-        function applyPerk(id) {
-            if (id === 'multishot') stats.bulletCount++;
-            if (id === 'firerate') stats.fireRate = Math.max(8, stats.fireRate - 4);
-            if (id === 'damage') stats.damage++;
-            if (id === 'shield') stats.orbitalShield = true;
-            if (id === 'magnet') stats.magnetRadius += 60;
-            if (id === 'heal') lives = Math.min(5, lives + 1);
         }
 
         function spawnBoss() {
             boss = {
-                x: canvas.width / 2 - 60,
-                y: -120,
-                targetY: 80,
-                width: 120,
-                height: 70,
-                hp: 80 + (level * 20),
-                maxHp: 80 + (level * 20),
-                dx: 3,
-                shootTimer: 0
+                x: canvas.width / 2 - 60, y: -120, targetY: 80,
+                width: 120, height: 70, hp: 80 + (level * 25), maxHp: 80 + (level * 25),
+                dx: 3, shootTimer: 0
             };
         }
 
         function spawnEntity() {
-            if (gameMode === 'boss') {
-                if (!boss) spawnBoss();
-                return;
-            }
-
-            let bossInterval = gameMode === 'endless' ? 350 : 500;
-            if (score > 0 && score % bossInterval === 0 && !boss && meteors.length === 0) {
-                spawnBoss();
-                return;
-            }
-
-            let spawnChance = gameMode === 'endless' ? 0.05 : 0.035;
-            if (!boss && Math.random() < spawnChance) {
+            if (gameMode === 'boss') { if (!boss) spawnBoss(); return; }
+            let interval = gameMode === 'endless' ? 350 : 500;
+            if (score > 0 && score % interval === 0 && !boss && meteors.length === 0) { spawnBoss(); return; }
+            if (!boss && Math.random() < 0.038) {
                 let size = Math.random() * 32 + 18;
                 meteors.push({
-                    x: Math.random() * (canvas.width - size),
-                    y: -size,
-                    size: size,
+                    x: Math.random() * (canvas.width - size), y: -size, size: size,
                     speed: (Math.random() * 2 + 2) + (level * 0.35),
-                    hp: Math.ceil(size / 12) * stats.damage,
-                    maxHp: Math.ceil(size / 12) * stats.damage
+                    hp: Math.ceil(size / 12) * stats.damage, maxHp: Math.ceil(size / 12) * stats.damage
                 });
             }
         }
 
         function createExplosion(x, y, color) {
             for (let i = 0; i < 10; i++) {
-                particles.push({
-                    x: x, y: y,
-                    dx: (Math.random() - 0.5) * 6,
-                    dy: (Math.random() - 0.5) * 6,
-                    size: Math.random() * 4 + 1,
-                    life: 25,
-                    color: color
-                });
+                particles.push({ x, y, dx: (Math.random() - 0.5) * 6, dy: (Math.random() - 0.5) * 6, size: Math.random() * 4 + 1, life: 25, color });
             }
         }
 
         function update() {
-            distance += 1;
             orbitalAngle += 0.08;
-
-            if (keys["ArrowLeft"] || keys["a"] || keys["A"]) ship.x -= ship.speed;
-            if (keys["ArrowRight"] || keys["d"] || keys["D"]) ship.x += ship.speed;
-            if (keys["ArrowUp"] || keys["w"] || keys["W"]) ship.y -= ship.speed;
-            if (keys["ArrowDown"] || keys["s"] || keys["S"]) ship.y += ship.speed;
+            if (keys["ArrowLeft"] || keys["a"]) ship.x -= ship.speed;
+            if (keys["ArrowRight"] || keys["d"]) ship.x += ship.speed;
+            if (keys["ArrowUp"] || keys["w"]) ship.y -= ship.speed;
+            if (keys["ArrowDown"] || keys["s"]) ship.y += ship.speed;
 
             if (isPointerDown) {
                 ship.x += (pointerX - ship.x) * 0.2;
@@ -511,20 +553,11 @@
                 let spread = 14;
                 let startX = ship.x - ((stats.bulletCount - 1) * spread) / 2;
                 for (let i = 0; i < stats.bulletCount; i++) {
-                    bullets.push({
-                        x: startX + (i * spread),
-                        y: ship.y - 15,
-                        width: 5,
-                        height: 16,
-                        speed: stats.bulletSpeed
-                    });
+                    bullets.push({ x: startX + (i * spread), y: ship.y - 15, width: 5, height: 16, speed: stats.bulletSpeed });
                 }
             }
 
-            stars.forEach(star => {
-                star.y += star.speed;
-                if (star.y > canvas.height) star.y = 0;
-            });
+            stars.forEach(star => { star.y += star.speed; if (star.y > canvas.height) star.y = 0; });
 
             if (boss) {
                 if (boss.y < boss.targetY) boss.y += 1.5;
@@ -536,9 +569,6 @@
                         enemyBullets.push({ x: boss.x + boss.width/2 - 4, y: boss.y + boss.height, width: 8, height: 16, speed: 6.5 });
                     }
                 }
-                document.getElementById("bossAlert").style.display = "inline";
-            } else {
-                document.getElementById("bossAlert").style.display = "none";
             }
 
             for (let i = bullets.length - 1; i >= 0; i--) {
@@ -549,51 +579,31 @@
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
                 let eb = enemyBullets[i];
                 eb.y += eb.speed;
-                let dx = ship.x - (eb.x + eb.width/2);
-                let dy = ship.y - (eb.y + eb.height/2);
+                let dx = ship.x - (eb.x + eb.width/2), dy = ship.y - (eb.y + eb.height/2);
                 if (Math.sqrt(dx*dx + dy*dy) < ship.radius + 6) {
                     enemyBullets.splice(i, 1);
                     lives--;
-                    createExplosion(ship.x, ship.y, "#f43f5e");
+                    createExplosion(ship.x, ship.y, "#fc3d21");
                     if (lives <= 0) gameOver();
-                } else if (eb.y > canvas.height) {
-                    enemyBullets.splice(i, 1);
-                }
+                } else if (eb.y > canvas.height) enemyBullets.splice(i, 1);
             }
 
             if (stats.orbitalShield) {
                 let shieldX = ship.x + Math.cos(orbitalAngle) * 55;
                 let shieldY = ship.y + Math.sin(orbitalAngle) * 55;
-                meteors.forEach((m) => {
-                    let mdx = shieldX - (m.x + m.size/2);
-                    let mdy = shieldY - (m.y + m.size/2);
-                    if (Math.sqrt(mdx*mdx + mdy*mdy) < m.size/2 + 12) {
-                        m.hp -= 2;
-                        createExplosion(shieldX, shieldY, "#38bdf8");
-                    }
+                meteors.forEach(m => {
+                    let mdx = shieldX - (m.x + m.size/2), mdy = shieldY - (m.y + m.size/2);
+                    if (Math.sqrt(mdx*mdx + mdy*mdy) < m.size/2 + 12) { m.hp -= 2; createExplosion(shieldX, shieldY, "#38bdf8"); }
                 });
             }
 
             for (let i = gems.length - 1; i >= 0; i--) {
                 let g = gems[i];
-                let dx = ship.x - g.x;
-                let dy = ship.y - g.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < stats.magnetRadius) {
-                    g.x += (dx / dist) * 8;
-                    g.y += (dy / dist) * 8;
-                }
-
+                let dx = ship.x - g.x, dy = ship.y - g.y, dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 8; g.y += (dy / dist) * 8; }
                 if (dist < ship.radius + 10) {
-                    exp += g.value;
-                    gems.splice(i, 1);
-                    if (exp >= maxExp) {
-                        exp = 0;
-                        maxExp = Math.floor(maxExp * 1.35);
-                        level++;
-                        showLevelUpModal();
-                    }
+                    exp += g.value; gems.splice(i, 1);
+                    if (exp >= maxExp) { exp = 0; maxExp = Math.floor(maxExp * 1.35); level++; showLevelUpModal(); }
                 }
             }
 
@@ -604,10 +614,7 @@
 
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j];
-                    if (
-                        b.x < m.x + m.size && b.x + b.width > m.x &&
-                        b.y < m.y + m.size && b.y + b.height > m.y
-                    ) {
+                    if (b.x < m.x + m.size && b.x + b.width > m.x && b.y < m.y + m.size && b.y + b.height > m.y) {
                         m.hp -= stats.damage;
                         bullets.splice(j, 1);
                         if (m.hp <= 0) {
@@ -623,41 +630,29 @@
                 if (boss && boss.y >= boss.targetY) {
                     for (let j = bullets.length - 1; j >= 0; j--) {
                         let b = bullets[j];
-                        if (
-                            b.x < boss.x + boss.width && b.x + b.width > boss.x &&
-                            b.y < boss.y + boss.height && b.y + b.height > boss.y
-                        ) {
+                        if (b.x < boss.x + boss.width && b.x + b.width > boss.x && b.y < boss.y + boss.height && b.y + b.height > boss.y) {
                             boss.hp -= stats.damage;
                             bullets.splice(j, 1);
                             if (boss.hp <= 0) {
                                 createExplosion(boss.x + boss.width/2, boss.y + boss.height/2, "#facc15", 30);
-                                score += 300;
-                                boss = null;
-                                if (gameMode === 'boss') {
-                                    score += 500; // Thưởng phá boss
-                                    spawnBoss(); // Lại ra Boss tiếp theo mạnh hơn
-                                }
+                                score += 350; boss = null;
+                                if (gameMode === 'boss') { score += 500; spawnBoss(); }
                                 break;
                             }
                         }
                     }
                 }
 
-                let dx = ship.x - (m.x + m.size/2);
-                let dy = ship.y - (m.y + m.size/2);
+                let dx = ship.x - (m.x + m.size/2), dy = ship.y - (m.y + m.size/2);
                 if (Math.sqrt(dx * dx + dy * dy) < ship.radius + m.size/2) {
-                    lives--;
-                    createExplosion(ship.x, ship.y, "#f43f5e");
-                    meteors.splice(i, 1);
+                    lives--; createExplosion(ship.x, ship.y, "#fc3d21"); meteors.splice(i, 1);
                     if (lives <= 0) gameOver();
                 }
-
                 if (m.y > canvas.height) meteors.splice(i, 1);
             }
 
             for (let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i];
-                p.x += p.dx; p.y += p.dy; p.life--;
+                let p = particles[i]; p.x += p.dx; p.y += p.dy; p.life--;
                 if (p.life <= 0) particles.splice(i, 1);
             }
 
@@ -665,45 +660,25 @@
             document.getElementById("levelText").innerText = `LV. ${level}`;
             document.getElementById("livesText").innerText = `❤️ ${lives}`;
             document.getElementById("expBar").style.width = `${(exp / maxExp) * 100}%`;
-
-            if (gameMode === 'normal') {
-                let currentPlanet = planets[0];
-                for (let p of planets) {
-                    if (distance >= p.targetDist) currentPlanet = p;
-                }
-                document.getElementById("planetInfo").innerText = `📍 Hành tinh: ${currentPlanet.name}`;
-            } else if (gameMode === 'boss') {
-                document.getElementById("planetInfo").innerText = `👑 Chế độ: Thử Thách Boss`;
-            } else {
-                document.getElementById("planetInfo").innerText = `🌌 Chế độ: Sinh Tồn Vô Tận`;
-            }
         }
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             ctx.fillStyle = "#ffffff";
-            stars.forEach(star => {
-                ctx.fillRect(star.x, star.y, star.size, star.size);
-            });
+            stars.forEach(star => ctx.fillRect(star.x, star.y, star.size, star.size));
 
             gems.forEach(g => {
-                ctx.fillStyle = "#38bdf8";
-                ctx.beginPath();
-                ctx.arc(g.x, g.y, 5, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(g.x, g.y, 5, 0, Math.PI * 2); ctx.fill();
             });
 
             if (stats.orbitalShield) {
                 let shieldX = ship.x + Math.cos(orbitalAngle) * 55;
                 let shieldY = ship.y + Math.sin(orbitalAngle) * 55;
-                ctx.fillStyle = "#38bdf8";
-                ctx.beginPath();
-                ctx.arc(shieldX, shieldY, 9, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 9, 0, Math.PI * 2); ctx.fill();
             }
 
-            ctx.fillStyle = "#38bdf8";
+            // Phi thuyền phong cách NASA
+            ctx.fillStyle = "#0b3d91";
             ctx.beginPath();
             ctx.moveTo(ship.x, ship.y - ship.radius);
             ctx.lineTo(ship.x - ship.radius * 0.8, ship.y + ship.radius);
@@ -712,39 +687,23 @@
             ctx.closePath();
             ctx.fill();
 
-            ctx.fillStyle = "#f43f5e";
+            ctx.fillStyle = "#fc3d21";
             ctx.fillRect(ship.x - 4, ship.y + ship.radius * 0.6, 8, 12);
 
-            bullets.forEach(b => {
-                ctx.fillStyle = "#38bdf8";
-                ctx.fillRect(b.x, b.y, b.width, b.height);
-            });
-
-            enemyBullets.forEach(eb => {
-                ctx.fillStyle = "#f43f5e";
-                ctx.fillRect(eb.x, eb.y, eb.width, eb.height);
-            });
+            bullets.forEach(b => { ctx.fillStyle = "#38bdf8"; ctx.fillRect(b.x, b.y, b.width, b.height); });
+            enemyBullets.forEach(eb => { ctx.fillStyle = "#fc3d21"; ctx.fillRect(eb.x, eb.y, eb.width, eb.height); });
 
             meteors.forEach(m => {
-                ctx.fillStyle = "#475569";
-                ctx.beginPath();
-                ctx.arc(m.x + m.size/2, m.y + m.size/2, m.size/2, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = "#64748b"; ctx.beginPath(); ctx.arc(m.x + m.size/2, m.y + m.size/2, m.size/2, 0, Math.PI * 2); ctx.fill();
             });
 
             if (boss) {
-                ctx.fillStyle = "#991b1b";
-                ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
-                ctx.fillStyle = "#ef4444";
-                ctx.fillRect(boss.x + 10, boss.y - 12, boss.width - 20, 6);
-                ctx.fillStyle = "#22c55e";
-                ctx.fillRect(boss.x + 10, boss.y - 12, (boss.width - 20) * (boss.hp / boss.maxHp), 6);
+                ctx.fillStyle = "#991b1b"; ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+                ctx.fillStyle = "#ef4444"; ctx.fillRect(boss.x + 10, boss.y - 12, boss.width - 20, 6);
+                ctx.fillStyle = "#22c55e"; ctx.fillRect(boss.x + 10, boss.y - 12, (boss.width - 20) * (boss.hp / boss.maxHp), 6);
             }
 
-            particles.forEach(p => {
-                ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, p.size, p.size);
-            });
+            particles.forEach(p => { ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); });
         }
 
         function loop() {
