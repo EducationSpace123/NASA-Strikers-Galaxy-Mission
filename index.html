@@ -2,986 +2,345 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NASA Galaxy Survivor - Ultimate Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà Tiên Tri Dị Giáo - 600 TCN</title>
     <style>
         :root {
-            --bg-color: #020617;
-            --text-color: #ffffff;
-            --nasa-blue: #0b3d91;
-            --nasa-red: #fc3d21;
-            --accent: #38bdf8;
-            --gold: #facc15;
+            --bg-color: #090d16;
+            --accent-gold: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-blue: #38bdf8;
+            --text-main: #f8fafc;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: 'Segoe UI', system-ui, sans-serif;
             user-select: none;
         }
 
-        body, html {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
+        body {
             background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .game-container {
-            position: relative;
+            color: var(--text-main);
             width: 100vw;
             height: 100vh;
-            background: #020617;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
 
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
-            touch-action: none;
-        }
-
-        .home-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 6, 23, 0.97);
+        .game-wrapper {
+            width: 95%;
+            max-width: 900px;
+            height: 90vh;
+            background: rgba(15, 23, 42, 0.95);
+            border: 3px solid #334155;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            overflow: hidden;
+        }
+
+        .header-bar {
+            background: #020617;
+            padding: 15px 25px;
+            border-bottom: 2px solid #334155;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            z-index: 20;
+        }
+
+        .header-bar h1 {
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .dialogue-box {
+            background: rgba(30, 41, 59, 0.8);
+            border-left: 4px solid var(--accent-blue);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .panel-interactive {
+            background: rgba(2, 6, 23, 0.6);
+            border: 2px solid #475569;
+            border-radius: 12px;
             padding: 20px;
             text-align: center;
-            overflow-y: auto;
         }
 
-        .nasa-logo {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 6px;
-            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+        .slider-container {
+            margin: 20px 0;
         }
 
-        .home-screen h1 {
-            font-size: 1.8rem;
-            color: #ffffff;
-            margin-bottom: 6px;
-            font-weight: 900;
-        }
-
-        .home-screen h1 span {
-            color: var(--nasa-red);
-        }
-
-        .player-info-bar {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .name-input-box {
-            background: rgba(15, 23, 42, 0.95);
-            border: 2px solid var(--accent);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            outline: none;
-            text-align: center;
-            width: 190px;
-        }
-
-        .money-badge {
-            background: rgba(11, 61, 145, 0.8);
-            border: 2px solid var(--gold);
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            color: var(--gold);
-            font-weight: bold;
-        }
-
-        .menu-grid {
+        .slider-container input[type=range] {
             width: 100%;
-            max-width: 980px;
-            display: flex;
-            gap: 12px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
+            height: 8px;
+            background: #334155;
+            outline: none;
+            border-radius: 4px;
         }
 
-        .panel-box {
-            flex: 1;
-            min-width: 290px;
-            background: rgba(15, 23, 42, 0.95);
-            border: 2px solid #334155;
-            border-radius: 12px;
-            padding: 12px 15px;
-            text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        }
-
-        .panel-title {
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: var(--accent);
-            margin-bottom: 8px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 4px;
-        }
-
-        .panel-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-            color: #f8fafc;
-            margin-bottom: 6px;
-        }
-
-        .leaderboard-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 125px;
-            overflow-y: auto;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            padding: 4px 6px;
-            border-bottom: 1px dashed rgba(255,255,255,0.15);
-        }
-
-        .leaderboard-item:nth-child(1) { color: var(--gold); font-weight: bold; background: rgba(250, 204, 21, 0.1); border-radius: 4px; }
-        .leaderboard-item:nth-child(2) { color: #cbd5e1; font-weight: bold; }
-        .leaderboard-item:nth-child(3) { color: #d97706; font-weight: bold; }
-
-        .action-btn {
-            background: var(--nasa-blue);
-            color: white;
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000;
             border: none;
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 12px 30px;
+            font-size: 1rem;
             font-weight: bold;
-            font-size: 0.75rem;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            transition: 0.2s;
+            margin-top: 10px;
         }
 
-        .action-btn:hover { background: #1d4ed8; }
-        .action-btn.buy { background: #ca8a04; }
-
-        .controls-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
+        .btn-action:hover {
+            transform: scale(1.05);
         }
 
-        .mode-container { display: flex; gap: 8px; }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
 
-        .mode-btn {
+        .option-btn {
             background: rgba(30, 41, 59, 0.9);
             border: 2px solid #475569;
             color: white;
-            padding: 8px 14px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            padding: 12px;
             border-radius: 8px;
             cursor: pointer;
-        }
-
-        .mode-btn.active {
-            border-color: var(--nasa-red);
-            background: rgba(252, 61, 33, 0.4);
-        }
-
-        .audio-toggle-btn, .fullscreen-toggle-btn, .quiz-btn {
-            background: rgba(14, 165, 233, 0.25);
-            border: 2px solid var(--accent);
-            color: #38bdf8;
-            padding: 8px 14px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .quiz-btn { background: rgba(250, 204, 21, 0.25); border-color: var(--gold); color: var(--gold); }
-
-        .play-btn {
-            background: linear-gradient(135deg, var(--nasa-red), #e11d48);
-            color: white;
-            border: none;
-            padding: 12px 45px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 0 25px rgba(252, 61, 33, 0.7);
-        }
-
-        #planetPopup, #quizModal {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 500px;
-            background: rgba(11, 61, 145, 0.98);
-            border: 3px solid var(--accent);
-            border-radius: 16px;
-            padding: 22px;
-            z-index: 40;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
-        }
-
-        .quiz-opt-btn {
-            width: 100%;
-            background: rgba(30, 41, 59, 0.95);
-            border: 2px solid #475569;
-            color: white;
-            padding: 10px;
-            font-size: 0.9rem;
             font-weight: 600;
-            border-radius: 8px;
-            margin: 6px 0;
-            cursor: pointer;
             text-align: left;
+            transition: 0.2s;
         }
 
-        .quiz-opt-btn:hover {
-            border-color: var(--accent);
-            background: rgba(51, 65, 85, 0.95);
+        .option-btn:hover {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.1);
         }
 
-        .game-over-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 7, 18, 0.98);
-            display: none; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 20; padding: 20px; text-align: center;
+        .input-number {
+            background: #0f172a;
+            border: 2px solid var(--accent-blue);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+            width: 200px;
+            margin: 10px 0;
+            outline: none;
         }
 
-        #perkModal {
-            display: none; position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.98); z-index: 30;
-            flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px;
-        }
-
-        .perk-card {
-            background: rgba(30, 41, 59, 0.95);
-            border: 2px solid #475569;
-            width: 100%; max-width: 420px;
-            padding: 14px 20px; border-radius: 12px;
-            margin: 8px 0; cursor: pointer; text-align: left;
-        }
-
-        .hud-top {
-            position: absolute;
-            top: 15px; left: 25px; right: 25px;
-            display: flex; justify-content: space-between; align-items: center;
-            pointer-events: none; z-index: 10;
-            font-weight: 900; font-size: 1.1rem; color: #ffffff;
-            text-shadow: 0 0 8px rgba(0,0,0,0.9);
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="game-container" id="gameContainer">
-        <!-- TRANG CHỦ -->
-        <div class="home-screen" id="homeScreen">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo">
-            <h1>NASA <span>SURVIVOR</span> - ULTIMATE</h1>
-
-            <div class="player-info-bar">
-                <input type="text" id="playerNameInput" class="name-input-box" placeholder="Tên phi công..." maxlength="12" onchange="savePlayerName()">
-                <div class="money-badge">💰 <span id="playerMoney">400</span> Xu</div>
-            </div>
-
-            <div class="menu-grid">
-                <!-- BẢNG XẾP HẠNG -->
-                <div class="panel-box">
-                    <div class="panel-title">🏆 BẢNG XẾP HẠNG TOP 5</div>
-                    <ul class="leaderboard-list" id="leaderboardList"></ul>
-                </div>
-
-                <!-- HỘP QUÀ TRI THỨC -->
-                <div class="panel-box">
-                    <div class="panel-title">🎁 HỘP QUÀ TRI THỨC</div>
-                    <div class="panel-item" style="flex-direction:column; align-items:flex-start; gap:6px;">
-                        <span>Trả lời câu hỏi vũ trụ ngẫu nhiên nhận +50 Xu!</span>
-                        <button class="quiz-btn" style="width:100%;" onclick="openRandomQuiz()">MỞ CÂU HỎI NGẪU NHIÊN</button>
-                    </div>
-                </div>
-
-                <!-- PHI THUYỀN & SHOP -->
-                <div class="panel-box">
-                    <div class="panel-title">🎨 PHI THUYỀN & SHOP</div>
-                    <div class="panel-item">
-                        <span>🚀 Trang Phục Tàu</span>
-                        <button class="action-btn" onclick="cycleSkin()">Đổi Skin</button>
-                    </div>
-                    <div class="panel-item">
-                        <span>💥 Sát Thương (Lvl <span id="lvlDamage">1</span>)</span>
-                        <button class="action-btn" onclick="upgradeStat('damage')">Nâng Cấp</button>
-                    </div>
-                    <div class="panel-item">
-                        <span>❤️ Mua Mạng (Sẵn: <span id="shopLives">0</span>)</span>
-                        <button class="action-btn buy" onclick="buyShopItem('lives')">150 Xu</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="controls-row">
-                <div class="mode-container">
-                    <button class="mode-btn active" id="modeNormal" onclick="selectMode('normal')">🚀 Hành Trình</button>
-                    <button class="mode-btn" id="modeBoss" onclick="selectMode('boss')">👑 Diệt Boss</button>
-                    <button class="mode-btn" id="modeEndless" onclick="selectMode('endless')">🌌 Vô Tận</button>
-                </div>
-                <button class="audio-toggle-btn" id="audioToggleBtn" onclick="toggleAudio()">🎵 ÂM THANH</button>
-                <button class="fullscreen-toggle-btn" onclick="toggleFullScreen()">🖥️ TOÀN MÀN HÌNH</button>
-            </div>
-
-            <button class="play-btn" onclick="launchGame()">XUẤT KÍCH</button>
+    <div class="game-wrapper">
+        <div class="header-bar">
+            <h1 id="chapterTitle">CHƯƠNG 1: CÚ HẠ CÁNH VÀ CÂY THẬP TỰ GIÁ</h1>
+            <div class="status-badge" id="failCounter">⚠️ Số lỗi: 0/3</div>
         </div>
 
-        <!-- MODAL CÂU HỎI -->
-        <div id="quizModal">
-            <h3 style="color: var(--gold); margin-bottom: 10px; font-size:1.2rem;">🎁 Thử Thách Tri Thức Vũ Trụ</h3>
-            <p id="quizQuestionText" style="font-size: 1rem; color: #fff; margin-bottom: 14px; line-height: 1.5;"></p>
-            <div id="quizOptionsContainer"></div>
-            <button class="action-btn" style="margin-top: 15px; padding: 8px 20px; font-size:0.9rem;" onclick="closeQuizModal()">Đóng</button>
+        <div class="content-area" id="contentArea">
+            <!-- Nội dung sẽ được render tự động qua JavaScript -->
         </div>
-
-        <!-- POPUP HÀNH TINH -->
-        <div id="planetPopup">
-            <h2 id="popupTitle" style="color: var(--gold); margin-bottom: 10px; font-size: 1.4rem;">Khám Phá Hành Tinh</h2>
-            <p id="popupDesc" style="font-size: 1rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 18px;"></p>
-            <button class="play-btn" style="padding: 10px 28px; font-size: 1rem;" onclick="closePlanetPopup()">TIẾP TỤC HÀNH TRÌNH</button>
-        </div>
-
-        <!-- MÀN HÌNH THUA TRẬN -->
-        <div class="game-over-screen" id="gameOverScreen">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo" class="nasa-logo" style="width:60px; height:60px;">
-            <h1 style="color: var(--nasa-red); font-size:2rem;">SỨ MỆNH THẤT BẠI</h1>
-            <p id="finalPlayerName" style="color: var(--gold); font-size: 1.2rem; font-weight: bold; margin-bottom: 6px;"></p>
-            <p id="finalStats" style="color:#cbd5e1; font-size:1.1rem; margin-bottom: 6px;">Tổng điểm: 0</p>
-            <p id="finalDistance" style="color:#38bdf8; font-size:1.1rem; margin-bottom: 8px;">Quãng đường: 0 mét</p>
-            <p id="earnedMoney" style="color: var(--gold); font-weight: bold; font-size: 1.2rem; margin-bottom: 20px;">Nhận được: +0 Xu</p>
-            <button class="play-btn" onclick="returnToHome()">VỀ TRANG CHỦ</button>
-        </div>
-
-        <!-- BẢNG LÊN CẤP -->
-        <div id="perkModal">
-            <h2 style="color: var(--accent); margin-bottom: 15px; font-size:1.4rem;">🎉 NÂNG CẤP TRONG TRẬN</h2>
-            <div id="perkOptionsContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
-        </div>
-
-        <!-- HUD TRONG TRẬN -->
-        <div class="hud-top" id="hudTop" style="display: none;">
-            <span id="hudPlayerName" style="color: var(--gold);">Phi Công</span>
-            <span id="scoreText">Điểm: 0</span>
-            <span id="distanceText">📍 0 m</span>
-            <span id="planetText">Sao Thủy</span>
-            <span id="levelText">LV. 1</span>
-            <span id="livesText">❤️ 3</span>
-        </div>
-
-        <canvas id="gameCanvas"></canvas>
     </div>
 
     <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+        let gameState = {
+            fails: 0,
+            currentStage: 1,
+            selectedDirection: null
+        };
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        const contentArea = document.getElementById('contentArea');
+        const chapterTitle = document.getElementById('chapterTitle');
+        const failCounter = document.getElementById('failCounter');
+
+        function updateFailUI() {
+            failCounter.innerText = `⚠️ Số lỗi: ${gameState.fails}/3`;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
-        function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => setTimeout(resizeCanvas, 100));
+        function renderStage() {
+            contentArea.innerHTML = "";
+            
+            if (gameState.currentStage === 1) {
+                chapterTitle.innerText = "CHƯƠNG 1: CÚ HẠ CÁNH VÀ CÂY THẬP TỰ GIÁ";
+                contentArea.innerHTML = `
+                    <div class="dialogue-box">
+                        <strong>AI Lượng Tử:</strong> "Cảnh báo! Tàu Orion-7 phá hủy cấu trúc không thời gian. Vị trí hiện tại: Lưỡng Hà / Hy Lạp cổ đại, năm 600 TCN.<br><br>
+                        Dân làng đang lôi ngươi ra bãi đất trống, dựng cây thập tự giá bằng gỗ sồi để chuẩn bị thiêu sống vì tội 'Ác quỷ từ trời rơi xuống'."
+                    </div>
+                    <div class="panel-interactive">
+                        <p style="margin-bottom: 15px; font-size: 1.1rem; color: var(--accent-gold);">Lão Giáo sĩ gầm lên: 'Khai đi, mi là giống loài ma quỷ nào?!'</p>
+                        <button class="btn-action" onclick="nextStage(2)">Thương lượng: "Tao là Đại Tiên Tri nắm giữ bí mật bầu trời!"</button>
+                    </div>
+                `;
+            } 
+            else if (gameState.currentStage === 2) {
+                chapterTitle.innerText = "CHƯƠNG 2: BẢN VẼ TRÊN VÁCH ĐÁ (VÙNG GOLDILOCKS)";
+                contentArea.innerHTML = `
+                    <div class="dialogue-box">
+                        <strong>Lão Giáo sĩ:</strong> "Nếu mi là Tiên Tri, hãy vẽ ngay cấu trúc Hệ Mặt Trời lên vách đá này! Nếu sai một li, ngọn lửa trên thập tự giá sẽ chờ sẵn mi!"<br><br>
+                        <em>[Nhiệm vụ]: Dùng hệ thống lượng tử trượt thanh điều chỉnh khoảng cách Trái Đất so với Mặt Trời (Đơn vị Thiên văn - AU). Hãy chọn khoảng cách an toàn (Vùng Goldilocks)!</em>
+                    </div>
+                    <div class="panel-interactive">
+                        <label>Khoảng cách Trái Đất - Mặt Trời: <span id="distVal" style="color:var(--accent-gold); font-weight:bold;">0.5</span> AU</label>
+                        <div class="slider-container">
+                            <input type="range" id="earthDist" min="0.1" max="3.0" step="0.1" value="0.5" oninput="document.getElementById('distVal').innerText=this.value">
+                        </div>
+                        <button class="btn-action" onclick="checkOrbit()">Khắc vách đá</button>
+                    </div>
+                `;
+            }
+            else if (gameState.currentStage === 3) {
+                chapterTitle.innerText = "CHƯƠNG 3: CHỨNG MINH TRÁI ĐẤT TRÒN (THÍ NGHIỆM 2 CỌC)";
+                contentArea.innerHTML = `
+                    <div class="dialogue-box">
+                        <strong>Học viện Hy Lạp:</strong> Sau khi cứu vãn mùa màng, đám học giả vẫn cãi cùn rằng Trái Đất là một chiếc đĩa phẳng. Cậu thanh niên thông minh tên <strong>Pythagoras</strong> bước ra thách thức.<br><br>
+                        <em>[Nhiệm vụ]: Sai đồ đệ Pythagoras đi cắm cọc đo bóng nắng theo đúng phương hướng địa lý chuẩn xác. Ngươi sẽ lệnh cho cậu ta đi về hướng nào?</em>
+                    </div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="checkPythagoras('Dong')">➡️ Hướng Đông (Sang vùng Tiểu Á)</button>
+                        <button class="option-btn" onclick="checkPythagoras('Nam')">⬇️ Hướng Nam (Xuống thành phố Syene)</button>
+                        <button class="option-btn" onclick="checkPythagoras('Tay')">⬅️ Hướng Tây (Ra biển Aegean)</button>
+                        <button class="option-btn" onclick="checkPythagoras('Bac')">⬆️ Hướng Bắc (Lên xứ Macedonia)</button>
+                    </div>
+                `;
+            }
+            else if (gameState.currentStage === 4) {
+                chapterTitle.innerText = "CHƯƠNG 3 (Tiếp): GIẢI ĐỐ BÁN KÍNH TRÁI ĐẤT";
+                contentArea.innerHTML = `
+                    <div class="dialogue-box">
+                        <strong>Thành công bước đầu!</strong> Đúng 12:00 trưa, cọc ở Syene không có bóng, trong khi cọc ở Athens vẫn lệch góc $\\alpha$. Pythagoras trợn tròn mắt chờ kết luận.<br><br>
+                        <em>[Nhiệm vụ]: Nhập con số bán kính chuẩn xác của Trái Đất để bẻ gãy mọi luận điệu đĩa phẳng trước đám đông! (Gợi ý: Khoảng 6000 đến 7000 km).</em>
+                    </div>
+                    <div class="panel-interactive">
+                        <input type="number" id="radiusInput" class="input-number" placeholder="Nhập số km..."><br>
+                        <button class="btn-action" onclick="checkRadius()">Tuyên bố trước học viện</button>
+                    </div>
+                `;
+            }
+            else if (gameState.currentStage === 5) {
+                chapterTitle.innerText = "CHƯƠNG 5: BÁ CHỦ CẦU (GOOD ENDING)";
+                contentArea.innerHTML = `
+                    <div class="dialogue-box" style="border-left-color: var(--accent-gold);">
+                        🎉 <strong>HOÀN THÀNH XUẤT SẮC!</strong><br><br>
+                        Bằng trí tuệ của một phi hành gia thế kỷ 22 kết hợp kiến thức vật lý thiên văn, ngươi đã chinh phục hoàn toàn thế giới cổ đại 600 TCN. Đám đông quỳ lạy, hàng ngàn đệ tử túc trực dâng hiến nguyên liệu chế tạo kính thiên văn.<br><br>
+                        Ngươi được tôn vinh là <strong>Chúa Tể Tri Thức (God-King of Science)</strong>, đưa lịch sử nhân loại bước thẳng vào kỷ nguyên vũ trụ sớm hơn 2.500 năm!
+                    </div>
+                    <div class="panel-interactive">
+                        <button class="btn-action" onclick="location.reload()">Chơi lại từ đầu</button>
+                    </div>
+                `;
+            }
+            else if (gameState.currentStage === 99) {
+                chapterTitle.innerText = "BAD ENDING: CÂY THẬP TỰ GIÁ ĐỊNH MỆNH";
+                contentArea.innerHTML = `
+                    <div class="dialogue-box" style="border-left-color: var(--accent-red);">
+                        💀 <strong>SAI SÓT 3 LẦN - THẤT BẠI HOÀN TOÀN!</strong><br><br>
+                        Do những tính toán sai lầm liên tiếp về quỹ đạo và trắc địa, dân làng và giáo sĩ kết luận ngươi chỉ là một tên lừa đảo ngớ ngẩn. Ngươi bị trói chặt lên cây thập tự giá dưới cái nắng chói chang của năm 600 TCN... Cuộc đời nhà du hành vũ trụ chính thức khép lại trên cột gỗ!<br><br>
+                        <em>AI Lượng tử tự hủy: "Thật là một trò hề không thể đỡ nổi..."</em>
+                    </div>
+                    <div class="panel-interactive">
+                        <button class="btn-action" style="background:var(--accent-red); color:white;" onclick="location.reload()">Thử lại (Reboot)</button>
+                    </div>
+                `;
+            }
+        }
+
+        function nextStage(stage) {
+            gameState.currentStage = stage;
+            renderStage();
+        }
+
+        function checkOrbit() {
+            let val = parseFloat(document.getElementById('earthDist').value);
+            // Vùng Goldilocks chuẩn là từ 0.9 đến 1.1 AU
+            if (val >= 0.9 && val <= 1.1) {
+                alert("✨ CHÍNH XÁC! Khoảng cách thuộc Vùng Goldilocks. Thời tiết ôn hòa, lúa mì xanh tốt lập tức bao trùm thung lũng!");
+                nextStage(3);
             } else {
-                if (document.exitFullscreen) document.exitFullscreen().then(() => setTimeout(resizeCanvas, 100));
+                gameState.fails++;
+                updateFailUI();
+                if (gameState.fails >= 3) {
+                    nextStage(99);
+                } else if (val < 0.9) {
+                    alert(`❌ SAI LẦN ${gameState.fails}/3: Trái Đất quá gần Mặt Trời (Nhiệt độ 60°C, suối cạn khô)! Dân làng suýt lôi ngươi ra trói lên thập tự giá. Hãy thử lại.`);
+                } else {
+                    alert(`❌ SAI LẦN ${gameState.fails}/3: Trái Đất quá xa (Đóng băng toàn tập giữa mùa hè)! Hãy điều chỉnh lại.`);
+                }
             }
         }
 
-        let playerName = localStorage.getItem('nasa_player_name') || "Phi Công " + Math.floor(Math.random() * 899 + 100);
-        document.getElementById("playerNameInput").value = playerName;
-
-        function savePlayerName() {
-            let inputVal = document.getElementById("playerNameInput").value.trim();
-            if (inputVal.length > 0) {
-                playerName = inputVal;
-                localStorage.setItem('nasa_player_name', playerName);
-                alert(`✅ Đã lưu thành công tên phi công: "${playerName}"! Sẵn sàng xuất kích.`);
-            }
-        }
-
-        let leaderboard = localStorage.getItem('nasa_leaderboard') ? JSON.parse(localStorage.getItem('nasa_leaderboard')) : [
-            { name: "NASA Alpha", score: 850 },
-            { name: "Star Voyager", score: 620 },
-            { name: "Apollo 11", score: 400 }
-        ];
-
-        function updateLeaderboardUI() {
-            let listEl = document.getElementById("leaderboardList");
-            if (!listEl) return;
-            listEl.innerHTML = "";
-            leaderboard.sort((a, b) => b.score - a.score);
-            leaderboard.slice(0, 5).forEach((item, index) => {
-                let li = document.createElement("li");
-                li.className = "leaderboard-item";
-                li.innerHTML = `<span>${index + 1}. ${item.name}</span><span>${item.score} điểm</span>`;
-                listEl.appendChild(li);
-            });
-        }
-
-        function saveScoreToLeaderboard(name, scoreVal) {
-            leaderboard.push({ name: name, score: scoreVal });
-            leaderboard.sort((a, b) => b.score - a.score);
-            leaderboard = leaderboard.slice(0, 5);
-            localStorage.setItem('nasa_leaderboard', JSON.stringify(leaderboard));
-            updateLeaderboardUI();
-        }
-
-        const spaceQuestions = [
-            { q: "Hành tinh nào gần Mặt Trời nhất?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Trái Đất", "D. Sao Hỏa"], ans: 0 },
-            { q: "Hành tinh nào nóng nhất trong Hệ Mặt Trời?", opts: ["A. Sao Thủy", "B. Sao Kim", "C. Sao Mộc", "D. Sao Hỏa"], ans: 1 },
-            { q: "Hành tinh nào có kích thước lớn nhất Hệ Mặt Trời?", opts: ["A. Sao Thổ", "B. Sao Mộc", "C. Sao Hải Vương", "D. Trái Đất"], ans: 1 },
-            { q: "Vùng tối đen trong vũ trụ có trọng lực cực mạnh đến mức ánh sáng cũng không thoát ra được gọi là gì?", opts: ["A. Tinh vân", "B. Lỗ đen (Black Hole)", "C. Tiểu hành tinh", "D. Sao băng"], ans: 1 },
-            { q: "Hành tinh nào được gọi là 'Hành tinh Đỏ'?", opts: ["A. Sao Kim", "B. Sao Hỏa", "C. Sao Mộc", "D. Sao Thủy"], ans: 1 },
-            { q: "Nơi nào lớn nhất chứa tất cả các ngôi sao, hành tinh và không gian?", opts: ["A. Vũ trụ", "B. Thiên hà", "C. Hệ mặt trời", "D. Tinh vân"], ans: 0 },
-            { q: "Hành tinh nào có hệ thống vành đai rực rỡ nhất?", opts: ["A. Sao Thổ", "B. Sao Mộc", "C. Sao Thiên Vương", "D. Sao Hải Vương"], ans: 0 },
-            { q: "Trạm không gian quốc tế đang hoạt động trên quỹ đạo Trái Đất tên là gì?", opts: ["A. NASA", "B. ISS", "C. Apollo", "D. Voyager"], ans: 1 },
-            { q: "Con người đầu tiên bước chân lên Mặt Trăng là ai?", opts: ["A. Yuri Gagarin", "B. Neil Armstrong", "C. Buzz Aldrin", "D. Elon Musk"], ans: 1 },
-            { q: "Khoảng cách ánh sáng đi được trong 1 năm gọi là gì?", opts: ["A. Năm ánh sáng", "B. Tốc độ vũ trụ", "C. Hải lý", "D. Thước thiên văn"], ans: 0 },
-            { q: "Mặt Trời là loại thiên thể nào?", opts: ["A. Hành tinh", "B. Ngôi sao", "C. Vệ tinh", "D. Sao chổi"], ans: 1 },
-            { q: "Vệ tinh tự nhiên duy nhất của Trái Đất là gì?", opts: ["A. Mặt Trăng", "B. Sao Hỏa", "C. ISS", "D. Titan"], ans: 0 },
-            { q: "Ngôi sao nào giúp xác định hướng Bắc trên bầu trời?", opts: ["A. Sao Kim", "B. Sao Bắc Đẩu (Polaris)", "C. Sao Hỏa", "D. Mặt Trời"], ans: 1 },
-            { q: "Lực nào giữ cho các hành tinh quay quanh Mặt Trời?", opts: ["A. Lực ma sát", "B. Lực hấp dẫn", "C. Lực từ trường", "D. Âm thanh"], ans: 1 },
-            { q: "Hành tinh duy nhất được biết tới hiện nay có sự sống là gì?", opts: ["A. Sao Hỏa", "B. Trái Đất", "C. Sao Kim", "D. Sao Mộc"], ans: 1 },
-            { q: "Cơn bão khổng lồ tồn tại hàng trăm năm trên Sao Mộc có tên là gì?", opts: ["A. Vết Đỏ Lớn", "B. Bão Mặt Trời", "C. Hố Đen", "D. Vành Đai Băng"], ans: 0 },
-            { q: "Cơ quan hàng không và vũ trụ Hoa Kỳ tên là gì?", opts: ["A. SpaceX", "B. NASA", "C. ESA", "D. JAXA"], ans: 1 },
-            { q: "Vật thể cấu tạo từ đá và băng bay quanh Mặt Trời đuôi sáng rực gọi là gì?", opts: ["A. Sao chổi", "B. Tiểu hành tinh", "C. Vệ tinh", "D. Khí cầu"], ans: 0 },
-            { q: "Thiên hà chứa Hệ Mặt Trời của chúng ta có tên là gì?", opts: ["A. Andromeda", "B. Ngân Hà (Milky Way)", "C. Sombrero", "D. Centaurus"], ans: 1 },
-            { q: "Hành tinh lạnh nhất và xa nhất trong 8 hành tinh chính của Hệ Mặt Trời là gì?", opts: ["A. Sao Thủy", "B. Sao Hải Vương", "C. Sao Kim", "D. Sao Mộc"], ans: 1 }
-        ];
-
-        function openRandomQuiz() {
-            let randomIdx = Math.floor(Math.random() * spaceQuestions.length);
-            let qData = spaceQuestions[randomIdx];
-            document.getElementById("quizQuestionText").innerText = `Câu hỏi (${randomIdx + 1}/20): ${qData.q}`;
-            let container = document.getElementById("quizOptionsContainer");
-            container.innerHTML = "";
-            qData.opts.forEach((opt, idx) => {
-                let btn = document.createElement("button");
-                btn.className = "quiz-opt-btn";
-                btn.innerText = opt;
-                btn.onclick = () => {
-                    if (idx === qData.ans) {
-                        playerMoney += 50;
-                        localStorage.setItem('nasa_money', playerMoney);
-                        updateHomeUI();
-                        alert("🎉 Chính xác! Bạn nhận được +50 Xu!");
-                    } else alert("❌ Chưa chính xác rồi!");
-                    closeQuizModal();
-                };
-                container.appendChild(btn);
-            });
-            document.getElementById("quizModal").style.display = "block";
-        }
-
-        function closeQuizModal() { document.getElementById("quizModal").style.display = "none"; }
-
-        let gameRunning = false, score = 0, level = 1, exp = 0, maxExp = 100, lives = 3, gameMode = 'normal', distanceMeters = 0, currentPlanetIdx = 0, invincibleTimer = 0;
-        let playerMoney = localStorage.getItem('nasa_money') ? parseInt(localStorage.getItem('nasa_money')) : 400;
-        let currentSkin = localStorage.getItem('nasa_skin') ? parseInt(localStorage.getItem('nasa_skin')) : 0;
-        let upgrades = { damage: localStorage.getItem('nasa_up_dmg') ? parseInt(localStorage.getItem('nasa_up_dmg')) : 1 };
-        let shopInventory = { lives: localStorage.getItem('nasa_shop_lives') ? parseInt(localStorage.getItem('nasa_shop_lives')) : 0 };
-
-        updateHomeUI();
-
-        function updateHomeUI() {
-            document.getElementById("playerMoney").innerText = playerMoney;
-            document.getElementById("lvlDamage").innerText = upgrades.damage;
-            document.getElementById("shopLives").innerText = shopInventory.lives;
-            updateLeaderboardUI();
-        }
-
-        function cycleSkin() {
-            currentSkin = (currentSkin + 1) % 3;
-            localStorage.setItem('nasa_skin', currentSkin);
-            alert(`Đã đổi Skin tàu: ${currentSkin === 0 ? 'Tiêu chuẩn NASA' : currentSkin === 1 ? 'Kẻ Hủy Diệt Đỏ' : 'Phượng Hoàng Kim'}!`);
-        }
-
-        function upgradeStat(type) {
-            let cost = 100 * upgrades[type];
-            if (playerMoney >= cost) {
-                playerMoney -= cost; upgrades[type]++;
-                localStorage.setItem('nasa_money', playerMoney);
-                localStorage.setItem('nasa_up_dmg', upgrades.damage);
-                updateHomeUI();
-            } else alert("Không đủ Xu!");
-        }
-
-        function buyShopItem(item) {
-            let cost = 150;
-            if (playerMoney >= cost) {
-                playerMoney -= cost; shopInventory[item]++;
-                localStorage.setItem('nasa_money', playerMoney);
-                localStorage.setItem('nasa_shop_lives', shopInventory.lives);
-                updateHomeUI();
-                alert("Mua thêm 1 mạng thành công!");
-            } else alert("Không đủ Xu!");
-        }
-
-        function selectMode(mode) {
-            gameMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            if(mode === 'normal') document.getElementById('modeNormal').classList.add('active');
-            if(mode === 'boss') document.getElementById('modeBoss').classList.add('active');
-            if(mode === 'endless') document.getElementById('modeEndless').classList.add('active');
-        }
-
-        let stats = { fireRate: 10, bulletSpeed: 18, bulletCount: 1, damage: upgrades.damage, magnetRadius: 180, orbitalShield: false };
-        let ship = { x: 150, y: canvas.height / 2, radius: 26, speed: 9 };
-        let keys = {}, isPointerDown = false, pointerX = 150, pointerY = canvas.height / 2;
-
-        window.addEventListener("keydown", (e) => { keys[e.key] = true; });
-        window.addEventListener("keyup", (e) => { keys[e.key] = false; });
-        canvas.addEventListener("pointerdown", (e) => { isPointerDown = true; updatePointerPos(e); });
-        canvas.addEventListener("pointermove", (e) => { if (isPointerDown) updatePointerPos(e); });
-        canvas.addEventListener("pointerup", () => { isPointerDown = false; });
-
-        function updatePointerPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            pointerX = (e.clientX - rect.left) * (canvas.width / rect.width);
-            pointerY = (e.clientY - rect.top) * (canvas.height / rect.height);
-        }
-
-        let bullets = [], enemyBullets = [], meteors = [], gems = [], particles = [], stars = [];
-        let boss = null, shootTimer = 0, orbitalAngle = 0;
-
-        for (let i = 0; i < 180; i++) stars.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, size: Math.random() * 2 + 1, speed: Math.random() * 3 + 1 });
-
-        let audioCtx = null, isMusicPlaying = false;
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-
-        function toggleAudio() {
-            initAudio();
-            if (!isMusicPlaying) {
-                startSpaceMusic();
-                document.getElementById("audioToggleBtn").innerText = "🔊 BẬT";
+        function checkPythagoras(dir) {
+            if (dir === 'Nam') {
+                alert("🎯 CHUẨN XÁC! Pythagoras di chuyển đúng dọc theo kinh tuyến về phía Nam đến Syene, nơi có giếng sâu không bóng nắng lúc 12h trưa.");
+                nextStage(4);
             } else {
-                stopSpaceMusic();
-                document.getElementById("audioToggleBtn").innerText = "🎵 ÂM THANH";
-            }
-        }
-
-        function startSpaceMusic() {
-            isMusicPlaying = true;
-            const notes = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392];
-            let step = 0;
-            function playNoteSequence() {
-                if (!isMusicPlaying || !audioCtx) return;
-                let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 3.5);
-                step++; setTimeout(playNoteSequence, 4000);
-            }
-            playNoteSequence();
-        }
-
-        function stopSpaceMusic() { isMusicPlaying = false; }
-
-        function playSound(type) {
-            if (!audioCtx || audioCtx.state !== 'running') return;
-            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            if (type === 'shoot') {
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-            } else if (type === 'explosion') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.35);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.35);
-            }
-        }
-
-        const planetsJourney = [
-            { name: "Sao Thủy ☿️", targetDist: 0, desc: "Hành tinh nhỏ nhất và gần Mặt Trời nhất. Bề mặt có nhiệt độ cực kỳ khắc nghiệt." },
-            { name: "Sao Kim ♀️", targetDist: 600, desc: "Hành tinh nóng nhất Hệ Mặt Trời với khí quyển CO2 dày đặc và áp suất cực cao." },
-            { name: "Trái Đất 🌍", targetDist: 1500, desc: "Ngôi nhà của chúng ta! Hành tinh duy nhất trong Hệ Mặt Trời được biết có sự sống." },
-            { name: "Sao Hỏa 🔴", targetDist: 2600, desc: "Hành tinh Đỏ với ngọn núi lửa khổng lồ Olympus Mons lớn nhất Hệ Mặt Trời." },
-            { name: "Sao Mộc 🟠", targetDist: 4000, desc: "Hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời với cơn bão Vết Đỏ Lớn." },
-            { name: "Sao Thổ 🪐", targetDist: 6000, desc: "Hành tinh nổi bật nhất nhờ hệ thống vành đai rực rỡ cấu tạo từ hạt băng và đá." },
-            { name: "Sao Hải Vương 🌊", targetDist: 8500, desc: "Hành tinh băng giá nằm ở rìa ngoài với những cơn gió siêu tốc độ." }
-        ];
-
-        function launchGame() {
-            savePlayerName();
-            initAudio();
-            if (!isMusicPlaying) startSpaceMusic();
-            resizeCanvas();
-
-            document.getElementById("homeScreen").style.display = "none";
-            document.getElementById("gameOverScreen").style.display = "none";
-            document.getElementById("hudTop").style.display = "flex";
-            document.getElementById("hudPlayerName").innerText = playerName;
-
-            score = 0; level = 1; exp = 0; maxExp = 100; lives = 3 + shopInventory.lives; distanceMeters = 0; currentPlanetIdx = 0; invincibleTimer = 60;
-            bullets = []; enemyBullets = []; meteors = []; gems = []; particles = []; boss = null;
-            stats.damage = upgrades.damage + (currentSkin === 1 ? 2 : 0);
-            stats.bulletCount = 1;
-            ship.speed = 9 + (currentSkin === 2 ? 2 : 0);
-            ship.x = 150; ship.y = canvas.height / 2; pointerX = ship.x; pointerY = ship.y;
-
-            if (gameMode === 'boss') spawnBoss();
-            gameRunning = true; loop();
-        }
-
-        function triggerPlanetPopup(planet) {
-            gameRunning = false;
-            document.getElementById("popupTitle").innerText = `🪐 Đã Đến: ${planet.name}`;
-            document.getElementById("popupDesc").innerText = planet.desc;
-            document.getElementById("planetPopup").style.display = "block";
-        }
-
-        function closePlanetPopup() {
-            document.getElementById("planetPopup").style.display = "none";
-            gameRunning = true; loop();
-        }
-
-        function gameOver() {
-            gameRunning = false;
-            document.getElementById("hudTop").style.display = "none";
-            let bonusMultiplier = currentSkin === 2 ? 1.5 : 1;
-            let earned = Math.floor((Math.floor(score / 10) + (level * 25)) * bonusMultiplier);
-            playerMoney += earned;
-            localStorage.setItem('nasa_money', playerMoney);
-
-            saveScoreToLeaderboard(playerName, score);
-
-            document.getElementById("finalPlayerName").innerText = `Phi công: ${playerName}`;
-            document.getElementById("finalStats").innerText = `Tổng điểm: ${score} | Cấp: ${level}`;
-            document.getElementById("finalDistance").innerText = `Quãng đường: ${Math.floor(distanceMeters)} mét`;
-            document.getElementById("earnedMoney").innerText = `💰 Nhận được: +${earned} Xu!`;
-            document.getElementById("gameOverScreen").style.display = "flex";
-        }
-
-        function returnToHome() {
-            document.getElementById("gameOverScreen").style.display = "none";
-            document.getElementById("homeScreen").style.display = "flex";
-            updateHomeUI();
-        }
-
-        const perkPool = [
-            { id: 'multishot', title: '⚡ Bắn Kép', desc: 'Tăng thêm tia đạn càn quét.' },
-            { id: 'firerate', title: '🚀 Tốc Độ Bắn Nhanh', desc: 'Xả đạn liên thanh tốc độ cao.' },
-            { id: 'damage', title: '💥 Sức Mạnh Laser', desc: 'Tăng sát thương tiêu diệt thiên thạch nhanh hơn.' },
-            { id: 'shield', title: '🛡️ Vòng Xoay Plasma', desc: 'Quả cầu xoay quanh thiêu đốt va chạm.' },
-            { id: 'heal', title: '❤️ Hồi Máu', desc: 'Phục hồi 1 mạng sinh tồn.' }
-        ];
-
-        function showLevelUpModal() {
-            gameRunning = false;
-            const container = document.getElementById("perkOptionsContainer");
-            container.innerHTML = "";
-            let shuffled = [...perkPool].sort(() => 0.5 - Math.random());
-            shuffled.slice(0, 3).forEach(perk => {
-                let card = document.createElement("div");
-                card.className = "perk-card";
-                card.innerHTML = `<div style="color:var(--accent); font-weight:bold; font-size:1rem;">${perk.title}</div><div style="font-size:0.85rem; color:#cbd5e1;">${perk.desc}</div>`;
-                card.onclick = () => {
-                    if (perk.id === 'multishot') stats.bulletCount++;
-                    if (perk.id === 'firerate') stats.fireRate = Math.max(6, stats.fireRate - 4);
-                    if (perk.id === 'damage') stats.damage++;
-                    if (perk.id === 'shield') stats.orbitalShield = true;
-                    if (perk.id === 'heal') lives = Math.min(5, lives + 1);
-
-                    document.getElementById("perkModal").style.display = "none";
-                    gameRunning = true; loop();
-                };
-                container.appendChild(card);
-            });
-            document.getElementById("perkModal").style.display = "flex";
-        }
-
-        function spawnBoss() {
-            boss = { x: canvas.width - 150, y: canvas.height / 2 - 65, targetX: canvas.width - 240, width: 90, height: 140, hp: 100 + (level * 30), maxHp: 100 + (level * 30), dy: 3.5, shootTimer: 0 };
-        }
-
-        function spawnEntity() {
-            if (gameMode === 'boss') { if (!boss) spawnBoss(); return; }
-            let interval = gameMode === 'endless' ? 350 : 500;
-            if (score > 0 && score % interval === 0 && !boss && meteors.length === 0) { spawnBoss(); return; }
-            if (!boss && Math.random() < 0.04) {
-                let size = Math.random() * 40 + 24;
-                meteors.push({ x: canvas.width + size, y: Math.random() * (canvas.height - size), size: size, speed: (Math.random() * 2 + 2) + (level * 0.35), hp: Math.ceil(size / 10) * stats.damage, maxHp: Math.ceil(size / 10) * stats.damage });
-            }
-        }
-
-        function createExplosion(x, y, color) {
-            playSound('explosion');
-            for (let i = 0; i < 12; i++) {
-                particles.push({ x, y, dx: (Math.random() - 0.5) * 7, dy: (Math.random() - 0.5) * 7, size: Math.random() * 5 + 1, life: 25, color });
-            }
-        }
-
-        function update() {
-            orbitalAngle += 0.08;
-            if (invincibleTimer > 0) invincibleTimer--;
-            distanceMeters += 0.5;
-
-            if (gameMode === 'normal' && currentPlanetIdx + 1 < planetsJourney.length) {
-                if (distanceMeters >= planetsJourney[currentPlanetIdx + 1].targetDist) {
-                    currentPlanetIdx++;
-                    triggerPlanetPopup(planetsJourney[currentPlanetIdx]);
+                gameState.fails++;
+                updateFailUI();
+                if (gameState.fails >= 3) {
+                    nextStage(99);
+                } else {
+                    alert(`❌ SAI LẦN ${gameState.fails}/3: Đi lệch hướng kinh tuyến khiến góc bóng nắng bị sai lệch hoàn toàn! Pythagoras gãi đầu chê sư phụ tính toán kém.`);
                 }
             }
-
-            if (keys["ArrowLeft"] || keys["a"]) ship.x -= ship.speed;
-            if (keys["ArrowRight"] || keys["d"]) ship.x += ship.speed;
-            if (keys["ArrowUp"] || keys["w"]) ship.y -= ship.speed;
-            if (keys["ArrowDown"] || keys["s"]) ship.y += ship.speed;
-
-            if (isPointerDown) {
-                ship.x += (pointerX - ship.x) * 0.25;
-                ship.y += (pointerY - ship.y) * 0.25;
-            }
-
-            ship.x = Math.max(ship.radius, Math.min(canvas.width - ship.radius, ship.x));
-            ship.y = Math.max(ship.radius, Math.min(canvas.height - ship.radius, ship.y));
-
-            shootTimer++;
-            if (shootTimer >= stats.fireRate) {
-                shootTimer = 0;
-                playSound('shoot');
-                let spread = 16;
-                let startY = ship.y - ((stats.bulletCount - 1) * spread) / 2;
-                for (let i = 0; i < stats.bulletCount; i++) {
-                    bullets.push({ x: ship.x + 22, y: startY + (i * spread), width: 20, height: 7, speed: 18 });
-                }
-            }
-
-            stars.forEach(star => { star.x -= star.speed; if (star.x < 0) star.x = canvas.width; });
-
-            if (boss) {
-                if (boss.x > boss.targetX) boss.x -= 1.5;
-                else {
-                    boss.y += boss.dy;
-                    if (boss.y <= 20 || boss.y + boss.height >= canvas.height - 20) boss.dy *= -1;
-                    boss.shootTimer++;
-                    if (boss.shootTimer % 40 === 0) {
-                        enemyBullets.push({ x: boss.x, y: boss.y + boss.height/2 - 4, width: 18, height: 9, speed: 7 });
-                    }
-                }
-            }
-
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                bullets[i].x += bullets[i].speed;
-                if (bullets[i].x > canvas.width + 20) bullets.splice(i, 1);
-            }
-
-            for (let i = enemyBullets.length - 1; i >= 0; i--) {
-                let eb = enemyBullets[i];
-                eb.x -= eb.speed;
-                let dx = ship.x - (eb.x + eb.width/2), dy = ship.y - (eb.y + eb.height/2);
-                if (Math.sqrt(dx*dx + dy*dy) < ship.radius + 6) {
-                    enemyBullets.splice(i, 1);
-                    if (invincibleTimer === 0) {
-                        lives--;
-                        createExplosion(ship.x, ship.y, "#fc3d21");
-                        if (lives <= 0) gameOver();
-                    }
-                } else if (eb.x < -20) enemyBullets.splice(i, 1);
-            }
-
-            if (stats.orbitalShield) {
-                let shieldX = ship.x + Math.cos(orbitalAngle) * 60;
-                let shieldY = ship.y + Math.sin(orbitalAngle) * 60;
-                meteors.forEach(m => {
-                    let mdx = shieldX - (m.x + m.size/2), mdy = shieldY - (m.y + m.size/2);
-                    if (Math.sqrt(mdx*mdx + mdy*mdy) < m.size/2 + 12) { m.hp -= 2; createExplosion(shieldX, shieldY, "#38bdf8"); }
-                });
-            }
-
-            for (let i = gems.length - 1; i >= 0; i--) {
-                let g = gems[i];
-                let dx = ship.x - g.x, dy = ship.y - g.y, dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < stats.magnetRadius) { g.x += (dx / dist) * 12; g.y += (dy / dist) * 12; }
-                if (dist < ship.radius + 14) {
-                    exp += g.value; gems.splice(i, 1);
-                    if (exp >= maxExp) { exp = 0; maxExp = Math.floor(maxExp * 1.35); level++; showLevelUpModal(); }
-                }
-            }
-
-            spawnEntity();
-            for (let i = meteors.length - 1; i >= 0; i--) {
-                let m = meteors[i]; m.x -= m.speed;
-                let meteorDestroyed = false;
-                for (let j = bullets.length - 1; j >= 0; j--) {
-                    let b = bullets[j];
-                    let mCenterX = m.x + m.size / 2;
-                    let mCenterY = m.y + m.size / 2;
-                    let bCenterX = b.x + b.width / 2;
-                    let bCenterY = b.y + b.height / 2;
-                    let distance = Math.sqrt((bCenterX - mCenterX) ** 2 + (bCenterY - mCenterY) ** 2);
-
-                    if (distance < (m.size / 2) + 12) {
-                        m.hp -= stats.damage;
-                        bullets.splice(j, 1);
-                        if (m.hp <= 0) {
-                            createExplosion(mCenterX, mCenterY, "#38bdf8");
-                            gems.push({ x: mCenterX, y: mCenterY, value: Math.ceil(m.size / 4) });
-                            meteors.splice(i, 1);
-                            score += 25;
-                            meteorDestroyed = true;
-                            break;
-                        }
-                    }
-                }
-                if (meteorDestroyed) continue;
-
-                if (boss && boss.x <= boss.targetX) {
-                    for (let j = bullets.length - 1; j >= 0; j--) {
-                        let b = bullets[j];
-                        if (b.x < boss.x + boss.width && b.x + b.width > boss.x && b.y < boss.y + boss.height && b.y + b.height > boss.y) {
-                            boss.hp -= stats.damage;
-                            bullets.splice(j, 1);
-                            if (boss.hp <= 0) {
-                                createExplosion(boss.x + boss.width/2, boss.y + boss.height/2, "#facc15", 30);
-                                score += 350; boss = null;
-                                if (gameMode === 'boss') { score += 500; spawnBoss(); }
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                let dx = ship.x - (m.x + m.size/2), dy = ship.y - (m.y + m.size/2);
-                if (Math.sqrt(dx * dx + dy * dy) < ship.radius + m.size/2 - 4) {
-                    if (invincibleTimer === 0) {
-                        lives--; 
-                        createExplosion(ship.x, ship.y, "#fc3d21"); 
-                        meteors.splice(i, 1);
-                        if (lives <= 0) gameOver();
-                    } else {
-                        meteors.splice(i, 1);
-                    }
-                }
-                if (m.x < -50) meteors.splice(i, 1);
-            }
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                let p = particles[i]; p.x += p.dx; p.y += p.dy; p.life--;
-                if (p.life <= 0) particles.splice(i, 1);
-            }
-
-            document.getElementById("scoreText").innerText = `Điểm: ${score}`;
-            document.getElementById("levelText").innerText = `LV. ${level}`;
-            document.getElementById("livesText").innerText = `❤️ ${lives}`;
-            document.getElementById("distanceText").innerText = `📍 ${Math.floor(distanceMeters)} m`;
-            document.getElementById("planetText").innerText = planetsJourney[currentPlanetIdx].name;
         }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#ffffff";
-            stars.forEach(star => ctx.fillRect(star.x, star.y, star.size, star.size));
-
-            gems.forEach(g => {
-                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(g.x, g.y, 7, 0, Math.PI * 2); ctx.fill();
-            });
-
-            if (stats.orbitalShield) {
-                let shieldX = ship.x + Math.cos(orbitalAngle) * 60;
-                let shieldY = ship.y + Math.sin(orbitalAngle) * 60;
-                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(shieldX, shieldY, 10, 0, Math.PI * 2); ctx.fill();
+        function checkRadius() {
+            let radius = parseInt(document.getElementById('radiusInput').value);
+            // Chấp nhận sai số từ 6000 đến 6800 km
+            if (radius >= 6000 && radius <= 6800) {
+                alert("🏆 HOÀN HẢO! Con số cực kỳ chuẩn xác so với thực tế (6.371 km). Đám học giả sụp gối bái lạy!");
+                nextStage(5);
+            } else {
+                gameState.fails++;
+                updateFailUI();
+                if (gameState.fails >= 3) {
+                    nextStage(99);
+                } else {
+                    alert(`❌ SAI LẦN ${gameState.fails}/3: Con số tính toán sai bét nhè! Đám đông bắt đầu nổi giận.`);
+                }
             }
-
-            if (invincibleTimer === 0 || Math.floor(invincibleTimer / 4) % 2 === 0) {
-                let mainColor = currentSkin === 1 ? "#dc2626" : currentSkin === 2 ? "#eab308" : "#0b3d91";
-                let glassColor = currentSkin === 1 ? "#fca5a5" : currentSkin === 2 ? "#fef08a" : "#38bdf8";
-
-                ctx.fillStyle = mainColor;
-                ctx.beginPath();
-                ctx.moveTo(ship.x + ship.radius + 8, ship.y);
-                ctx.lineTo(ship.x - ship.radius * 0.8, ship.y - ship.radius);
-                ctx.lineTo(ship.x - ship.radius * 0.4, ship.y);
-                ctx.lineTo(ship.x - ship.radius * 0.8, ship.y + ship.radius);
-                ctx.closePath();
-                ctx.fill();
-
-                ctx.fillStyle = glassColor;
-                ctx.beginPath();
-                ctx.arc(ship.x, ship.y, ship.radius * 0.35, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = "#fc3d21";
-                ctx.fillRect(ship.x - ship.radius - 9, ship.y - 6, 14, 12);
-            }
-
-            bullets.forEach(b => { ctx.fillStyle = currentSkin === 1 ? "#ef4444" : currentSkin === 2 ? "#eab308" : "#38bdf8"; ctx.fillRect(b.x, b.y, b.width, b.height); });
-            enemyBullets.forEach(eb => { ctx.fillStyle = "#fc3d21"; ctx.fillRect(eb.x, eb.y, eb.width, eb.height); });
-
-            meteors.forEach(m => {
-                ctx.fillStyle = "#64748b"; ctx.beginPath(); ctx.arc(m.x + m.size/2, m.y + m.size/2, m.size/2, 0, Math.PI * 2); ctx.fill();
-            });
-
-            if (boss) {
-                ctx.fillStyle = "#991b1b"; ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
-                ctx.fillStyle = "#ef4444"; ctx.fillRect(boss.x - 12, boss.y, 8, boss.height);
-                ctx.fillStyle = "#22c55e"; ctx.fillRect(boss.x - 12, boss.y, 8, boss.height * (boss.hp / boss.maxHp));
-            }
-
-            particles.forEach(p => { ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); });
         }
 
-        function loop() {
-            if (!gameRunning) return;
-            update();
-            draw();
-            requestAnimationFrame(loop);
-        }
+        // Khởi động lần đầu
+        renderStage();
     </script>
 </body>
 </html>
