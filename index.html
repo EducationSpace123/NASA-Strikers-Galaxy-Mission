@@ -3,344 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhà Tiên Tri Dị Giáo - 600 TCN</title>
+    <title>NASA Mission Control - Solar Sandbox | EducationSpaceX</title>
     <style>
         :root {
-            --bg-color: #090d16;
-            --accent-gold: #f59e0b;
+            --bg-dark: #030712;
+            --panel-bg: rgba(15, 23, 42, 0.95);
+            --nasa-blue: #0284c7;
+            --accent-green: #22c55e;
             --accent-red: #ef4444;
-            --accent-blue: #38bdf8;
-            --text-main: #f8fafc;
+            --accent-amber: #f59e0b;
+            --text-glow: #38bdf8;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Courier New', Courier, monospace; /* Phong cách trạm điều khiển máy tính */
             user-select: none;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg-dark);
+            color: #f8fafc;
             width: 100vw;
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .game-wrapper {
-            width: 95%;
-            max-width: 900px;
-            height: 90vh;
-            background: rgba(15, 23, 42, 0.95);
-            border: 3px solid #334155;
-            border-radius: 16px;
-            display: flex;
             flex-direction: column;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
             overflow: hidden;
         }
 
-        .header-bar {
+        /* Header Trạm Điều Hành */
+        header {
             background: #020617;
-            padding: 15px 25px;
-            border-bottom: 2px solid #334155;
+            border-bottom: 2px solid #1e293b;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .header-bar h1 {
-            font-size: 1.3rem;
-            color: var(--accent-gold);
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area h1 {
+            font-size: 1.1rem;
+            color: var(--text-glow);
+            letter-spacing: 2px;
+        }
+
+        .system-time {
+            font-size: 0.85rem;
+            color: var(--accent-amber);
+        }
+
+        /* Layout chính */
+        .main-container {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            flex: 1;
+            background: radial-gradient(circle at center, #090d16 0%, #020617 100%);
+        }
+
+        /* Bảng Điều Khiển Bên Trái (Control Panel) */
+        .control-sidebar {
+            width: 340px;
+            background: var(--panel-bg);
+            border-right: 2px solid #1e293b;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .panel-section {
+            border: 1px solid #334155;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.4);
+        }
+
+        .panel-section h3 {
+            font-size: 0.9rem;
+            color: var(--accent-amber);
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #334155;
+            padding-bottom: 5px;
             letter-spacing: 1px;
         }
 
-        .status-badge {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid var(--accent-red);
-            color: var(--accent-red);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
+        .control-row {
+            margin-bottom: 12px;
         }
 
-        .content-area {
-            flex: 1;
-            padding: 25px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .control-row label {
+            display: block;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 4px;
         }
 
-        .dialogue-box {
-            background: rgba(30, 41, 59, 0.8);
-            border-left: 4px solid var(--accent-blue);
-            padding: 18px;
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 1.05rem;
-        }
-
-        .panel-interactive {
-            background: rgba(2, 6, 23, 0.6);
-            border: 2px solid #475569;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .slider-container {
-            margin: 20px 0;
-        }
-
-        .slider-container input[type=range] {
+        .control-row input[type=range] {
             width: 100%;
-            height: 8px;
-            background: #334155;
-            outline: none;
-            border-radius: 4px;
+            accent-color: var(--nasa-blue);
         }
+
+        .val-display {
+            float: right;
+            color: var(--text-glow);
+            font-weight: bold;
+        }
+
+        /* Bảng Phân Tích Sự Sống (Goldilocks Zone Status) */
+        .status-box {
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid #475569;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-safe { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+        .status-danger { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
 
         .btn-action {
-            background: linear-gradient(135deg, var(--accent-gold), #d97706);
-            color: #000;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
+            background: linear-gradient(135deg, #0284c7, #1d4ed8);
+            color: white;
+            border: 1px solid var(--text-glow);
+            padding: 10px;
+            font-size: 0.9rem;
             font-weight: bold;
-            border-radius: 30px;
+            border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            width: 100%;
+            letter-spacing: 1px;
             transition: 0.2s;
-            margin-top: 10px;
         }
 
         .btn-action:hover {
-            transform: scale(1.05);
+            background: #0369a1;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
         }
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .option-btn {
-            background: rgba(30, 41, 59, 0.9);
-            border: 2px solid #475569;
-            color: white;
+        /* Thông báo trạng thái dưới màn hình */
+        .terminal-log {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 350px;
+            background: rgba(2, 6, 23, 0.9);
+            border: 1px solid #1e293b;
             padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            text-align: left;
-            transition: 0.2s;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #38bdf8;
+            max-height: 120px;
+            overflow-y: auto;
+            pointer-events: none;
         }
-
-        .option-btn:hover {
-            border-color: var(--accent-blue);
-            background: rgba(56, 189, 248, 0.1);
-        }
-
-        .input-number {
-            background: #0f172a;
-            border: 2px solid var(--accent-blue);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 1rem;
-            text-align: center;
-            width: 200px;
-            margin: 10px 0;
-            outline: none;
-        }
-
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="game-wrapper">
-        <div class="header-bar">
-            <h1 id="chapterTitle">CHƯƠNG 1: CÚ HẠ CÁNH VÀ CÂY THẬP TỰ GIÁ</h1>
-            <div class="status-badge" id="failCounter">⚠️ Số lỗi: 0/3</div>
+    <header>
+        <div class="logo-area">
+            <span style="font-size: 1.2rem;">🛰️</span>
+            <h1>NASA MISSION CONTROL - EDUCATIONSPACEX</h1>
+        </div>
+        <div class="system-time" id="sysTime">SYS_TIME: 00:00:00</div>
+    </header>
+
+    <div class="main-container">
+        <!-- Bảng điều khiển bên trái -->
+        <div class="control-sidebar">
+            
+            <!-- Phần tạo lập hệ mặt trời -->
+            <div class="panel-section">
+                <h3>🪐 THÔNG SỐ HÀNH TINH SANDBOX</h3>
+                
+                <div class="control-row">
+                    <label>Khoảng Cách Quỹ Đạo (AU): <span class="val-display" id="orbitVal">1.0</span> AU</label>
+                    <input type="range" id="planetDist" min="0.4" max="2.5" step="0.1" value="1.0" oninput="updatePlanetParams()">
+                </div>
+
+                <div class="control-row">
+                    <label>Khí Quản / Hiệu Ứng Nhà Kính: <span class="val-display" id="greenhouseVal">1.0</span>x</label>
+                    <input type="range" id="planetGreenhouse" min="0.2" max="3.0" step="0.1" value="1.0" oninput="updatePlanetParams()">
+                </div>
+            </div>
+
+            <!-- Phần phân tích sự sống (Vùng Goldilocks) -->
+            <div class="panel-section">
+                <h3>🧬 PHÂN TÍCH VÙNG GOLDILOCKS</h3>
+                <div class="status-box" id="analysisBox">
+                    <span class="status-indicator status-safe" id="statusDot"></span>
+                    <strong id="lifeStatusText">Đang quét sinh quyển...</strong>
+                    <div id="tempDisplay" style="margin-top: 8px; color: #cbd5e1;">Nhiệt độ bề mặt: 15°C</div>
+                    <div id="waterDisplay" style="color: #cbd5e1;">Trạng thái nước: Nước lỏng (Ổn định)</div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <h3>⚙️ HỆ THỐNG MÔ PHỎNG</h3>
+                <button class="btn-action" onclick="resetSandbox()">ĐẶT LẠI QUỸ ĐẠO</button>
+            </div>
+
         </div>
 
-        <div class="content-area" id="contentArea">
-            <!-- Nội dung sẽ được render tự động qua JavaScript -->
+        <!-- Màn hình radar / không gian canvas -->
+        <canvas id="controlCanvas"></canvas>
+
+        <!-- Bảng log terminal giả lập -->
+        <div class="terminal-log" id="terminalLog">
+            [SYS_INIT] Kết nối trạm điều khiển thành công.<br>
+            [RADAR] Hệ thống theo dõi Vùng Goldilocks đang hoạt động.
         </div>
     </div>
 
     <script>
-        let gameState = {
-            fails: 0,
-            currentStage: 1,
-            selectedDirection: null
+        const canvas = document.getElementById('controlCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth - 340;
+            canvas.height = window.innerHeight - 50;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Đồng hồ hệ thống giả lập
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('sysTime').innerText = `SYS_TIME: ${now.toTimeString().split(' ')[0]}`;
+        }, 1000);
+
+        let sandboxPlanet = {
+            distance: 1.0,      // Đơn vị AU
+            greenhouse: 1.0,    // Hệ số nhà kính
+            angle: 0,
+            speed: 0.02
         };
 
-        const contentArea = document.getElementById('contentArea');
-        const chapterTitle = document.getElementById('chapterTitle');
-        const failCounter = document.getElementById('failCounter');
-
-        function updateFailUI() {
-            failCounter.innerText = `⚠️ Số lỗi: ${gameState.fails}/3`;
+        function logTerminal(msg) {
+            const term = document.getElementById('terminalLog');
+            term.innerHTML += `<br>[LOG] ${msg}`;
+            term.scrollTop = term.scrollHeight;
         }
 
-        function renderStage() {
-            contentArea.innerHTML = "";
+        function updatePlanetParams() {
+            sandboxPlanet.distance = parseFloat(document.getElementById('planetDist').value);
+            sandboxPlanet.greenhouse = parseFloat(document.getElementById('planetGreenhouse').value);
+
+            document.getElementById('orbitVal').innerText = sandboxPlanet.distance.toFixed(1);
+            document.getElementById('greenhouseVal').innerText = sandboxPlanet.greenhouse.toFixed(1);
+
+            evaluateLifeSupport();
+        }
+
+        function evaluateLifeSupport() {
+            // Công thức tính nhiệt độ bề mặt giả lập dựa trên khoảng cách và nhà kính
+            // Nhiệt độ Trái Đất chuẩn ~ 15°C ở 1.0 AU với nhà kính 1.0
+            let tempK = 288 / Math.sqrt(sandboxPlanet.distance) * Math.pow(sandboxPlanet.greenhouse, 0.25);
+            let tempC = Math.round(tempK - 273.15);
+
+            let statusDot = document.getElementById('statusDot');
+            let lifeStatusText = document.getElementById('lifeStatusText');
+            let tempDisplay = document.getElementById('tempDisplay');
+            let waterDisplay = document.getElementById('waterDisplay');
+
+            tempDisplay.innerText = `Nhiệt độ bề mặt: ${tempC}°C`;
+
+            // Vùng Goldilocks cho phép nước lỏng tồn tại (Nhiệt độ từ 0°C đến 100°C)
+            if (tempC >= 0 && tempC <= 100) {
+                statusDot.className = "status-indicator status-safe";
+                lifeStatusText.innerText = "ĐIỀU KIỆN SỰ SỐNG: TỐI ƯU";
+                waterDisplay.innerText = "Trạng thái nước: Nước lỏng (Duy trì sự sống)";
+                waterDisplay.style.color = "var(--accent-green)";
+            } else if (tempC < 0) {
+                statusDot.className = "status-indicator status-danger";
+                lifeStatusText.innerText = "ĐIỀU KIỆN SỐNG: ĐÓNG BĂNG";
+                waterDisplay.innerText = "Trạng thái nước: Băng rắn (Quá lạnh)";
+                waterDisplay.style.color = "var(--accent-red)";
+            } else {
+                statusDot.className = "status-indicator status-danger";
+                lifeStatusText.innerText = "ĐIỀU KIỆN SỐNG: THIÊU RỤI";
+                waterDisplay.innerText = "Trạng thái nước: Bốc hơi (Quá nóng)";
+                waterDisplay.style.color = "var(--accent-red)";
+            }
+        }
+
+        function resetSandbox() {
+            document.getElementById('planetDist').value = 1.0;
+            document.getElementById('planetGreenhouse').value = 1.0;
+            updatePlanetParams();
+            logTerminal("Đã khôi phục thông số quỹ đạo chuẩn Trái Đất.");
+        }
+
+        function drawGrid(centerX, centerY) {
+            ctx.strokeStyle = "rgba(30, 41, 59, 0.5)";
+            ctx.lineWidth = 1;
             
-            if (gameState.currentStage === 1) {
-                chapterTitle.innerText = "CHƯƠNG 1: CÚ HẠ CÁNH VÀ CÂY THẬP TỰ GIÁ";
-                contentArea.innerHTML = `
-                    <div class="dialogue-box">
-                        <strong>AI Lượng Tử:</strong> "Cảnh báo! Tàu Orion-7 phá hủy cấu trúc không thời gian. Vị trí hiện tại: Lưỡng Hà / Hy Lạp cổ đại, năm 600 TCN.<br><br>
-                        Dân làng đang lôi ngươi ra bãi đất trống, dựng cây thập tự giá bằng gỗ sồi để chuẩn bị thiêu sống vì tội 'Ác quỷ từ trời rơi xuống'."
-                    </div>
-                    <div class="panel-interactive">
-                        <p style="margin-bottom: 15px; font-size: 1.1rem; color: var(--accent-gold);">Lão Giáo sĩ gầm lên: 'Khai đi, mi là giống loài ma quỷ nào?!'</p>
-                        <button class="btn-action" onclick="nextStage(2)">Thương lượng: "Tao là Đại Tiên Tri nắm giữ bí mật bầu trời!"</button>
-                    </div>
-                `;
-            } 
-            else if (gameState.currentStage === 2) {
-                chapterTitle.innerText = "CHƯƠNG 2: BẢN VẼ TRÊN VÁCH ĐÁ (VÙNG GOLDILOCKS)";
-                contentArea.innerHTML = `
-                    <div class="dialogue-box">
-                        <strong>Lão Giáo sĩ:</strong> "Nếu mi là Tiên Tri, hãy vẽ ngay cấu trúc Hệ Mặt Trời lên vách đá này! Nếu sai một li, ngọn lửa trên thập tự giá sẽ chờ sẵn mi!"<br><br>
-                        <em>[Nhiệm vụ]: Dùng hệ thống lượng tử trượt thanh điều chỉnh khoảng cách Trái Đất so với Mặt Trời (Đơn vị Thiên văn - AU). Hãy chọn khoảng cách an toàn (Vùng Goldilocks)!</em>
-                    </div>
-                    <div class="panel-interactive">
-                        <label>Khoảng cách Trái Đất - Mặt Trời: <span id="distVal" style="color:var(--accent-gold); font-weight:bold;">0.5</span> AU</label>
-                        <div class="slider-container">
-                            <input type="range" id="earthDist" min="0.1" max="3.0" step="0.1" value="0.5" oninput="document.getElementById('distVal').innerText=this.value">
-                        </div>
-                        <button class="btn-action" onclick="checkOrbit()">Khắc vách đá</button>
-                    </div>
-                `;
-            }
-            else if (gameState.currentStage === 3) {
-                chapterTitle.innerText = "CHƯƠNG 3: CHỨNG MINH TRÁI ĐẤT TRÒN (THÍ NGHIỆM 2 CỌC)";
-                contentArea.innerHTML = `
-                    <div class="dialogue-box">
-                        <strong>Học viện Hy Lạp:</strong> Sau khi cứu vãn mùa màng, đám học giả vẫn cãi cùn rằng Trái Đất là một chiếc đĩa phẳng. Cậu thanh niên thông minh tên <strong>Pythagoras</strong> bước ra thách thức.<br><br>
-                        <em>[Nhiệm vụ]: Sai đồ đệ Pythagoras đi cắm cọc đo bóng nắng theo đúng phương hướng địa lý chuẩn xác. Ngươi sẽ lệnh cho cậu ta đi về hướng nào?</em>
-                    </div>
-                    <div class="options-grid">
-                        <button class="option-btn" onclick="checkPythagoras('Dong')">➡️ Hướng Đông (Sang vùng Tiểu Á)</button>
-                        <button class="option-btn" onclick="checkPythagoras('Nam')">⬇️ Hướng Nam (Xuống thành phố Syene)</button>
-                        <button class="option-btn" onclick="checkPythagoras('Tay')">⬅️ Hướng Tây (Ra biển Aegean)</button>
-                        <button class="option-btn" onclick="checkPythagoras('Bac')">⬆️ Hướng Bắc (Lên xứ Macedonia)</button>
-                    </div>
-                `;
-            }
-            else if (gameState.currentStage === 4) {
-                chapterTitle.innerText = "CHƯƠNG 3 (Tiếp): GIẢI ĐỐ BÁN KÍNH TRÁI ĐẤT";
-                contentArea.innerHTML = `
-                    <div class="dialogue-box">
-                        <strong>Thành công bước đầu!</strong> Đúng 12:00 trưa, cọc ở Syene không có bóng, trong khi cọc ở Athens vẫn lệch góc $\\alpha$. Pythagoras trợn tròn mắt chờ kết luận.<br><br>
-                        <em>[Nhiệm vụ]: Nhập con số bán kính chuẩn xác của Trái Đất để bẻ gãy mọi luận điệu đĩa phẳng trước đám đông! (Gợi ý: Khoảng 6000 đến 7000 km).</em>
-                    </div>
-                    <div class="panel-interactive">
-                        <input type="number" id="radiusInput" class="input-number" placeholder="Nhập số km..."><br>
-                        <button class="btn-action" onclick="checkRadius()">Tuyên bố trước học viện</button>
-                    </div>
-                `;
-            }
-            else if (gameState.currentStage === 5) {
-                chapterTitle.innerText = "CHƯƠNG 5: BÁ CHỦ CẦU (GOOD ENDING)";
-                contentArea.innerHTML = `
-                    <div class="dialogue-box" style="border-left-color: var(--accent-gold);">
-                        🎉 <strong>HOÀN THÀNH XUẤT SẮC!</strong><br><br>
-                        Bằng trí tuệ của một phi hành gia thế kỷ 22 kết hợp kiến thức vật lý thiên văn, ngươi đã chinh phục hoàn toàn thế giới cổ đại 600 TCN. Đám đông quỳ lạy, hàng ngàn đệ tử túc trực dâng hiến nguyên liệu chế tạo kính thiên văn.<br><br>
-                        Ngươi được tôn vinh là <strong>Chúa Tể Tri Thức (God-King of Science)</strong>, đưa lịch sử nhân loại bước thẳng vào kỷ nguyên vũ trụ sớm hơn 2.500 năm!
-                    </div>
-                    <div class="panel-interactive">
-                        <button class="btn-action" onclick="location.reload()">Chơi lại từ đầu</button>
-                    </div>
-                `;
-            }
-            else if (gameState.currentStage === 99) {
-                chapterTitle.innerText = "BAD ENDING: CÂY THẬP TỰ GIÁ ĐỊNH MỆNH";
-                contentArea.innerHTML = `
-                    <div class="dialogue-box" style="border-left-color: var(--accent-red);">
-                        💀 <strong>SAI SÓT 3 LẦN - THẤT BẠI HOÀN TOÀN!</strong><br><br>
-                        Do những tính toán sai lầm liên tiếp về quỹ đạo và trắc địa, dân làng và giáo sĩ kết luận ngươi chỉ là một tên lừa đảo ngớ ngẩn. Ngươi bị trói chặt lên cây thập tự giá dưới cái nắng chói chang của năm 600 TCN... Cuộc đời nhà du hành vũ trụ chính thức khép lại trên cột gỗ!<br><br>
-                        <em>AI Lượng tử tự hủy: "Thật là một trò hề không thể đỡ nổi..."</em>
-                    </div>
-                    <div class="panel-interactive">
-                        <button class="btn-action" style="background:var(--accent-red); color:white;" onclick="location.reload()">Thử lại (Reboot)</button>
-                    </div>
-                `;
-            }
+            // Vẽ các đường tròn quỹ đạo mẫu (0.5 AU, 1.0 AU, 1.5 AU, 2.0 AU)
+            [0.6, 1.0, 1.5, 2.0].forEach(au => {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, au * 180, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+
+            // Vẽ Vùng Goldilocks (0.9 AU đến 1.1 AU) nổi bật xanh lá mờ
+            ctx.fillStyle = "rgba(34, 197, 94, 0.05)";
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 1.1 * 180, 0, Math.PI * 2);
+            ctx.arc(centerX, centerY, 0.9 * 180, 0, Math.PI * 2, true);
+            ctx.fill();
         }
 
-        function nextStage(stage) {
-            gameState.currentStage = stage;
-            renderStage();
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let centerX = canvas.width / 2;
+            let centerY = canvas.height / 2;
+
+            drawGrid(centerX, centerY);
+
+            // Vẽ Mặt Trời ở tâm
+            ctx.fillStyle = "#f59e0b";
+            ctx.shadowBlur = 30;
+            ctx.shadowColor = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0; // Tắt hiệu ứng bóng cho các vật thể khác
+
+            // Cập nhật góc quay hành tinh sandbox
+            sandboxPlanet.angle += sandboxPlanet.speed / Math.sqrt(sandboxPlanet.distance);
+            let planetRadiusPx = sandboxPlanet.distance * 180;
+            let px = centerX + Math.cos(sandboxPlanet.angle) * planetRadiusPx;
+            let py = centerY + Math.sin(sandboxPlanet.angle) * planetRadiusPx;
+
+            // Vẽ quỹ đạo hành tinh hiện tại
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.3)";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, planetRadiusPx, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Vẽ hành tinh Sandbox
+            ctx.fillStyle = "#38bdf8";
+            ctx.beginPath();
+            ctx.arc(px, py, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Nhãn tên hành tinh trên radar
+            ctx.fillStyle = "#f8fafc";
+            ctx.font = "12px Courier New";
+            ctx.fillText("Hành tinh Sandbox", px + 16, py + 4);
+
+            requestAnimationFrame(render);
         }
 
-        function checkOrbit() {
-            let val = parseFloat(document.getElementById('earthDist').value);
-            // Vùng Goldilocks chuẩn là từ 0.9 đến 1.1 AU
-            if (val >= 0.9 && val <= 1.1) {
-                alert("✨ CHÍNH XÁC! Khoảng cách thuộc Vùng Goldilocks. Thời tiết ôn hòa, lúa mì xanh tốt lập tức bao trùm thung lũng!");
-                nextStage(3);
-            } else {
-                gameState.fails++;
-                updateFailUI();
-                if (gameState.fails >= 3) {
-                    nextStage(99);
-                } else if (val < 0.9) {
-                    alert(`❌ SAI LẦN ${gameState.fails}/3: Trái Đất quá gần Mặt Trời (Nhiệt độ 60°C, suối cạn khô)! Dân làng suýt lôi ngươi ra trói lên thập tự giá. Hãy thử lại.`);
-                } else {
-                    alert(`❌ SAI LẦN ${gameState.fails}/3: Trái Đất quá xa (Đóng băng toàn tập giữa mùa hè)! Hãy điều chỉnh lại.`);
-                }
-            }
-        }
-
-        function checkPythagoras(dir) {
-            if (dir === 'Nam') {
-                alert("🎯 CHUẨN XÁC! Pythagoras di chuyển đúng dọc theo kinh tuyến về phía Nam đến Syene, nơi có giếng sâu không bóng nắng lúc 12h trưa.");
-                nextStage(4);
-            } else {
-                gameState.fails++;
-                updateFailUI();
-                if (gameState.fails >= 3) {
-                    nextStage(99);
-                } else {
-                    alert(`❌ SAI LẦN ${gameState.fails}/3: Đi lệch hướng kinh tuyến khiến góc bóng nắng bị sai lệch hoàn toàn! Pythagoras gãi đầu chê sư phụ tính toán kém.`);
-                }
-            }
-        }
-
-        function checkRadius() {
-            let radius = parseInt(document.getElementById('radiusInput').value);
-            // Chấp nhận sai số từ 6000 đến 6800 km
-            if (radius >= 6000 && radius <= 6800) {
-                alert("🏆 HOÀN HẢO! Con số cực kỳ chuẩn xác so với thực tế (6.371 km). Đám học giả sụp gối bái lạy!");
-                nextStage(5);
-            } else {
-                gameState.fails++;
-                updateFailUI();
-                if (gameState.fails >= 3) {
-                    nextStage(99);
-                } else {
-                    alert(`❌ SAI LẦN ${gameState.fails}/3: Con số tính toán sai bét nhè! Đám đông bắt đầu nổi giận.`);
-                }
-            }
-        }
-
-        // Khởi động lần đầu
-        renderStage();
+        // Khởi chạy
+        updatePlanetParams();
+        render();
     </script>
 </body>
 </html>
